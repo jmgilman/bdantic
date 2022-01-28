@@ -9,10 +9,16 @@ license = "MIT"
 python = "^3.8"
 beancount = "^2.3.4"
 pydantic = "^1.9.0"
+beancount-stubs = "^0.1.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"
 black = "^21.12b0"
+flake8 = "^4.0.1"
+mypy = "^0.931"
+
+[tool.black]
+line-length = 79
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
