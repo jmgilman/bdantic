@@ -24,13 +24,11 @@ Models are created by converting a beancount type into its respective model:
 
 ```python
 from beancount.core import amount
-from bdantic import to_model
+from bdantic import parse
 from decimal import Decimal
 
 amt = amount.Amount(number=Decimal(1.50), currency="USD"))
-model = to_model(amt) # Produces a bdantic.models.Amount
-
-print(model.json()) # The model is a full pydantic model
+model = parse(amt) # Produces a bdantic.models.Amount
 ```
 
 All models can be exported back into their original beancount data type:
@@ -38,6 +36,19 @@ All models can be exported back into their original beancount data type:
 ```python
 amt_export = model.export()
 assert amt == amt_export # The exported object is identical to the original
+```
+
+Since all models are Pydantic base models, it's possible to export the entire
+result of parsing a beancount file into JSON:
+
+```python
+from beancount import loader
+from bdantic import parse_entries
+
+entries, _, _ = loader.load_file("test.beancount")
+dirs = parse_entries(entries)
+
+print(dirs.json())
 ```
 
 Note that models are not compatible with beancount functions as most functions

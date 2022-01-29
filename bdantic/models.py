@@ -293,16 +293,31 @@ class Event(BaseDirective):
 
 
 class Inventory(Base):
+    """A model representing a beancount.core.inventory.Inventory."""
+
     __root__: List[Position]
 
     @classmethod
     def parse(cls: Type[Inventory], obj: inventory.Inventory) -> Inventory:
+        """Parses a beancount Inventory into this model
+
+        Args:
+            obj: The Beancount Inventory to parse
+
+        Returns:
+            A new instance of this model
+        """
         positions = [
             Position.parse(position) for position in obj.get_positions()
         ]
         return Inventory(__root__=positions)
 
     def export(self) -> inventory.Inventory:
+        """Exports this model into a beancount Inventory
+
+        Returns:
+            A new instance of a beancount Inventory directive
+        """
         positions = [position.export() for position in self.__root__]
         return inventory.Inventory(positions=positions)
 
@@ -568,18 +583,11 @@ class TxnPosting(Base):
         return self._sibling(**_recursive_export(self))
 
 
-# Update forward references
-Inventory.update_forward_refs()
-
-# A union for all models which have Beancount types that are NamedTuple's
-ModelTuple = Union[
-    Amount,
+# A union for all models that are directives
+ModelDirective = Union[
     Balance,
-    Base,
     Close,
     Open,
-    Cost,
-    CostSpec,
     Commodity,
     Custom,
     Document,
@@ -587,11 +595,20 @@ ModelTuple = Union[
     Note,
     Open,
     Pad,
-    Position,
-    Posting,
     Price,
     Query,
     Transaction,
+]
+
+# A union for all models which have Beancount types that are NamedTuple's
+ModelTuple = Union[
+    ModelDirective,
+    Amount,
+    Base,
+    Cost,
+    CostSpec,
+    Position,
+    Posting,
     TxnPosting,
 ]
 
@@ -623,6 +640,62 @@ BeancountTuple = Union[
 
 # A union for all Beancount types
 BeancountType = Union[BeancountTuple, inventory.Inventory]
+
+# A dictionary mapping Beancount types to their respective models
+type_map: Dict[Type[BeancountType], Type[Model]] = {
+    amount.Amount: Amount,
+    data.Balance: Balance,
+    data.Close: Close,
+    data.Commodity: Commodity,
+    position.Cost: Cost,
+    position.CostSpec: CostSpec,
+    data.Custom: Custom,
+    data.Document: Document,
+    data.Event: Event,
+    data.Note: Note,
+    data.Open: Open,
+    data.Pad: Pad,
+    position.Position: Position,
+    data.Posting: Posting,
+    data.Price: Price,
+    data.Query: Query,
+    data.Transaction: Transaction,
+    data.TxnPosting: TxnPosting,
+    inventory.Inventory: Inventory,
+}
+
+
+class Directives(BaseModel):
+    """A model representing a list of directives."""
+
+    __root__: List[ModelDirective]
+
+    @classmethod
+    def parse(cls, obj: List[data.Directive]) -> Directives:
+        """Parses a list of beancount directives into this model
+
+        Args:
+            obj: The Beancount directives to parse
+
+        Returns:
+            A new instance of this model
+        """
+        dirs = [type_map[type(d)].parse(d) for d in obj]  # type: ignore
+        return Directives(__root__=dirs)
+
+    def export(self) -> List[data.Directive]:
+        """Exports this model into a list of beancount directives
+
+        Returns:
+            The list of beancount directives
+        """
+        dirs = [d.export() for d in self.__root__]
+        return dirs
+
+
+# Update forward references
+Directives.update_forward_refs()
+Inventory.update_forward_refs()
 
 
 def _is_named_tuple(obj: Any) -> bool:
