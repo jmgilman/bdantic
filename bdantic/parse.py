@@ -26,8 +26,8 @@ _type_map: Dict[Type[models.BeancountType], Type[models.Model]] = {
 }
 
 
-def to_model(obj: models.BeancountType) -> models.Model:
-    """Converts a Beancount type into it's respective Pydantic models.
+def parse(obj: models.BeancountType) -> models.Model:
+    """Parses a Beancount type into it's respective Pydantic models.
 
     Args:
         obj: A valid BeancountType
@@ -38,8 +38,8 @@ def to_model(obj: models.BeancountType) -> models.Model:
     return _type_map[type(obj)].parse(obj)  # type: ignore
 
 
-def to_models(objs: Sequence[models.BeancountType]) -> List[models.Model]:
-    """Converts a list of Beancount types into a list of their respective
+def parse_all(objs: Sequence[models.BeancountType]) -> List[models.Model]:
+    """Parses a list of Beancount types into a list of their respective
     Pydantic models.
 
     Args:
@@ -48,4 +48,4 @@ def to_models(objs: Sequence[models.BeancountType]) -> List[models.Model]:
     Returns:
         A list of associated models for each BeancountType
     """
-    return [to_model(obj) for obj in objs]
+    return [parse(obj) for obj in objs]

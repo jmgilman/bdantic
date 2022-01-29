@@ -1,10 +1,10 @@
 from beancount.core import amount, data
-from bdantic import to_model, to_models, models
+from bdantic import parse, parse_all, models
 from datetime import date
 from decimal import Decimal
 
 
-def test_to_model():
+def test_parse():
     txn = data.Transaction(
         meta={},
         date=date.today(),
@@ -45,11 +45,11 @@ def test_to_model():
         ],
     )
 
-    result = to_model(txn)
+    result = parse(txn)
     assert result == expected
 
 
-def test_to_models():
+def test_parse_all():
     btypes = []
     expected_models = []
 
@@ -77,5 +77,5 @@ def test_to_models():
         )
     )
 
-    result = to_models(btypes)
+    result = parse_all(btypes)
     assert result == expected_models

@@ -1,4 +1,4 @@
-from bdantic.parse import to_model, to_models
+from bdantic.parse import parse, parse_all
 
-to_model = to_model
-to_models = to_models
+parse = parse
+parse_all = parse_all
