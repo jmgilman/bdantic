@@ -11,7 +11,8 @@ from beancount.core import (
 from bdantic import models
 from datetime import date
 from decimal import Decimal
-from typing import Any, Dict, NamedTuple
+from testing.util import is_equal
+from typing import NamedTuple
 
 
 def test_all():
@@ -380,43 +381,12 @@ def test_all():
         )
     )
 
-    def _is_equal(obj1: Any, obj2: Any) -> bool:
-        def _get_dict(obj: Any) -> Dict[Any, Any]:
-            if "_asdict" in dir(obj) and callable(getattr(obj, "_asdict")):
-                return obj._asdict()
-            else:
-                return obj.__dict__
-
-        def _is_recursable(obj: Any) -> bool:
-            return (
-                type(obj) in models.type_map.keys()
-                or type(obj) in models.type_map.values()
-            )
-
-        def _recurse(obj: Any) -> Dict[Any, Any]:
-            new_dict = {}
-            for key, value in _get_dict(obj).items():
-                if isinstance(value, dict):
-
-                    def rec(v):
-                        return _recurse(v) if _is_recursable(v) else v
-
-                    new_dict[key] = {k: rec(v) for (k, v) in value.items()}
-                elif _is_recursable(value):
-                    new_dict[key] = _recurse(value)
-                else:
-                    new_dict[key] = value
-
-            return new_dict
-
-        return _recurse(obj1) == _recurse(obj2)
-
     for btype, model in zip(test_btypes, test_models):
         result_model = type(model).parse(btype)
-        assert _is_equal(result_model, model)
+        assert is_equal(result_model, model)
 
         result_btype = model.export()
-        assert _is_equal(result_btype, btype)
+        assert is_equal(result_btype, btype)
 
 
 def test_is_named_tuple():

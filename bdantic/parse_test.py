@@ -3,6 +3,7 @@ from beancount.core import amount, data
 from bdantic import parse, parse_all, parse_entries, parse_loader, models
 from datetime import date
 from decimal import Decimal
+from testing.util import is_equal
 
 
 def test_parse():
@@ -121,10 +122,23 @@ def test_parse_entries():
     assert result == expected_entries
 
 
-def test_parse_file():
+def test_parse_loader():
     entries, errors, options = loader.load_file("testing/static.beancount")
-    result = parse_loader(entries, errors, options)
+    parsed = parse_loader(entries, errors, options)
 
-    assert entries == result.entries.export()
-    assert errors == result.errors
-    assert options == result.options
+    def compare(object1, object2):
+        for expected, result in zip(object1, object2):
+            if type(expected) in models.type_map.keys():
+                assert is_equal(expected, result)
+            else:
+                assert expected == result
+
+    # Entries
+    compare(entries, parsed.entries.export())
+
+    # Options
+    compare(options.values(), parsed.options.export().values())
+    assert options.keys() == parsed.options.export().keys()
+
+    # Errors
+    assert errors == parsed.errors

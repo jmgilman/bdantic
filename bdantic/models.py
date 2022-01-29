@@ -844,11 +844,76 @@ class Entries(BaseModel):
         return dirs
 
 
+class Options(BaseModel):
+    """A model representing a dictionary of options."""
+
+    __root__: Dict[str, Any]
+
+    def __len__(self) -> int:
+        return len(self.__root__)
+
+    def __getitem__(self, key: str) -> Any:
+        return self.__root__[key]
+
+    def __delitem__(self, key: str) -> None:
+        del self.__root__[key]
+
+    def __setitem__(self, key: str, v: Any):
+        self.__root__[key] = v
+
+    def __iter__(self) -> Generator[Tuple[str, Any], None, None]:
+        for v in self.__root__.values():
+            yield v
+
+    def items(self):
+        return self.__root__.items()
+
+    def keys(self):
+        return self.__root__.keys()
+
+    def values(self):
+        return self.__root__.values()
+
+    @classmethod
+    def parse(cls, obj: Dict[str, Any]) -> Options:
+        """Parses a dictionary of beancount options into this model
+
+        Args:
+            obj: The Beancount options to parse
+
+        Returns:
+            A new instance of this model
+        """
+        d = {}
+        for key, value in obj.items():
+            if type(value) in type_map.keys():
+                d[key] = type_map[type(value)].parse(value)  # type: ignore
+            else:
+                d[key] = value
+
+        return Options(__root__=d)
+
+    def export(self) -> Dict[str, Any]:
+        """Exports this model into a dictionary of beancount options
+
+        Returns:
+            The dictionary of beancount options
+        """
+        d = {}
+        for key, value in self.__root__.items():
+            if type(value) in type_map.values():
+                d[key] = value.export()
+            else:
+                d[key] = value
+
+        return d
+
+
 class BeancountFile(BaseModel):
     """A model representing the contents of an entire beancount file."""
 
     entries: Entries
-    options: Dict[str, Any]
+    options: Options
     errors: List[Any]
 
     @classmethod
@@ -868,7 +933,7 @@ class BeancountFile(BaseModel):
         """
         return BeancountFile(
             entries=Entries.parse(entries),
-            options=options,
+            options=Options.parse(options),
             errors=errors,
         )
 
@@ -878,7 +943,7 @@ class BeancountFile(BaseModel):
         Returns:
             The entries, errors, and options from the original loader
         """
-        return (self.entries.export(), self.errors, self.options)
+        return (self.entries.export(), self.errors, self.options.export())
 
 
 # Update forward references
