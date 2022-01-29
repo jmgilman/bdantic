@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datetime
 
-from beancount.core import amount, data, position  # type: ignore
+from beancount.core import amount, data, position
 from decimal import Decimal
 from pydantic import BaseModel
 from typing import (

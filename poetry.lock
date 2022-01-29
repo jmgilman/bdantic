@@ -42,7 +42,7 @@ requests = "*"
 
 [[package]]
 name = "beancount-stubs"
-version = "0.1.0"
+version = "0.1.1"
 description = "Stub files for the beancount package"
 category = "main"
 optional = false
@@ -582,7 +582,7 @@ socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "3aa640bc7fb1e6b4b007b44ba69698f88964360e632b569161fecd95320a0071"
+content-hash = "4411d2c985640c69711dd18030afb6fed907e69f49945a5a78f8ad968d65c02b"
 
 [metadata.files]
 atomicwrites = [
@@ -605,8 +605,8 @@ beancount = [
     {file = "beancount-2.3.4.tar.gz", hash = "sha256:2bf08ce6a95d98000f4d73395985cd1deb81c0d52ed5a76e610bac77d82f86c0"},
 ]
 beancount-stubs = [
-    {file = "beancount-stubs-0.1.0.tar.gz", hash = "sha256:43dc48431cd3837b60a165c91ea44d6f4bcd374c7ef934e96f5ea3297231ddfd"},
-    {file = "beancount_stubs-0.1.0-py3-none-any.whl", hash = "sha256:158b2edf5d6a28de53d7ddd760ed1e210941d6870346cac89671adba7fbca9f8"},
+    {file = "beancount-stubs-0.1.1.tar.gz", hash = "sha256:58cad2ba53c24e99996b7323b80822f707e84f8f85471bb99e759c0a2da27155"},
+    {file = "beancount_stubs-0.1.1-py3-none-any.whl", hash = "sha256:f387b351fbe502e06fd8ef06c05b002595f87f9fa57ce9c46497dca9d9d00f77"},
 ]
 beautifulsoup4 = [
     {file = "beautifulsoup4-4.10.0-py3-none-any.whl", hash = "sha256:9a315ce70049920ea4572a4055bc4bd700c940521d36fc858205ad4fcde149bf"},
