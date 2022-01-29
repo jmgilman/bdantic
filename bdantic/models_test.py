@@ -1,4 +1,4 @@
-from beancount.core import amount, data, position
+from beancount.core import amount, data, inventory, position
 from bdantic import models
 from datetime import date
 from decimal import Decimal
@@ -54,6 +54,16 @@ def test_all():
     )
     test_btypes.append(
         data.Event(meta={}, date=date.today(), type="test", description="test")
+    )
+    test_btypes.append(
+        inventory.Inventory(
+            positions=[
+                position.Position(
+                    units=amount.Amount(number=Decimal(1.50), currency="USD"),
+                    cost=None,
+                )
+            ]
+        )
     )
     test_btypes.append(
         data.Note(
@@ -209,6 +219,16 @@ def test_all():
     test_models.append(
         models.Event(
             meta={}, date=date.today(), type="test", description="test"
+        )
+    )
+    test_models.append(
+        models.Inventory(
+            __root__=[
+                models.Position(
+                    units=models.Amount(number=Decimal(1.50), currency="USD"),
+                    cost=None,
+                )
+            ]
         )
     )
     test_models.append(
@@ -404,15 +424,15 @@ def test_recursive_export():
         ],
     )
 
-    expected = data.Transaction(
-        meta={},
-        date=date.today(),
-        flag="*",
-        payee="test",
-        narration="test",
-        tags=None,
-        links=None,
-        postings=[
+    expected = {
+        "meta": {},
+        "date": date.today(),
+        "flag": "*",
+        "payee": "test",
+        "narration": "test",
+        "tags": None,
+        "links": None,
+        "postings": [
             data.Posting(
                 account="Test",
                 units=amount.Amount(number=Decimal(1.50), currency="USD"),
@@ -422,7 +442,7 @@ def test_recursive_export():
                 meta={},
             )
         ],
-    )
+    }
 
     result = models._recursive_export(txn)
     assert result == expected

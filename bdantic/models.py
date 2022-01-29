@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datetime
 
-from beancount.core import amount, data, position
+from beancount.core import amount, data, inventory, position
 from decimal import Decimal
 from pydantic import BaseModel
 from typing import (
@@ -21,33 +21,7 @@ Flag = str
 
 
 class Base(BaseModel):
-    """Base class for representing models of Beancount types.
-
-    This class provides standard methods for converting between a Beancount
-    type and a Pydantic model.
-    """
-
-    _sibling: Type[BeancountType]
-
-    @classmethod
-    def parse(cls: Type[Model], obj: BeancountType) -> Model:
-        """Attempts to parse a Beancount type into this class.
-
-        Args:
-            obj: The Beancount type to parse
-
-        Returns:
-            A new instance of this class
-        """
-        return cls.parse_obj(_recursive_parse(obj))
-
-    def export(self) -> BeancountType:
-        """Attempts to export this class into it's respective Beancount type.
-
-        Returns:
-            A new instance of the respective Beancount type for this class.
-        """
-        return _recursive_export(self)
+    _sibling: type
 
 
 class BaseDirective(Base):
@@ -64,6 +38,26 @@ class Amount(Base):
     number: Optional[Decimal]
     currency: Optional[Currency]
 
+    @classmethod
+    def parse(cls, obj: amount.Amount) -> Amount:
+        """Parses a beancount Amount into this model
+
+        Args:
+            obj: The Beancount Amount to parse
+
+        Returns:
+            A new instance of this model
+        """
+        return cls.parse_obj(_recursive_parse(obj))
+
+    def export(self) -> amount.Amount:
+        """Exports this model into a beancount Amount
+
+        Returns:
+            A new instance of a beancount Amount
+        """
+        return self._sibling(**_recursive_export(self))
+
 
 class Balance(BaseDirective):
     """A model representing a beancount.core.data.Balance."""
@@ -74,6 +68,26 @@ class Balance(BaseDirective):
     tolerance: Optional[Decimal]
     diff_amount: Optional[Amount]
 
+    @classmethod
+    def parse(cls, obj: data.Balance) -> Balance:
+        """Parses a beancount Balance directive into this model
+
+        Args:
+            obj: The Beancount Balance directive to parse
+
+        Returns:
+            A new instance of this model
+        """
+        return cls.parse_obj(_recursive_parse(obj))
+
+    def export(self) -> data.Balance:
+        """Exports this model into a beancount Balance directive
+
+        Returns:
+            A new instance of a beancount Balance directive
+        """
+        return self._sibling(**_recursive_export(self))
+
 
 class Close(BaseDirective):
     """A model representing a beancount.core.data.Close."""
@@ -81,12 +95,25 @@ class Close(BaseDirective):
     _sibling = data.Close
     account: Account
 
+    @classmethod
+    def parse(cls, obj: data.Close) -> Close:
+        """Parses a beancount Close directive into this model
 
-class Commodity(BaseDirective):
-    """A model representing a beancount.core.data.Commodity."""
+        Args:
+            obj: The Beancount Close directive to parse
 
-    _sibling = data.Commodity
-    currency: Currency
+        Returns:
+            A new instance of this model
+        """
+        return cls.parse_obj(_recursive_parse(obj))
+
+    def export(self) -> data.Close:
+        """Exports this model into a beancount Close directive
+
+        Returns:
+            A new instance of a beancount Close directive
+        """
+        return self._sibling(**_recursive_export(self))
 
 
 class Cost(Base):
@@ -97,6 +124,26 @@ class Cost(Base):
     currency: Currency
     date: datetime.date
     label: Optional[str]
+
+    @classmethod
+    def parse(cls, obj: position.Cost) -> Cost:
+        """Parses a beancount Cost into this model
+
+        Args:
+            obj: The Beancount Cost to parse
+
+        Returns:
+            A new instance of this model
+        """
+        return cls.parse_obj(_recursive_parse(obj))
+
+    def export(self) -> position.Cost:
+        """Exports this model into a beancount Cost
+
+        Returns:
+            A new instance of a beancount Cost
+        """
+        return self._sibling(**_recursive_export(self))
 
 
 class CostSpec(Base):
@@ -110,6 +157,54 @@ class CostSpec(Base):
     label: Optional[str]
     merge: Optional[bool]
 
+    @classmethod
+    def parse(cls, obj: position.CostSpec) -> CostSpec:
+        """Parses a beancount CostSpec into this model
+
+        Args:
+            obj: The Beancount CostSpec to parse
+
+        Returns:
+            A new instance of this model
+        """
+        return cls.parse_obj(_recursive_parse(obj))
+
+    def export(self) -> position.CostSpec:
+        """Exports this model into a beancount CostSpec
+
+        Returns:
+            A new instance of a beancount CostSpec
+        """
+        return self._sibling(**_recursive_export(self))
+
+
+class Commodity(BaseDirective):
+    """A model representing a beancount.core.data.Commodity."""
+
+    _sibling = data.Commodity
+    date: datetime.date
+    currency: str
+
+    @classmethod
+    def parse(cls, obj: data.Commodity) -> Commodity:
+        """Parses a beancount Commodity directive into this model
+
+        Args:
+            obj: The Beancount Commodity directive to parse
+
+        Returns:
+            A new instance of this model
+        """
+        return cls.parse_obj(_recursive_parse(obj))
+
+    def export(self) -> data.Commodity:
+        """Exports this model into a beancount Commodity directive
+
+        Returns:
+            A new instance of a beancount Commodity directive
+        """
+        return self._sibling(**_recursive_export(self))
+
 
 class Custom(BaseDirective):
     """A model representing a beancount.core.data.Custom."""
@@ -117,6 +212,26 @@ class Custom(BaseDirective):
     _sibling = data.Custom
     type: str
     values: List[Any]
+
+    @classmethod
+    def parse(cls, obj: data.Custom) -> Custom:
+        """Parses a beancount Custom directive into this model
+
+        Args:
+            obj: The Beancount Custom directive to parse
+
+        Returns:
+            A new instance of this model
+        """
+        return cls.parse_obj(_recursive_parse(obj))
+
+    def export(self) -> data.Custom:
+        """Exports this model into a beancount Custom directive
+
+        Returns:
+            A new instance of a beancount Custom directive
+        """
+        return self._sibling(**_recursive_export(self))
 
 
 class Document(BaseDirective):
@@ -128,6 +243,26 @@ class Document(BaseDirective):
     tags: Optional[Set]
     links: Optional[Set]
 
+    @classmethod
+    def parse(cls, obj: data.Document) -> Document:
+        """Parses a beancount Document directive into this model
+
+        Args:
+            obj: The Beancount Document directive to parse
+
+        Returns:
+            A new instance of this model
+        """
+        return cls.parse_obj(_recursive_parse(obj))
+
+    def export(self) -> data.Document:
+        """Exports this model into a beancount Document directive
+
+        Returns:
+            A new instance of a beancount Document directive
+        """
+        return self._sibling(**_recursive_export(self))
+
 
 class Event(BaseDirective):
     """A model representing a beancount.core.data.Event."""
@@ -136,6 +271,41 @@ class Event(BaseDirective):
     type: str
     description: str
 
+    @classmethod
+    def parse(cls, obj: data.Event) -> Event:
+        """Parses a beancount Event directive into this model
+
+        Args:
+            obj: The Beancount Event directive to parse
+
+        Returns:
+            A new instance of this model
+        """
+        return cls.parse_obj(_recursive_parse(obj))
+
+    def export(self) -> data.Event:
+        """Exports this model into a beancount Event directive
+
+        Returns:
+            A new instance of a beancount Event directive
+        """
+        return self._sibling(**_recursive_export(self))
+
+
+class Inventory(Base):
+    __root__: List[Position]
+
+    @classmethod
+    def parse(cls: Type[Inventory], obj: inventory.Inventory) -> Inventory:
+        positions = [
+            Position.parse(position) for position in obj.get_positions()
+        ]
+        return Inventory(__root__=positions)
+
+    def export(self) -> inventory.Inventory:
+        positions = [position.export() for position in self.__root__]
+        return inventory.Inventory(positions=positions)
+
 
 class Note(BaseDirective):
     """A model representing a beancount.core.data.Note."""
@@ -143,6 +313,26 @@ class Note(BaseDirective):
     _sibling = data.Note
     account: Account
     comment: str
+
+    @classmethod
+    def parse(cls, obj: data.Note) -> Note:
+        """Parses a beancount Note directive into this model
+
+        Args:
+            obj: The Beancount Note directive to parse
+
+        Returns:
+            A new instance of this model
+        """
+        return cls.parse_obj(_recursive_parse(obj))
+
+    def export(self) -> data.Note:
+        """Exports this model into a beancount Note directive
+
+        Returns:
+            A new instance of a beancount Note directive
+        """
+        return self._sibling(**_recursive_export(self))
 
 
 class Open(BaseDirective):
@@ -153,6 +343,26 @@ class Open(BaseDirective):
     currencies: Optional[List[Currency]]
     booking: Optional[data.Booking]
 
+    @classmethod
+    def parse(cls, obj: data.Open) -> Open:
+        """Parses a beancount Open directive into this model
+
+        Args:
+            obj: The Beancount Open directive to parse
+
+        Returns:
+            A new instance of this model
+        """
+        return cls.parse_obj(_recursive_parse(obj))
+
+    def export(self) -> data.Open:
+        """Exports this model into a beancount Open directive
+
+        Returns:
+            A new instance of a beancount Open directive
+        """
+        return self._sibling(**_recursive_export(self))
+
 
 class Pad(BaseDirective):
     """A model representing a beancount.core.data.Pad."""
@@ -161,6 +371,26 @@ class Pad(BaseDirective):
     account: Account
     source_account: Account
 
+    @classmethod
+    def parse(cls, obj: data.Pad) -> Pad:
+        """Parses a beancount Pad directive into this model
+
+        Args:
+            obj: The Beancount Pad directive to parse
+
+        Returns:
+            A new instance of this model
+        """
+        return cls.parse_obj(_recursive_parse(obj))
+
+    def export(self) -> data.Pad:
+        """Exports this model into a beancount Pad directive
+
+        Returns:
+            A new instance of a beancount Pad directive
+        """
+        return self._sibling(**_recursive_export(self))
+
 
 class Position(Base):
     """A model representing a beancount.core.position.Position."""
@@ -168,6 +398,26 @@ class Position(Base):
     _sibling = position.Position
     units: Amount
     cost: Optional[Cost]
+
+    @classmethod
+    def parse(cls, obj: position.Position) -> Position:
+        """Parses a beancount Position into this model
+
+        Args:
+            obj: The Beancount Position to parse
+
+        Returns:
+            A new instance of this model
+        """
+        return cls.parse_obj(_recursive_parse(obj))
+
+    def export(self) -> position.Position:
+        """Exports this model into a beancount Position
+
+        Returns:
+            A new instance of a beancount Position
+        """
+        return self._sibling(**_recursive_export(self))
 
 
 class Posting(Base):
@@ -181,6 +431,26 @@ class Posting(Base):
     flag: Optional[str]
     meta: Optional[Dict[str, Any]]
 
+    @classmethod
+    def parse(cls, obj: data.Posting) -> Posting:
+        """Parses a beancount Posting into this model
+
+        Args:
+            obj: The Beancount Posting to parse
+
+        Returns:
+            A new instance of this model
+        """
+        return cls.parse_obj(_recursive_parse(obj))
+
+    def export(self) -> data.Posting:
+        """Exports this model into a beancount Posting
+
+        Returns:
+            A new instance of a beancount Posting
+        """
+        return self._sibling(**_recursive_export(self))
+
 
 class Price(BaseDirective):
     """A model representing a beancount.core.data.Price."""
@@ -189,6 +459,26 @@ class Price(BaseDirective):
     currency: Currency
     amount: Amount
 
+    @classmethod
+    def parse(cls, obj: data.Price) -> Price:
+        """Parses a beancount Price directive into this model
+
+        Args:
+            obj: The Beancount Price directive to parse
+
+        Returns:
+            A new instance of this model
+        """
+        return cls.parse_obj(_recursive_parse(obj))
+
+    def export(self) -> data.Price:
+        """Exports this model into a beancount Price directive
+
+        Returns:
+            A new instance of a beancount Price directive
+        """
+        return self._sibling(**_recursive_export(self))
+
 
 class Query(BaseDirective):
     """A model representing a beancount.core.data.Query."""
@@ -196,6 +486,26 @@ class Query(BaseDirective):
     _sibling = data.Query
     name: str
     query_string: str
+
+    @classmethod
+    def parse(cls, obj: data.Query) -> Query:
+        """Parses a beancount Query directive into this model
+
+        Args:
+            obj: The Beancount Query directive to parse
+
+        Returns:
+            A new instance of this model
+        """
+        return cls.parse_obj(_recursive_parse(obj))
+
+    def export(self) -> data.Query:
+        """Exports this model into a beancount Query directive
+
+        Returns:
+            A new instance of a beancount Query directive
+        """
+        return self._sibling(**_recursive_export(self))
 
 
 class Transaction(BaseDirective):
@@ -209,6 +519,26 @@ class Transaction(BaseDirective):
     links: Optional[Set]
     postings: List[Posting]
 
+    @classmethod
+    def parse(cls, obj: data.Transaction) -> Transaction:
+        """Parses a beancount Transaction directive into this model
+
+        Args:
+            obj: The Beancount Transaction directive to parse
+
+        Returns:
+            A new instance of this model
+        """
+        return cls.parse_obj(_recursive_parse(obj))
+
+    def export(self) -> data.Transaction:
+        """Exports this model into a beancount Transaction directive
+
+        Returns:
+            A new instance of a beancount Transaction directive
+        """
+        return self._sibling(**_recursive_export(self))
+
 
 class TxnPosting(Base):
     """A model representing a beancount.core.data.TxnPosting."""
@@ -217,16 +547,40 @@ class TxnPosting(Base):
     txn: Transaction
     posting: Posting
 
+    @classmethod
+    def parse(cls, obj: data.TxnPosting) -> TxnPosting:
+        """Parses a beancount TxnPosting into this model
 
-# A union type for all valid models
-Model = Union[
+        Args:
+            obj: The Beancount TxnPosting to parse
+
+        Returns:
+            A new instance of this model
+        """
+        return cls.parse_obj(_recursive_parse(obj))
+
+    def export(self) -> data.TxnPosting:
+        """Exports this model into a beancount TxnPosting
+
+        Returns:
+            A new instance of a beancount TxnPosting
+        """
+        return self._sibling(**_recursive_export(self))
+
+
+# Update forward references
+Inventory.update_forward_refs()
+
+# A union for all models which have Beancount types that are NamedTuple's
+ModelTuple = Union[
     Amount,
     Balance,
     Base,
     Close,
-    Commodity,
+    Open,
     Cost,
     CostSpec,
+    Commodity,
     Custom,
     Document,
     Event,
@@ -241,14 +595,18 @@ Model = Union[
     TxnPosting,
 ]
 
-# A union type for all valid Beancount types
-BeancountType = Union[
+# A union for all models
+Model = Union[ModelTuple, Inventory]
+
+# A union for all Beancount types which are NamedTuple's
+BeancountTuple = Union[
     amount.Amount,
     data.Balance,
     data.Close,
-    data.Commodity,
+    data.Open,
     position.Cost,
     position.CostSpec,
+    data.Commodity,
     data.Custom,
     data.Document,
     data.Event,
@@ -262,6 +620,9 @@ BeancountType = Union[
     data.Transaction,
     data.TxnPosting,
 ]
+
+# A union for all Beancount types
+BeancountType = Union[BeancountTuple, inventory.Inventory]
 
 
 def _is_named_tuple(obj: Any) -> bool:
@@ -285,18 +646,18 @@ def _is_named_tuple(obj: Any) -> bool:
     )
 
 
-def _recursive_parse(b: BeancountType) -> Dict[str, Any]:
-    """Recursively parses a BeancountType into a nested dictionary.
+def _recursive_parse(b: BeancountTuple) -> Dict[str, Any]:
+    """Recursively parses a BeancountType into a nested dictionary of models.
 
     Since a NamedTuple can be represented as a dictionary using the bultin
     _asdict() method, this function attempts to recursively convert a
-    BeancountType and any children types into a nested dictionary structure.
+    BeancountTuple and any children types into a nested dictionary structure.
 
     Args:
         b: The BeancountType to recursively parse
 
     Returns:
-        A nested dictionary with all parsed BeancountType contents.
+        A nested dictionary with all parsed models.
     """
     result: Dict[str, Any] = {}
     for key, value in b._asdict().items():
@@ -311,23 +672,25 @@ def _recursive_parse(b: BeancountType) -> Dict[str, Any]:
     return result
 
 
-def _recursive_export(b: Base) -> BeancountType:
-    """Recursively exports a Base model into its resepective BeancountType.
+def _recursive_export(b: ModelTuple) -> Dict[str, Any]:
+    """Recursively exports a ModelTuple into a nested dictionary
 
     Args:
-        b: The Base model to recursively export
+        b: The ModelTuple to recursively export
 
     Returns:
-        The respective BeancountType
+        A nested dictionary with all exported Beancount types
     """
     result: Dict[str, Any] = {}
     for key, value in b.__dict__.items():
         if isinstance(value, Base):
-            result[key] = _recursive_export(value)
+            result[key] = value._sibling(**_recursive_export(value))
         elif isinstance(value, list) and value:
             if isinstance(value[0], Base):
-                result[key] = [_recursive_export(c) for c in value]
+                result[key] = [
+                    c._sibling(**_recursive_export(c)) for c in value
+                ]
         else:
             result[key] = value
 
-    return b._sibling(**result)
+    return result

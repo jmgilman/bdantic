@@ -1,4 +1,4 @@
-from beancount.core import amount, data, position
+from beancount.core import amount, data, inventory, position
 from bdantic import models
 from typing import Dict, List, Sequence, Type
 
@@ -22,6 +22,7 @@ _type_map: Dict[Type[models.BeancountType], Type[models.Model]] = {
     data.Query: models.Query,
     data.Transaction: models.Transaction,
     data.TxnPosting: models.TxnPosting,
+    inventory.Inventory: models.Inventory,
 }
 
 
@@ -34,7 +35,7 @@ def to_model(obj: models.BeancountType) -> models.Model:
     Returns:
         The associated model for the given BeancountType
     """
-    return _type_map[type(obj)].parse(obj)
+    return _type_map[type(obj)].parse(obj)  # type: ignore
 
 
 def to_models(objs: Sequence[models.BeancountType]) -> List[models.Model]:
