@@ -1,6 +1,6 @@
 from beancount.core.data import Directive
 from bdantic import models
-from typing import List, Sequence
+from typing import Any, Dict, List, Sequence
 
 
 def parse(obj: models.BeancountType) -> models.Model:
@@ -28,7 +28,7 @@ def parse_all(objs: Sequence[models.BeancountType]) -> List[models.Model]:
     return [parse(obj) for obj in objs]
 
 
-def parse_entries(entries: List[Directive]) -> models.Directives:
+def parse_entries(entries: List[Directive]) -> models.Entries:
     """Parses a list of directives into a Directives model.
 
     Args:
@@ -37,4 +37,10 @@ def parse_entries(entries: List[Directive]) -> models.Directives:
     Returns:
         A Directives instance
     """
-    return models.Directives.parse(entries)
+    return models.Entries.parse(entries)
+
+
+def parse_loader(
+    entries: List[Directive], errors: List[Any], options: Dict[str, Any]
+) -> models.BeancountFile:
+    return models.BeancountFile.parse(entries, errors, options)

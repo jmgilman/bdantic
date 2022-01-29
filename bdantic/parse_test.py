@@ -1,5 +1,6 @@
+from beancount import loader
 from beancount.core import amount, data
-from bdantic import parse, parse_all, parse_entries, models
+from bdantic import parse, parse_all, parse_entries, parse_loader, models
 from datetime import date
 from decimal import Decimal
 
@@ -114,7 +115,16 @@ def test_parse_entries():
     expected_models.append(
         models.Commodity(meta={}, date=date.today(), currency="USD")
     )
-    expected_directives = models.Directives(__root__=expected_models)
+    expected_entries = models.Entries(__root__=expected_models)
 
     result = parse_entries(btypes)
-    assert result == expected_directives
+    assert result == expected_entries
+
+
+def test_parse_file():
+    entries, errors, options = loader.load_file("testing/static.beancount")
+    result = parse_loader(entries, errors, options)
+
+    assert entries == result.entries.export()
+    assert errors == result.errors
+    assert options == result.options

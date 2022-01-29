@@ -1,16 +1,26 @@
 from __future__ import annotations
 
+import collections
 import datetime
 
-from beancount.core import amount, data, inventory, position
+from beancount.core import (
+    amount,
+    data,
+    display_context,
+    distribution,
+    inventory,
+    position,
+)
 from decimal import Decimal
 from pydantic import BaseModel
 from typing import (
     Any,
     Dict,
+    Generator,
     List,
     Optional,
     Set,
+    Tuple,
     Type,
     Union,
 )
@@ -206,6 +216,44 @@ class Commodity(BaseDirective):
         return self._sibling(**_recursive_export(self))
 
 
+class CurrencyContext(Base):
+    """A model representing a core.display_context._CurrencyContext."""
+
+    _sibling = display_context._CurrencyContext
+    has_sign: bool
+    integer_max: int
+    fractional_dist: Distribution
+
+    @classmethod
+    def parse(cls, obj: display_context._CurrencyContext) -> CurrencyContext:
+        """Parses a beancount CurrencyContext into this model
+
+        Args:
+            obj: The Beancount CurrencyContext to parse
+
+        Returns:
+            A new instance of this model
+        """
+
+        return CurrencyContext(
+            has_sign=obj.has_sign,
+            integer_max=obj.integer_max,
+            fractional_dist=Distribution.parse(obj.fractional_dist),
+        )
+
+    def export(self) -> display_context._CurrencyContext:
+        """Exports this model into a beancount CurrencyContext
+
+        Returns:
+            A new instance of a beancount CurrencyContext
+        """
+        ctx = display_context._CurrencyContext()
+        ctx.has_sign = self.has_sign
+        ctx.integer_max = self.integer_max
+        ctx.fractional_dist = self.fractional_dist.export()
+        return ctx
+
+
 class Custom(BaseDirective):
     """A model representing a beancount.core.data.Custom."""
 
@@ -232,6 +280,75 @@ class Custom(BaseDirective):
             A new instance of a beancount Custom directive
         """
         return self._sibling(**_recursive_export(self))
+
+
+class DisplayContext(Base):
+    """A model representing a core.display_context.DisplayContext."""
+
+    _sibling = display_context.DisplayContext
+    ccontexts: collections.defaultdict
+    commas: bool
+
+    @classmethod
+    def parse(cls, obj: display_context.DisplayContext) -> DisplayContext:
+        """Parses a beancount DisplayContext into this model
+
+        Args:
+            obj: The Beancount DisplayContext to parse
+
+        Returns:
+            A new instance of this model
+        """
+        ccontexts = collections.defaultdict(
+            CurrencyContext,
+            {k: CurrencyContext.parse(v) for (k, v) in obj.ccontexts.items()},
+        )
+        return DisplayContext(ccontexts=ccontexts, commas=obj.commas)
+
+    def export(self) -> display_context.DisplayContext:
+        """Exports this model into a beancount DisplayContext
+
+        Returns:
+            A new instance of a beancount DisplayContext
+        """
+        ccontexts = collections.defaultdict(
+            display_context._CurrencyContext,
+            {k: v.export() for (k, v) in self.ccontexts.items()},
+        )
+        ctx = display_context.DisplayContext()
+        ctx.ccontexts = ccontexts
+        ctx.commas = self.commas
+        return ctx
+
+
+class Distribution(Base):
+    """A model representing a beancount.core.distribution.Distribution."""
+
+    _sibling = distribution.Distribution
+    hist: collections.defaultdict
+
+    @classmethod
+    def parse(cls, obj: distribution.Distribution) -> Distribution:
+        """Parses a beancount Distribution into this model
+
+        Args:
+            obj: The Beancount Distribution to parse
+
+        Returns:
+            A new instance of this model
+        """
+
+        return Distribution(hist=obj.hist)
+
+    def export(self) -> distribution.Distribution:
+        """Exports this model into a beancount Distribution
+
+        Returns:
+            A new instance of a beancount Distribution
+        """
+        dist = distribution.Distribution()
+        dist.hist = self.hist
+        return dist
 
 
 class Document(BaseDirective):
@@ -298,7 +415,7 @@ class Inventory(Base):
     __root__: List[Position]
 
     @classmethod
-    def parse(cls: Type[Inventory], obj: inventory.Inventory) -> Inventory:
+    def parse(cls, obj: inventory.Inventory) -> Inventory:
         """Parses a beancount Inventory into this model
 
         Args:
@@ -316,7 +433,7 @@ class Inventory(Base):
         """Exports this model into a beancount Inventory
 
         Returns:
-            A new instance of a beancount Inventory directive
+            A new instance of a beancount Inventory
         """
         positions = [position.export() for position in self.__root__]
         return inventory.Inventory(positions=positions)
@@ -613,7 +730,9 @@ ModelTuple = Union[
 ]
 
 # A union for all models
-Model = Union[ModelTuple, Inventory]
+Model = Union[
+    ModelTuple, CurrencyContext, DisplayContext, Distribution, Inventory
+]
 
 # A union for all Beancount types which are NamedTuple's
 BeancountTuple = Union[
@@ -639,7 +758,16 @@ BeancountTuple = Union[
 ]
 
 # A union for all Beancount types
-BeancountType = Union[BeancountTuple, inventory.Inventory]
+BeancountType = Union[
+    BeancountTuple,
+    display_context._CurrencyContext,
+    display_context.DisplayContext,
+    distribution.Distribution,
+    inventory.Inventory,
+]
+
+# Valid types for keys in the meta field
+MetaKeys = Union[str, int, float, bool, None]
 
 # A dictionary mapping Beancount types to their respective models
 type_map: Dict[Type[BeancountType], Type[Model]] = {
@@ -649,7 +777,10 @@ type_map: Dict[Type[BeancountType], Type[Model]] = {
     data.Commodity: Commodity,
     position.Cost: Cost,
     position.CostSpec: CostSpec,
+    display_context._CurrencyContext: CurrencyContext,
     data.Custom: Custom,
+    display_context.DisplayContext: DisplayContext,
+    distribution.Distribution: Distribution,
     data.Document: Document,
     data.Event: Event,
     data.Note: Note,
@@ -665,37 +796,111 @@ type_map: Dict[Type[BeancountType], Type[Model]] = {
 }
 
 
-class Directives(BaseModel):
-    """A model representing a list of directives."""
+class Entries(BaseModel):
+    """A model representing a list of entries (directives)."""
 
-    __root__: List[ModelDirective]
+    __root__: List[
+        Any
+    ]  # Necessary to avoid weird Pydantic conversion problems
+
+    def __len__(self) -> int:
+        return len(self.__root__)
+
+    def __getitem__(self, i: int) -> ModelDirective:
+        return self.__root__[i]
+
+    def __delitem__(self, i: int) -> None:
+        del self.__root__[i]
+
+    def __setitem__(self, i: int, v: ModelDirective):
+        self.__root__[i] = v
+
+    def __iter__(self) -> Generator[Tuple[str, Any], None, None]:
+        for v in self.__root__:
+            yield v
 
     @classmethod
-    def parse(cls, obj: List[data.Directive]) -> Directives:
-        """Parses a list of beancount directives into this model
+    def parse(cls, obj: List[data.Directive]) -> Entries:
+        """Parses a list of beancount entries into this model
 
         Args:
-            obj: The Beancount directives to parse
+            obj: The Beancount entries to parse
 
         Returns:
             A new instance of this model
         """
+        dirs = []
+
         dirs = [type_map[type(d)].parse(d) for d in obj]  # type: ignore
-        return Directives(__root__=dirs)
+        return Entries(__root__=dirs)
 
     def export(self) -> List[data.Directive]:
-        """Exports this model into a list of beancount directives
+        """Exports this model into a list of beancount entries
 
         Returns:
-            The list of beancount directives
+            The list of beancount entries
         """
         dirs = [d.export() for d in self.__root__]
         return dirs
 
 
+class BeancountFile(BaseModel):
+    """A model representing the contents of an entire beancount file."""
+
+    entries: Entries
+    options: Dict[str, Any]
+    errors: List[Any]
+
+    @classmethod
+    def parse(
+        cls,
+        entries: List[data.Directive],
+        errors: List[Any],
+        options: Dict[str, Any],
+    ) -> BeancountFile:
+        """Parses the results of loading a beancount file into this model.
+
+        Args:
+            obj: The results from calling the beancount loader
+
+        Returns:
+            A new instance of this model
+        """
+        return BeancountFile(
+            entries=Entries.parse(entries),
+            options=options,
+            errors=errors,
+        )
+
+    def export(self) -> Tuple[List[data.Directive], List[Any], Dict[str, Any]]:
+        """Exports this model into it's original counterpart
+
+        Returns:
+            The entries, errors, and options from the original loader
+        """
+        return (self.entries.export(), self.errors, self.options)
+
+
 # Update forward references
-Directives.update_forward_refs()
+CurrencyContext.update_forward_refs()
 Inventory.update_forward_refs()
+
+
+def filter_dict(meta: Dict[Any, Any]) -> Dict[MetaKeys, Any]:
+    new_meta: Dict[MetaKeys, Any] = {}
+    for key, value in meta.items():
+        if type(key) not in [str, int, float, bool, None]:
+            continue
+        if isinstance(value, dict):
+            new_meta[key] = filter_dict(value)
+        elif isinstance(value, list):
+            new_meta[key] = [
+                filter_dict(v) for v in value if isinstance(v, dict)
+            ]
+        else:
+            new_meta[key] = value
+
+    return new_meta
 
 
 def _is_named_tuple(obj: Any) -> bool:
@@ -739,6 +944,10 @@ def _recursive_parse(b: BeancountTuple) -> Dict[str, Any]:
         elif isinstance(value, list) and value:
             if _is_named_tuple(value[0]):
                 result[key] = [_recursive_parse(c) for c in value]
+            else:
+                result[key] = value
+        elif isinstance(value, dict):
+            result[key] = filter_dict(value)
         else:
             result[key] = value
 
@@ -763,6 +972,8 @@ def _recursive_export(b: ModelTuple) -> Dict[str, Any]:
                 result[key] = [
                     c._sibling(**_recursive_export(c)) for c in value
                 ]
+            else:
+                result[key] = value
         else:
             result[key] = value
 

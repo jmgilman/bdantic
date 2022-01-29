@@ -1,13 +1,38 @@
-from beancount.core import amount, data, inventory, position
+import collections
+
+from beancount.core import (
+    amount,
+    data,
+    display_context,
+    distribution,
+    inventory,
+    position,
+)
 from bdantic import models
 from datetime import date
 from decimal import Decimal
-from typing import NamedTuple
+from typing import Any, Dict, NamedTuple
 
 
 def test_all():
     test_btypes = []
     test_models = []
+
+    dd = collections.defaultdict(int)
+    dd[2] = 2941
+    dd[0] = 13
+    dist = distribution.Distribution()
+    dist.hist = dd
+
+    cc = display_context._CurrencyContext()
+    cc.has_sign = False
+    cc.integer_max = 1
+    cc.fractional_dist = dist
+
+    dc = display_context.DisplayContext()
+    dc.commas = False
+    dc.ccontexts = collections.defaultdict(display_context._CurrencyContext)
+    dc.ccontexts["USD"] = cc
 
     test_btypes.append(amount.Amount(number=Decimal(1.50), currency="USD"))
     test_btypes.append(
@@ -39,9 +64,12 @@ def test_all():
             merge=None,
         )
     )
+    test_btypes.append(cc)
     test_btypes.append(
         data.Custom(meta={}, date=date.today(), type="Test", values=[])
     )
+    test_btypes.append(dc)
+    test_btypes.append(dist)
     test_btypes.append(
         data.Document(
             meta={},
@@ -204,8 +232,23 @@ def test_all():
         )
     )
     test_models.append(
+        models.CurrencyContext(
+            has_sign=False,
+            integer_max=1,
+            fractional_dist=models.Distribution(hist=dd),
+        )
+    )
+    test_models.append(
         models.Custom(meta={}, date=date.today(), type="Test", values=[])
     )
+    mcc = collections.defaultdict(models.CurrencyContext)
+    mcc["USD"] = models.CurrencyContext(
+        has_sign=False,
+        integer_max=1,
+        fractional_dist=models.Distribution(hist=dd),
+    )
+    test_models.append(models.DisplayContext(commas=False, ccontexts=mcc))
+    test_models.append(models.Distribution(hist=dd))
     test_models.append(
         models.Document(
             meta={},
@@ -337,12 +380,43 @@ def test_all():
         )
     )
 
+    def _is_equal(obj1: Any, obj2: Any) -> bool:
+        def _get_dict(obj: Any) -> Dict[Any, Any]:
+            if "_asdict" in dir(obj) and callable(getattr(obj, "_asdict")):
+                return obj._asdict()
+            else:
+                return obj.__dict__
+
+        def _is_recursable(obj: Any) -> bool:
+            return (
+                type(obj) in models.type_map.keys()
+                or type(obj) in models.type_map.values()
+            )
+
+        def _recurse(obj: Any) -> Dict[Any, Any]:
+            new_dict = {}
+            for key, value in _get_dict(obj).items():
+                if isinstance(value, dict):
+
+                    def rec(v):
+                        return _recurse(v) if _is_recursable(v) else v
+
+                    new_dict[key] = {k: rec(v) for (k, v) in value.items()}
+                elif _is_recursable(value):
+                    new_dict[key] = _recurse(value)
+                else:
+                    new_dict[key] = value
+
+            return new_dict
+
+        return _recurse(obj1) == _recurse(obj2)
+
     for btype, model in zip(test_btypes, test_models):
         result_model = type(model).parse(btype)
-        assert result_model == model
+        assert _is_equal(result_model, model)
 
         result_btype = model.export()
-        assert result_btype == btype
+        assert _is_equal(result_btype, btype)
 
 
 def test_is_named_tuple():
