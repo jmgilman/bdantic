@@ -1,0 +1,108 @@
+on:
+  push:
+    paths-ignore:
+      - '.github/**'
+      - '.vscode/**'
+      - '**.toml'
+      - '**.md'
+  pull_request:
+    paths-ignore:
+      - '.github/**'
+      - '.vscode/**'
+      - '**.toml'
+      - '**.md'
+  workflow_dispatch:
+
+name: CI
+
+env:
+  POETRY_VERSION: "1.1.5"
+  PYTHON_VERSION: "3.8"
+  TWINE_USERNAME: __token__
+  TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+
+jobs:
+  lint:
+    name: Run linter
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Setup Poetry
+        uses: abatilo/actions-poetry@v2.0.0
+        with:
+          poetry-version: ${{ env.POETRY_VERSION }}
+      - name: Install dependencies
+        run: poetry install
+      - name: Run flake8
+        run: poetry run flake8 $(git ls-files "*.py")
+  format:
+    name: Validate formatting
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Setup Poetry
+        uses: abatilo/actions-poetry@v2.0.0
+        with:
+          poetry-version: ${{ env.POETRY_VERSION }}
+      - name: Install dependencies
+        run: poetry install
+      - name: Run black
+        run: poetry run black --diff --check $(git ls-files '*.py')
+  type:
+    name: Validate type checking
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Setup Poetry
+        uses: abatilo/actions-poetry@v2.0.0
+        with:
+          poetry-version: ${{ env.POETRY_VERSION }}
+      - name: Install dependencies
+        run: poetry install
+      - name: Run mypy
+        run: poetry run mypy $(git ls-files "*.py")
+  test:
+    name: Run tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Setup Poetry
+        uses: abatilo/actions-poetry@v2.0.0
+        with:
+          poetry-version: ${{ env.POETRY_VERSION }}
+      - name: Install dependencies
+        run: poetry install
+      - name: Run pytest
+        run: poetry run pytest
+  push:
+    name: Push to PyPi
+    runs-on: ubuntu-latest
+    if: startsWith(github.event.ref, 'refs/tags/v')
+    needs: [lint, format, type, test]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Setup Poetry
+        uses: abatilo/actions-poetry@v2.0.0
+        with:
+          poetry-version: ${{ env.POETRY_VERSION }}
+      - name: Install dependencies
+        run: poetry install
+      - name: Build
+        run: poetry build
+      - name: Upload
+        run: poetry run twine upload dist/*

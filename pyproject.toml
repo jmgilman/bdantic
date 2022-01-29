@@ -1,9 +1,13 @@
 [tool.poetry]
 name = "bdantic"
-version = "0.1.0"
+version = "0.1.1"
 description = "A package for extending Beancount with Pydantic"
 authors = ["Joshua Gilman <joshuagilman@gmail.com>"]
 license = "MIT"
+readme = "README.md"
+homepage = "https://github.com/jmgilman/bdantic"
+repository = "https://github.com/jmgilman/bdantic"
+keywords = ["beancount", "pydantic", "models"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
@@ -16,6 +20,7 @@ pytest = "^6.2.5"
 black = "^21.12b0"
 flake8 = "^4.0.1"
 mypy = "^0.931"
+twine = "^3.7.1"
 
 [tool.black]
 line-length = 79
