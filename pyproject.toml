@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "bdantic"
 version = "0.1.1"
-description = "A package for extending Beancount with Pydantic"
+description = "A package for extending beancount with pydantic"
 authors = ["Joshua Gilman <joshuagilman@gmail.com>"]
 license = "MIT"
 readme = "README.md"
