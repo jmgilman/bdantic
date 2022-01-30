@@ -43,4 +43,14 @@ def parse_entries(entries: List[Directive]) -> models.Entries:
 def parse_loader(
     entries: List[Directive], errors: List[Any], options: Dict[str, Any]
 ) -> models.BeancountFile:
+    """Parses the result from calling the beancount loader to a BeancountFile.
+
+    Args:
+        entries: The entries return from the loader
+        errors: The errors returned from a loader
+        options: The options returned from a loder
+
+    Returns:
+        A BeancountFile model
+    """
     return models.BeancountFile.parse(entries, errors, options)

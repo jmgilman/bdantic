@@ -43,18 +43,18 @@ result of parsing a beancount file into JSON:
 
 ```python
 from beancount import loader
-from bdantic import parse_entries
+from bdantic import parse_loader
 
-entries, _, _ = loader.load_file("test.beancount")
-dirs = parse_entries(entries)
+result = parse_loader(*loader.load_file("testing/static.beancount"))
 
-print(dirs.json())
+print(result.json())
 ```
 
 Note that models are not compatible with beancount functions as most functions
 make heavy use of type checking and will fail when passed a model. It's expected
 to do all processing using the beancount package and then convert the types to
-models when needed.
+models when needed. Additionally, while JSON can be generated, it's not
+guaranteed to go both ways due to limitations with Pydantic.
 
 ## Contributing
 
