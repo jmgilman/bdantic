@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import collections
 import datetime
+import orjson
 
 from beancount.core import (
     amount,
@@ -30,8 +31,16 @@ Currency = str
 Flag = str
 
 
+def orjson_dumps(v, *, default):
+    return orjson.dumps(v, default=default).decode()
+
+
 class Base(BaseModel):
     _sibling: type
+
+    class Config:
+        json_loads = orjson.loads
+        json_dumps = orjson_dumps
 
 
 class BaseDirective(Base):
