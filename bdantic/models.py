@@ -16,7 +16,6 @@ from pydantic import BaseModel
 from typing import (
     Any,
     Dict,
-    Generator,
     List,
     Optional,
     Set,
@@ -769,6 +768,10 @@ BeancountType = Union[
 # Valid types for keys in the meta field
 MetaKeys = Union[str, int, float, bool, None]
 
+OptionValues = Union[
+    bool, data.Booking, Decimal, Dict, int, List[str], None, set, str
+]
+
 # A dictionary mapping Beancount types to their respective models
 type_map: Dict[Type[BeancountType], Type[Model]] = {
     amount.Amount: Amount,
@@ -796,12 +799,10 @@ type_map: Dict[Type[BeancountType], Type[Model]] = {
 }
 
 
-class Entries(BaseModel):
+class Entries(BaseModel, smart_union=True):
     """A model representing a list of entries (directives)."""
 
-    __root__: List[
-        Any
-    ]  # Necessary to avoid weird Pydantic conversion problems
+    __root__: List[ModelDirective]
 
     def __len__(self) -> int:
         return len(self.__root__)
@@ -815,7 +816,7 @@ class Entries(BaseModel):
     def __setitem__(self, i: int, v: ModelDirective):
         self.__root__[i] = v
 
-    def __iter__(self) -> Generator[Tuple[str, Any], None, None]:
+    def __iter__(self):
         for v in self.__root__:
             yield v
 
@@ -847,7 +848,7 @@ class Entries(BaseModel):
 class Options(BaseModel):
     """A model representing a dictionary of options."""
 
-    __root__: Dict[str, Any]
+    __root__: Dict[str, OptionValues]
 
     def __len__(self) -> int:
         return len(self.__root__)
@@ -861,7 +862,7 @@ class Options(BaseModel):
     def __setitem__(self, key: str, v: Any):
         self.__root__[key] = v
 
-    def __iter__(self) -> Generator[Tuple[str, Any], None, None]:
+    def __iter__(self):
         for v in self.__root__.values():
             yield v
 
@@ -902,7 +903,7 @@ class Options(BaseModel):
         d = {}
         for key, value in self.__root__.items():
             if type(value) in type_map.values():
-                d[key] = value.export()
+                d[key] = value.export()  # type: ignore
             else:
                 d[key] = value
 

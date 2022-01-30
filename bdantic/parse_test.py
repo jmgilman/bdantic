@@ -131,7 +131,8 @@ def test_parse_loader():
             if type(expected) in models.type_map.keys():
                 assert is_equal(expected, result)
             else:
-                assert expected == result
+                if expected and result:
+                    assert expected == result
 
     # Entries
     compare(entries, parsed.entries.export())

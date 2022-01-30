@@ -80,7 +80,11 @@ def _to_dict(obj: Any) -> Dict[Any, Any]:
         A dictionary representation of the object
     """
     new_dict: Dict[Any, Any] = {}
-    for key, value in _get_dict(obj).items():
+    if isinstance(obj, dict):
+        d = obj
+    else:
+        d = _get_dict(obj)
+    for key, value in d.items():
         if isinstance(value, dict):
             new_dict[key] = {k: _try_recurse(v) for (k, v) in value.items()}
         elif isinstance(value, list):
