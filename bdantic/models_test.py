@@ -389,6 +389,14 @@ def test_all():
         assert is_equal(result_btype, btype)
 
 
+def test_filter_dict():
+    d = {"test": "test", 1: 2, type(str): "str"}
+    expected = {"test": "test", 1: 2}
+
+    result = models._filter_dict(d)
+    assert result == expected
+
+
 def test_is_named_tuple():
     class Test(NamedTuple):
         pass

@@ -952,16 +952,24 @@ CurrencyContext.update_forward_refs()
 Inventory.update_forward_refs()
 
 
-def filter_dict(meta: Dict[Any, Any]) -> Dict[MetaKeys, Any]:
+def _filter_dict(meta: Dict[Any, Any]) -> Dict[MetaKeys, Any]:
+    """Recursively filters a dictionary to remove non-JSON serializable keys.
+
+    Args:
+        d: The dictionary to filter
+
+    Returns:
+        The filtered dictionary
+    """
     new_meta: Dict[MetaKeys, Any] = {}
     for key, value in meta.items():
         if type(key) not in [str, int, float, bool, None]:
             continue
         if isinstance(value, dict):
-            new_meta[key] = filter_dict(value)
+            new_meta[key] = _filter_dict(value)
         elif isinstance(value, list):
             new_meta[key] = [
-                filter_dict(v) for v in value if isinstance(v, dict)
+                _filter_dict(v) for v in value if isinstance(v, dict)
             ]
         else:
             new_meta[key] = value
@@ -1013,7 +1021,7 @@ def _recursive_parse(b: BeancountTuple) -> Dict[str, Any]:
             else:
                 result[key] = value
         elif isinstance(value, dict):
-            result[key] = filter_dict(value)
+            result[key] = _filter_dict(value)
         else:
             result[key] = value
 
