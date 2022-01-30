@@ -12,11 +12,12 @@ from beancount.core import (
     position,
 )
 from decimal import Decimal
-from pydantic import BaseModel
+from pydantic import BaseModel, Extra, Field
 from typing import (
     Any,
     Dict,
     List,
+    Literal,
     Optional,
     Set,
     Tuple,
@@ -37,13 +38,23 @@ class BaseDirective(Base):
     """A base class containing common fields for a Beancount directive."""
 
     date: datetime.date
-    meta: Optional[Dict[str, Any]]
+    meta: Optional[Meta]
+
+
+class Meta(BaseModel):
+    filename: Optional[str]
+    lineno: Optional[int]
+    tolerances: Optional[Dict[str, Decimal]] = Field(alias="__tolerances__")
+
+    class Config:
+        extra = Extra.allow
 
 
 class Amount(Base):
     """A model representing a beancount.core.amount.Amount."""
 
     _sibling = amount.Amount
+    ty: Literal["Amount"] = "Amount"
     number: Optional[Decimal]
     currency: Optional[Currency]
 
@@ -72,6 +83,7 @@ class Balance(BaseDirective):
     """A model representing a beancount.core.data.Balance."""
 
     _sibling = data.Balance
+    ty: Literal["Balance"] = "Balance"
     account: Account
     amount: Amount
     tolerance: Optional[Decimal]
@@ -102,6 +114,7 @@ class Close(BaseDirective):
     """A model representing a beancount.core.data.Close."""
 
     _sibling = data.Close
+    ty: Literal["Close"] = "Close"
     account: Account
 
     @classmethod
@@ -129,6 +142,7 @@ class Cost(Base):
     """A model representing a beancount.core.position.Cost."""
 
     _sibling = position.Cost
+    ty: Literal["Cost"] = "Cost"
     number: Decimal
     currency: Currency
     date: datetime.date
@@ -159,6 +173,7 @@ class CostSpec(Base):
     """A model representing a beancount.core.position.CostSpec."""
 
     _sibling = position.CostSpec
+    ty: Literal["CostSpec"] = "CostSpec"
     number_per: Optional[Decimal]
     number_total: Optional[Decimal]
     currency: Optional[Currency]
@@ -191,6 +206,7 @@ class Commodity(BaseDirective):
     """A model representing a beancount.core.data.Commodity."""
 
     _sibling = data.Commodity
+    ty: Literal["Commodity"] = "Commodity"
     date: datetime.date
     currency: str
 
@@ -219,6 +235,7 @@ class CurrencyContext(Base):
     """A model representing a core.display_context._CurrencyContext."""
 
     _sibling = display_context._CurrencyContext
+    ty: Literal["CurrencyContext"] = "CurrencyContext"
     has_sign: bool
     integer_max: int
     fractional_dist: Distribution
@@ -257,6 +274,7 @@ class Custom(BaseDirective):
     """A model representing a beancount.core.data.Custom."""
 
     _sibling = data.Custom
+    ty: Literal["Custom"] = "Custom"
     type: str
     values: List[Any]
 
@@ -285,6 +303,7 @@ class DisplayContext(Base):
     """A model representing a core.display_context.DisplayContext."""
 
     _sibling = display_context.DisplayContext
+    ty: Literal["DisplayContext"] = "DisplayContext"
     ccontexts: collections.defaultdict
     commas: bool
 
@@ -324,6 +343,7 @@ class Distribution(Base):
     """A model representing a beancount.core.distribution.Distribution."""
 
     _sibling = distribution.Distribution
+    ty: Literal["Distribution"] = "Distribution"
     hist: collections.defaultdict
 
     @classmethod
@@ -354,6 +374,7 @@ class Document(BaseDirective):
     """A model representing a beancount.core.data.Document."""
 
     _sibling = data.Document
+    ty: Literal["Document"] = "Document"
     account: Account
     filename: str
     tags: Optional[Set]
@@ -384,6 +405,7 @@ class Event(BaseDirective):
     """A model representing a beancount.core.data.Event."""
 
     _sibling = data.Event
+    ty: Literal["Event"] = "Event"
     type: str
     description: str
 
@@ -442,6 +464,7 @@ class Note(BaseDirective):
     """A model representing a beancount.core.data.Note."""
 
     _sibling = data.Note
+    ty: Literal["Note"] = "Note"
     account: Account
     comment: str
 
@@ -470,6 +493,7 @@ class Open(BaseDirective):
     """A model representing a beancount.core.data.Open."""
 
     _sibling = data.Open
+    ty: Literal["Open"] = "Open"
     account: Account
     currencies: Optional[List[Currency]]
     booking: Optional[data.Booking]
@@ -499,6 +523,7 @@ class Pad(BaseDirective):
     """A model representing a beancount.core.data.Pad."""
 
     _sibling = data.Pad
+    ty: Literal["Pad"] = "Pad"
     account: Account
     source_account: Account
 
@@ -527,6 +552,7 @@ class Position(Base):
     """A model representing a beancount.core.position.Position."""
 
     _sibling = position.Position
+    ty: Literal["Position"] = "Position"
     units: Amount
     cost: Optional[Cost]
 
@@ -555,6 +581,7 @@ class Posting(Base):
     """A model representing a beancount.core.data.Posting."""
 
     _sibling = data.Posting
+    ty: Literal["Posting"] = "Posting"
     account: Account
     units: Optional[Amount]
     cost: Optional[Union[Cost, CostSpec]]
@@ -587,6 +614,7 @@ class Price(BaseDirective):
     """A model representing a beancount.core.data.Price."""
 
     _sibling = data.Price
+    ty: Literal["Price"] = "Price"
     currency: Currency
     amount: Amount
 
@@ -615,6 +643,7 @@ class Query(BaseDirective):
     """A model representing a beancount.core.data.Query."""
 
     _sibling = data.Query
+    ty: Literal["Query"] = "Query"
     name: str
     query_string: str
 
@@ -643,6 +672,7 @@ class Transaction(BaseDirective):
     """A model representing a beancount.core.data.Transaction."""
 
     _sibling = data.Transaction
+    ty: Literal["Transaction"] = "Transaction"
     flag: Flag
     payee: Optional[str]
     narration: str
@@ -675,6 +705,7 @@ class TxnPosting(Base):
     """A model representing a beancount.core.data.TxnPosting."""
 
     _sibling = data.TxnPosting
+    ty: Literal["TxnPosting"] = "TxnPosting"
     txn: Transaction
     posting: Posting
 
@@ -703,7 +734,6 @@ class TxnPosting(Base):
 ModelDirective = Union[
     Balance,
     Close,
-    Open,
     Commodity,
     Custom,
     Document,
@@ -720,7 +750,6 @@ ModelDirective = Union[
 ModelTuple = Union[
     ModelDirective,
     Amount,
-    Base,
     Cost,
     CostSpec,
     Position,
@@ -771,6 +800,8 @@ MetaKeys = Union[str, int, float, bool, None]
 OptionValues = Union[
     bool, data.Booking, Decimal, Dict, int, List[str], None, set, str
 ]
+
+MetaValues = Union[bool, int, Decimal, str, Dict[str, Decimal]]
 
 # A dictionary mapping Beancount types to their respective models
 type_map: Dict[Type[BeancountType], Type[Model]] = {
@@ -888,7 +919,7 @@ class Options(BaseModel):
         d = {}
         for key, value in obj.items():
             if type(value) in type_map.keys():
-                d[key] = type_map[type(value)].parse(value)  # type: ignore
+                d[key] = type_map[type(value)].parse(value)
             else:
                 d[key] = value
 
@@ -948,8 +979,20 @@ class BeancountFile(BaseModel):
 
 
 # Update forward references
+Balance.update_forward_refs()
+Close.update_forward_refs()
+Commodity.update_forward_refs()
 CurrencyContext.update_forward_refs()
+Custom.update_forward_refs()
+Document.update_forward_refs()
+Event.update_forward_refs()
 Inventory.update_forward_refs()
+Note.update_forward_refs()
+Open.update_forward_refs()
+Pad.update_forward_refs()
+Price.update_forward_refs()
+Query.update_forward_refs()
+Transaction.update_forward_refs()
 
 
 def _filter_dict(meta: Dict[Any, Any]) -> Dict[MetaKeys, Any]:
@@ -1039,7 +1082,17 @@ def _recursive_export(b: ModelTuple) -> Dict[str, Any]:
     """
     result: Dict[str, Any] = {}
     for key, value in b.__dict__.items():
-        if isinstance(value, Base):
+        if key == "ty":
+            continue
+        elif key == "meta":
+            if not isinstance(value, dict) and value:
+                result[key] = value.dict(
+                    by_alias=True, exclude_none=True, exclude_unset=True
+                )
+            else:
+                result[key] = value
+            continue
+        if type(value) in list(type_map.values()):
             result[key] = value._sibling(**_recursive_export(value))
         elif isinstance(value, list) and value:
             if isinstance(value[0], Base):

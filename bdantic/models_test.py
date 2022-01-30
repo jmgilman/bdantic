@@ -38,7 +38,10 @@ def test_all():
     test_btypes.append(amount.Amount(number=Decimal(1.50), currency="USD"))
     test_btypes.append(
         data.Balance(
-            meta={},
+            meta={
+                "filename": "test.beancount",
+                "lineno": 123,
+            },
             date=date.today(),
             account="Test",
             amount=amount.Amount(number=Decimal(1.50), currency="USD"),
@@ -46,9 +49,25 @@ def test_all():
             diff_amount=None,
         )
     )
-    test_btypes.append(data.Close(meta={}, date=date.today(), account="Test"))
     test_btypes.append(
-        data.Commodity(meta={}, date=date.today(), currency="USD")
+        data.Close(
+            meta={
+                "filename": "test.beancount",
+                "lineno": 123,
+            },
+            date=date.today(),
+            account="Test",
+        )
+    )
+    test_btypes.append(
+        data.Commodity(
+            meta={
+                "filename": "test.beancount",
+                "lineno": 123,
+            },
+            date=date.today(),
+            currency="USD",
+        )
     )
     test_btypes.append(
         position.Cost(
@@ -67,13 +86,24 @@ def test_all():
     )
     test_btypes.append(cc)
     test_btypes.append(
-        data.Custom(meta={}, date=date.today(), type="Test", values=[])
+        data.Custom(
+            meta={
+                "filename": "test.beancount",
+                "lineno": 123,
+            },
+            date=date.today(),
+            type="Test",
+            values=[],
+        )
     )
     test_btypes.append(dc)
     test_btypes.append(dist)
     test_btypes.append(
         data.Document(
-            meta={},
+            meta={
+                "filename": "test.beancount",
+                "lineno": 123,
+            },
             date=date.today(),
             account="Test",
             filename="test.zip",
@@ -82,7 +112,15 @@ def test_all():
         )
     )
     test_btypes.append(
-        data.Event(meta={}, date=date.today(), type="test", description="test")
+        data.Event(
+            meta={
+                "filename": "test.beancount",
+                "lineno": 123,
+            },
+            date=date.today(),
+            type="test",
+            description="test",
+        )
     )
     test_btypes.append(
         inventory.Inventory(
@@ -96,7 +134,10 @@ def test_all():
     )
     test_btypes.append(
         data.Note(
-            meta={},
+            meta={
+                "filename": "test.beancount",
+                "lineno": 123,
+            },
             date=date.today(),
             account="Test",
             comment="test",
@@ -104,7 +145,10 @@ def test_all():
     )
     test_btypes.append(
         data.Open(
-            meta={},
+            meta={
+                "filename": "test.beancount",
+                "lineno": 123,
+            },
             date=date.today(),
             account="Test",
             currencies=[],
@@ -113,7 +157,13 @@ def test_all():
     )
     test_btypes.append(
         data.Pad(
-            meta={}, date=date.today(), account="Test", source_account="Test"
+            meta={
+                "filename": "test.beancount",
+                "lineno": 123,
+            },
+            date=date.today(),
+            account="Test",
+            source_account="Test",
         )
     )
     test_btypes.append(
@@ -134,7 +184,10 @@ def test_all():
     )
     test_btypes.append(
         data.Price(
-            meta={},
+            meta={
+                "filename": "test.beancount",
+                "lineno": 123,
+            },
             date=date.today(),
             currency="USD",
             amount=amount.Amount(number=Decimal(1.50), currency="USD"),
@@ -142,12 +195,21 @@ def test_all():
     )
     test_btypes.append(
         data.Query(
-            meta={}, date=date.today(), name="test", query_string="test"
+            meta={
+                "filename": "test.beancount",
+                "lineno": 123,
+            },
+            date=date.today(),
+            name="test",
+            query_string="test",
         )
     )
     test_btypes.append(
         data.Transaction(
-            meta={},
+            meta={
+                "filename": "test.beancount",
+                "lineno": 123,
+            },
             date=date.today(),
             flag="*",
             payee="test",
@@ -169,7 +231,10 @@ def test_all():
     test_btypes.append(
         data.TxnPosting(
             txn=data.Transaction(
-                meta={},
+                meta={
+                    "filename": "test.beancount",
+                    "lineno": 123,
+                },
                 date=date.today(),
                 flag="*",
                 payee="test",
@@ -203,7 +268,10 @@ def test_all():
     test_models.append(models.Amount(number=Decimal(1.50), currency="USD"))
     test_models.append(
         models.Balance(
-            meta={},
+            meta=models.Meta(
+                filename="test.beancount",
+                lineno=123,
+            ),
             date=date.today(),
             account="Test",
             amount=models.Amount(number=Decimal(1.50), currency="USD"),
@@ -212,10 +280,24 @@ def test_all():
         )
     )
     test_models.append(
-        models.Close(meta={}, date=date.today(), account="Test")
+        models.Close(
+            meta=models.Meta(
+                filename="test.beancount",
+                lineno=123,
+            ),
+            date=date.today(),
+            account="Test",
+        )
     )
     test_models.append(
-        models.Commodity(meta={}, date=date.today(), currency="USD")
+        models.Commodity(
+            meta=models.Meta(
+                filename="test.beancount",
+                lineno=123,
+            ),
+            date=date.today(),
+            currency="USD",
+        )
     )
     test_models.append(
         models.Cost(
@@ -240,7 +322,15 @@ def test_all():
         )
     )
     test_models.append(
-        models.Custom(meta={}, date=date.today(), type="Test", values=[])
+        models.Custom(
+            meta=models.Meta(
+                filename="test.beancount",
+                lineno=123,
+            ),
+            date=date.today(),
+            type="Test",
+            values=[],
+        )
     )
     mcc = collections.defaultdict(models.CurrencyContext)
     mcc["USD"] = models.CurrencyContext(
@@ -252,7 +342,10 @@ def test_all():
     test_models.append(models.Distribution(hist=dd))
     test_models.append(
         models.Document(
-            meta={},
+            meta=models.Meta(
+                filename="test.beancount",
+                lineno=123,
+            ),
             date=date.today(),
             account="Test",
             filename="test.zip",
@@ -262,7 +355,13 @@ def test_all():
     )
     test_models.append(
         models.Event(
-            meta={}, date=date.today(), type="test", description="test"
+            meta=models.Meta(
+                filename="test.beancount",
+                lineno=123,
+            ),
+            date=date.today(),
+            type="test",
+            description="test",
         )
     )
     test_models.append(
@@ -277,7 +376,10 @@ def test_all():
     )
     test_models.append(
         models.Note(
-            meta={},
+            meta=models.Meta(
+                filename="test.beancount",
+                lineno=123,
+            ),
             date=date.today(),
             account="Test",
             comment="test",
@@ -285,7 +387,10 @@ def test_all():
     )
     test_models.append(
         models.Open(
-            meta={},
+            meta=models.Meta(
+                filename="test.beancount",
+                lineno=123,
+            ),
             date=date.today(),
             account="Test",
             currencies=[],
@@ -294,7 +399,13 @@ def test_all():
     )
     test_models.append(
         models.Pad(
-            meta={}, date=date.today(), account="Test", source_account="Test"
+            meta=models.Meta(
+                filename="test.beancount",
+                lineno=123,
+            ),
+            date=date.today(),
+            account="Test",
+            source_account="Test",
         )
     )
     test_models.append(
@@ -315,7 +426,10 @@ def test_all():
     )
     test_models.append(
         models.Price(
-            meta={},
+            meta=models.Meta(
+                filename="test.beancount",
+                lineno=123,
+            ),
             date=date.today(),
             currency="USD",
             amount=models.Amount(number=Decimal(1.50), currency="USD"),
@@ -323,12 +437,21 @@ def test_all():
     )
     test_models.append(
         models.Query(
-            meta={}, date=date.today(), name="test", query_string="test"
+            meta=models.Meta(
+                filename="test.beancount",
+                lineno=123,
+            ),
+            date=date.today(),
+            name="test",
+            query_string="test",
         )
     )
     test_models.append(
         models.Transaction(
-            meta={},
+            meta=models.Meta(
+                filename="test.beancount",
+                lineno=123,
+            ),
             date=date.today(),
             flag="*",
             payee="test",
@@ -350,7 +473,10 @@ def test_all():
     test_models.append(
         models.TxnPosting(
             txn=models.Transaction(
-                meta={},
+                meta=models.Meta(
+                    filename="test.beancount",
+                    lineno=123,
+                ),
                 date=date.today(),
                 flag="*",
                 payee="test",
@@ -409,7 +535,10 @@ def test_is_named_tuple():
 
 def test_recursive_parse():
     txn = data.Transaction(
-        meta={},
+        meta={
+            "filename": "test.beancount",
+            "lineno": 123,
+        },
         date=date.today(),
         flag="*",
         payee="test",
@@ -429,7 +558,10 @@ def test_recursive_parse():
     )
 
     expected = {
-        "meta": {},
+        "meta": {
+            "filename": "test.beancount",
+            "lineno": 123,
+        },
         "date": date.today(),
         "flag": "*",
         "payee": "test",
@@ -457,7 +589,10 @@ def test_recursive_parse():
 
 def test_recursive_export():
     txn = models.Transaction(
-        meta={},
+        meta={
+            "filename": "test.beancount",
+            "lineno": 123,
+        },
         date=date.today(),
         flag="*",
         payee="test",
@@ -477,7 +612,10 @@ def test_recursive_export():
     )
 
     expected = {
-        "meta": {},
+        "meta": {
+            "filename": "test.beancount",
+            "lineno": 123,
+        },
         "date": date.today(),
         "flag": "*",
         "payee": "test",

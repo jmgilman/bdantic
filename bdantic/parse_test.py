@@ -8,7 +8,10 @@ from testing.util import is_equal
 
 def test_parse():
     txn = data.Transaction(
-        meta={},
+        meta={
+            "filename": "test.beancount",
+            "lineno": 123,
+        },
         date=date.today(),
         flag="*",
         payee="test",
@@ -28,7 +31,7 @@ def test_parse():
     )
 
     expected = models.Transaction(
-        meta={},
+        meta=models.Meta(filename="test.beancount", lineno=123),
         date=date.today(),
         flag="*",
         payee="test",
@@ -58,7 +61,10 @@ def test_parse_all():
     btypes.append(amount.Amount(number=Decimal(1.50), currency="USD"))
     btypes.append(
         data.Balance(
-            meta={},
+            meta={
+                "filename": "test.beancount",
+                "lineno": 123,
+            },
             date=date.today(),
             account="Test",
             amount=amount.Amount(number=Decimal(1.50), currency="USD"),
@@ -70,7 +76,7 @@ def test_parse_all():
     expected_models.append(models.Amount(number=Decimal(1.50), currency="USD"))
     expected_models.append(
         models.Balance(
-            meta={},
+            meta=models.Meta(filename="test.beancount", lineno=123),
             date=date.today(),
             account="Test",
             amount=models.Amount(number=Decimal(1.50), currency="USD"),
@@ -89,7 +95,10 @@ def test_parse_entries():
 
     btypes.append(
         data.Balance(
-            meta={},
+            meta={
+                "filename": "test.beancount",
+                "lineno": 123,
+            },
             date=date.today(),
             account="Test",
             amount=amount.Amount(number=Decimal(1.50), currency="USD"),
@@ -97,12 +106,30 @@ def test_parse_entries():
             diff_amount=None,
         )
     )
-    btypes.append(data.Close(meta={}, date=date.today(), account="Test"))
-    btypes.append(data.Commodity(meta={}, date=date.today(), currency="USD"))
+    btypes.append(
+        data.Close(
+            meta={
+                "filename": "test.beancount",
+                "lineno": 123,
+            },
+            date=date.today(),
+            account="Test",
+        )
+    )
+    btypes.append(
+        data.Commodity(
+            meta={
+                "filename": "test.beancount",
+                "lineno": 123,
+            },
+            date=date.today(),
+            currency="USD",
+        )
+    )
 
     expected_models.append(
         models.Balance(
-            meta={},
+            meta=models.Meta(filename="test.beancount", lineno=123),
             date=date.today(),
             account="Test",
             amount=models.Amount(number=Decimal(1.50), currency="USD"),
@@ -111,10 +138,18 @@ def test_parse_entries():
         )
     )
     expected_models.append(
-        models.Close(meta={}, date=date.today(), account="Test")
+        models.Close(
+            meta=models.Meta(filename="test.beancount", lineno=123),
+            date=date.today(),
+            account="Test",
+        )
     )
     expected_models.append(
-        models.Commodity(meta={}, date=date.today(), currency="USD")
+        models.Commodity(
+            meta=models.Meta(filename="test.beancount", lineno=123),
+            date=date.today(),
+            currency="USD",
+        )
     )
     expected_entries = models.Entries(__root__=expected_models)
 
@@ -129,6 +164,9 @@ def test_parse_loader():
     def compare(object1, object2):
         for expected, result in zip(object1, object2):
             if type(expected) in models.type_map.keys():
+                if not is_equal(expected, result):
+                    print(expected)
+                    print(result)
                 assert is_equal(expected, result)
             else:
                 if expected and result:
