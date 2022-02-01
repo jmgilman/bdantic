@@ -1,9 +1,11 @@
 from beancount.core.data import Directive
-from bdantic import models
+from bdantic.models.file import Entries, BeancountFile
+from bdantic.types import type_map
+from bdantic.types import BeancountType, Model
 from typing import Any, Dict, List, Sequence
 
 
-def parse(obj: models.BeancountType) -> models.Model:
+def parse(obj: BeancountType) -> Model:
     """Parses a Beancount type into it's respective Pydantic models.
 
     Args:
@@ -12,10 +14,12 @@ def parse(obj: models.BeancountType) -> models.Model:
     Returns:
         The associated model for the given BeancountType
     """
-    return models.type_map[type(obj)].parse(obj)  # type: ignore
+    return type_map[type(obj)].parse(obj)  # type: ignore
 
 
-def parse_all(objs: Sequence[models.BeancountType]) -> List[models.Model]:
+def parse_all(
+    objs: Sequence[BeancountType],
+) -> List[Model]:
     """Parses a list of Beancount types into a list of their respective
     Pydantic models.
 
@@ -28,7 +32,7 @@ def parse_all(objs: Sequence[models.BeancountType]) -> List[models.Model]:
     return [parse(obj) for obj in objs]
 
 
-def parse_entries(entries: List[Directive]) -> models.Entries:
+def parse_entries(entries: List[Directive]) -> Entries:
     """Parses a list of directives into a Directives model.
 
     Args:
@@ -37,12 +41,12 @@ def parse_entries(entries: List[Directive]) -> models.Entries:
     Returns:
         A Directives instance
     """
-    return models.Entries.parse(entries)
+    return Entries.parse(entries)
 
 
 def parse_loader(
     entries: List[Directive], errors: List[Any], options: Dict[str, Any]
-) -> models.BeancountFile:
+) -> BeancountFile:
     """Parses the result from calling the beancount loader to a BeancountFile.
 
     Args:
@@ -53,4 +57,4 @@ def parse_loader(
     Returns:
         A BeancountFile model
     """
-    return models.BeancountFile.parse(entries, errors, options)
+    return BeancountFile.parse(entries, errors, options)

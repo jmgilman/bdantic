@@ -1,9 +1,10 @@
 from beancount import loader
 from beancount.core import amount, data
-from bdantic import parse, parse_all, parse_entries, parse_loader, models
+from bdantic import parse, parse_all, parse_entries, parse_loader, types
+from bdantic import models
 from datetime import date
 from decimal import Decimal
-from testing.util import is_equal
+from testing import common as t
 
 
 def test_parse():
@@ -30,8 +31,8 @@ def test_parse():
         ],
     )
 
-    expected = models.Transaction(
-        meta=models.Meta(filename="test.beancount", lineno=123),
+    expected = models.directives.Transaction(
+        meta=models.directives.Meta(filename="test.beancount", lineno=123),
         date=date.today(),
         flag="*",
         payee="test",
@@ -39,9 +40,9 @@ def test_parse():
         tags=None,
         links=None,
         postings=[
-            models.Posting(
+            models.directives.Posting(
                 account="Test",
-                units=models.Amount(number=Decimal(1.50), currency="USD"),
+                units=models.data.Amount(number=Decimal(1.50), currency="USD"),
                 cost=None,
                 price=None,
                 flag=None,
@@ -73,13 +74,15 @@ def test_parse_all():
         )
     )
 
-    expected_models.append(models.Amount(number=Decimal(1.50), currency="USD"))
     expected_models.append(
-        models.Balance(
-            meta=models.Meta(filename="test.beancount", lineno=123),
+        models.data.Amount(number=Decimal(1.50), currency="USD")
+    )
+    expected_models.append(
+        models.directives.Balance(
+            meta=models.directives.Meta(filename="test.beancount", lineno=123),
             date=date.today(),
             account="Test",
-            amount=models.Amount(number=Decimal(1.50), currency="USD"),
+            amount=models.data.Amount(number=Decimal(1.50), currency="USD"),
             tolerance=None,
             diff_amount=None,
         )
@@ -128,30 +131,30 @@ def test_parse_entries():
     )
 
     expected_models.append(
-        models.Balance(
-            meta=models.Meta(filename="test.beancount", lineno=123),
+        models.directives.Balance(
+            meta=models.directives.Meta(filename="test.beancount", lineno=123),
             date=date.today(),
             account="Test",
-            amount=models.Amount(number=Decimal(1.50), currency="USD"),
+            amount=models.data.Amount(number=Decimal(1.50), currency="USD"),
             tolerance=None,
             diff_amount=None,
         )
     )
     expected_models.append(
-        models.Close(
-            meta=models.Meta(filename="test.beancount", lineno=123),
+        models.directives.Close(
+            meta=models.directives.Meta(filename="test.beancount", lineno=123),
             date=date.today(),
             account="Test",
         )
     )
     expected_models.append(
-        models.Commodity(
-            meta=models.Meta(filename="test.beancount", lineno=123),
+        models.directives.Commodity(
+            meta=models.directives.Meta(filename="test.beancount", lineno=123),
             date=date.today(),
             currency="USD",
         )
     )
-    expected_entries = models.Entries(__root__=expected_models)
+    expected_entries = models.file.Entries(__root__=expected_models)
 
     result = parse_entries(btypes)
     assert result == expected_entries
@@ -163,11 +166,8 @@ def test_parse_loader():
 
     def compare(object1, object2):
         for expected, result in zip(object1, object2):
-            if type(expected) in models.type_map.keys():
-                if not is_equal(expected, result):
-                    print(expected)
-                    print(result)
-                assert is_equal(expected, result)
+            if type(expected) in types.type_map.keys():
+                t.compare_object(expected, result, t.Ctx())
             else:
                 if expected and result:
                     assert expected == result
