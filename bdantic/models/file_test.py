@@ -5,7 +5,7 @@ from .directives import Meta, Posting, Transaction
 from .file import Entries, Options
 from hypothesis import given, strategies as s
 from testing import common as t
-from ..types import ModelDirective, OptionValues
+from ..types import OptionValues
 from typing import Dict, List, Type
 
 r = [Amount, Cost, CostSpec, Meta, Posting, Transaction]
@@ -62,7 +62,7 @@ def setup_module(_):
         max_leaves=5,
     ).filter(reject)
 )
-def test_entries(e: List[ModelDirective]):
+def test_entries(e: List[data.Directive]):
     pe = Entries.parse(e)
 
     for i, en in enumerate(pe):

@@ -22,6 +22,7 @@ black = "^21.12b0"
 flake8 = "^4.0.1"
 mypy = "^0.931"
 twine = "^3.7.1"
+hypothesis = "^6.36.1"
 
 [tool.black]
 line-length = 79
