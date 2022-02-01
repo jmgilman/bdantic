@@ -1,4 +1,4 @@
-# beancount-stubs
+# bdantic
 
 <p align="center">
     <a href="https://github.com/jmgilman/bdantic/actions/workflows/ci.yml">
@@ -54,7 +54,14 @@ Note that models are not compatible with beancount functions as most functions
 make heavy use of type checking and will fail when passed a model. It's expected
 to do all processing using the beancount package and then convert the types to
 models when needed. Additionally, while JSON can be generated, it's not
-guaranteed to go both ways due to limitations with Pydantic.
+guaranteed to go both ways due to limitations with Pydantic type coercion:
+
+```python
+from bdantic.models import BeancountFile
+
+# Should work in most cases
+beancount_file = BeancountFile.parse_raw(result.json())
+```
 
 ## Contributing
 
