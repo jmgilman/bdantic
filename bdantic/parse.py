@@ -5,14 +5,38 @@ from bdantic.types import BeancountType, Model
 from typing import Any, Dict, List, Sequence
 
 
+def export(model: Model) -> BeancountType:
+    """Exports a Model to its respective BeancountType.
+
+    Args:
+        model: A valid Model
+
+    Returns:
+        The associated BeancountType for this Model
+    """
+    return model.export()
+
+
+def export_all(models: List[Model]) -> List[BeancountType]:
+    """Exports a list of Models into a list of their respective BeancountType.
+
+    Args:
+        models: A list of Models
+
+    Returns:
+        A list of associated BeancountType's for each model
+    """
+    return [export(model) for model in models]
+
+
 def parse(obj: BeancountType) -> Model:
-    """Parses a Beancount type into it's respective Pydantic models.
+    """Parses a BeancountType into it's respective Model.
 
     Args:
         obj: A valid BeancountType
 
     Returns:
-        The associated model for the given BeancountType
+        The associated Model for the given BeancountType
     """
     return type_map[type(obj)].parse(obj)  # type: ignore
 
@@ -20,14 +44,14 @@ def parse(obj: BeancountType) -> Model:
 def parse_all(
     objs: Sequence[BeancountType],
 ) -> List[Model]:
-    """Parses a list of Beancount types into a list of their respective
-    Pydantic models.
+    """Parses a list of BeancountTypes's into a list of their respective
+    Models.
 
     Args:
         objs: A list of valid BeancountType's
 
     Returns:
-        A list of associated models for each BeancountType
+        A list of associated Models for each BeancountType
     """
     return [parse(obj) for obj in objs]
 

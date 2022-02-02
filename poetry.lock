@@ -42,7 +42,7 @@ requests = "*"
 
 [[package]]
 name = "beancount-stubs"
-version = "0.1.1"
+version = "0.1.2"
 description = "Stub files for the beancount package"
 category = "main"
 optional = false
@@ -658,6 +658,17 @@ optional = false
 python-versions = "*"
 
 [[package]]
+name = "randomwords"
+version = "0.3.0"
+description = "A useful module for a random text, e-mails and lorem ipsum."
+category = "dev"
+optional = false
+python-versions = "*"
+
+[package.extras]
+testing = ["pytest"]
+
+[[package]]
 name = "readme-renderer"
 version = "32.0"
 description = "readme_renderer is a library for rendering \"readme\" descriptions for Warehouse"
@@ -863,7 +874,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "daa6bd29f99a2fc5a41df409ef1ccf9b54a0eb60f14134f07ba8c9eb6edab44c"
+content-hash = "595d432c82a928671b0087516d9df0a1514faae5b66fc0043fb22453f1439954"
 
 [metadata.files]
 atomicwrites = [
@@ -886,8 +897,8 @@ beancount = [
     {file = "beancount-2.3.4.tar.gz", hash = "sha256:2bf08ce6a95d98000f4d73395985cd1deb81c0d52ed5a76e610bac77d82f86c0"},
 ]
 beancount-stubs = [
-    {file = "beancount-stubs-0.1.1.tar.gz", hash = "sha256:58cad2ba53c24e99996b7323b80822f707e84f8f85471bb99e759c0a2da27155"},
-    {file = "beancount_stubs-0.1.1-py3-none-any.whl", hash = "sha256:f387b351fbe502e06fd8ef06c05b002595f87f9fa57ce9c46497dca9d9d00f77"},
+    {file = "beancount-stubs-0.1.2.tar.gz", hash = "sha256:14ccb89637eae0f7b09f215d50d6831d8fdfa50427090add9c3c973b626fe23b"},
+    {file = "beancount_stubs-0.1.2-py3-none-any.whl", hash = "sha256:b4ef32ff2fc6d96a7d19f822be5d7ca3893148a037fbece7e4702a3761316a1a"},
 ]
 beautifulsoup4 = [
     {file = "beautifulsoup4-4.10.0-py3-none-any.whl", hash = "sha256:9a315ce70049920ea4572a4055bc4bd700c940521d36fc858205ad4fcde149bf"},
@@ -1335,6 +1346,9 @@ python-magic = [
 pywin32-ctypes = [
     {file = "pywin32-ctypes-0.2.0.tar.gz", hash = "sha256:24ffc3b341d457d48e8922352130cf2644024a4ff09762a2261fd34c36ee5942"},
     {file = "pywin32_ctypes-0.2.0-py2.py3-none-any.whl", hash = "sha256:9dc2d991b3479cc2df15930958b674a48a227d5361d413827a4cfd0b5876fc98"},
+]
+randomwords = [
+    {file = "RandomWords-0.3.0.tar.gz", hash = "sha256:2a8c8d95bcea31a0da16a84911768f7d6fc0eba861264a72df83deddea0b9326"},
 ]
 readme-renderer = [
     {file = "readme_renderer-32.0-py3-none-any.whl", hash = "sha256:a50a0f2123a4c1145ac6f420e1a348aafefcc9211c846e3d51df05fe3d865b7d"},

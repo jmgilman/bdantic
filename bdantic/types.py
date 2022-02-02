@@ -7,6 +7,7 @@ from beancount.core import (
     distribution,
     inventory,
     position,
+    realization,
 )
 from .models.data import (
     Amount,
@@ -32,6 +33,7 @@ from .models.directives import (
     TxnPosting,
 )
 from .models.display import CurrencyContext, DisplayContext, Distribution
+from .models.realize import RealAccount
 from decimal import Decimal
 from typing import Dict, List, Type, Union
 
@@ -50,6 +52,7 @@ type_map: Dict[Type[BeancountType], Type[Model]] = {
     distribution.Distribution: Distribution,
     data.Document: Document,
     data.Event: Event,
+    inventory.Inventory: Inventory,
     data.Note: Note,
     data.Open: Open,
     data.Pad: Pad,
@@ -57,9 +60,9 @@ type_map: Dict[Type[BeancountType], Type[Model]] = {
     data.Posting: Posting,
     data.Price: Price,
     data.Query: Query,
+    realization.RealAccount: RealAccount,
     data.Transaction: Transaction,
     data.TxnPosting: TxnPosting,
-    inventory.Inventory: Inventory,
 }
 
 # A union for all models that are directives
@@ -91,7 +94,12 @@ ModelTuple = Union[
 
 # A union for all models
 Model = Union[
-    ModelTuple, CurrencyContext, DisplayContext, Distribution, Inventory
+    ModelTuple,
+    CurrencyContext,
+    DisplayContext,
+    Distribution,
+    Inventory,
+    RealAccount,
 ]
 
 # A union for all Beancount types which are NamedTuple's
@@ -113,6 +121,7 @@ BeancountTuple = Union[
     data.Posting,
     data.Price,
     data.Query,
+    realization.RealAccount,
     data.Transaction,
     data.TxnPosting,
 ]

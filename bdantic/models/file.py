@@ -39,8 +39,6 @@ class Entries(BaseModel, smart_union=True):
         """
         dirs = []
 
-        for d in obj:
-            assert type(d) in type_map, f"{str(d)}"
         dirs = [type_map[type(d)].parse(d) for d in obj]  # type: ignore
         return Entries(__root__=dirs)
 

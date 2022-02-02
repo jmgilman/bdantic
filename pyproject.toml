@@ -23,6 +23,7 @@ flake8 = "^4.0.1"
 mypy = "^0.931"
 twine = "^3.7.1"
 hypothesis = "^6.36.1"
+RandomWords = "^0.3.0"
 
 [tool.black]
 line-length = 79

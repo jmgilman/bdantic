@@ -2,7 +2,7 @@ import string
 
 from beancount import loader
 from beancount.core import amount
-from beancount.query import query  # type: ignore
+from beancount.query import query
 from copy import copy
 from .data import Amount, Inventory, Position
 from decimal import Decimal
