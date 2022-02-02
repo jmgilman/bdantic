@@ -1,9 +1,10 @@
 from beancount.core import data, realization
 from bdantic.models.file import Entries, BeancountFile
+from bdantic.models.query import QueryResult
 from bdantic.models.realize import RealAccount
 from bdantic.types import type_map
 from bdantic.types import BeancountType, Model
-from typing import Any, Dict, List, Sequence
+from typing import Any, Dict, List, Sequence, Tuple, Type
 
 
 def export(model: Model) -> BeancountType:
@@ -83,6 +84,20 @@ def parse_loader(
         A BeancountFile model
     """
     return BeancountFile.parse(entries, errors, options)
+
+
+def parse_query(
+    query_result: Tuple[List[Tuple[str, Type]], List[Any]]
+) -> QueryResult:
+    """Parses the response from running query.run_query() on a list of entries.
+
+    Args:
+        query_result: The query result to parse
+
+    Returns:
+        A QueryResult model
+    """
+    return QueryResult.parse(query_result)
 
 
 def parse_realize(real_acct: realization.RealAccount) -> RealAccount:

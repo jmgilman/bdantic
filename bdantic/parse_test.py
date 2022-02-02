@@ -1,10 +1,19 @@
 from beancount import loader
 from beancount.core import amount, data
-from bdantic import parse, parse_all, parse_entries, parse_loader, types
+from bdantic import (
+    parse,
+    parse_all,
+    parse_entries,
+    parse_loader,
+    parse_query,
+    parse_realize,
+    types,
+)
 from bdantic import models
 from datetime import date
 from decimal import Decimal
 from testing import common as t
+from unittest.mock import patch, Mock
 
 
 def test_parse():
@@ -181,3 +190,17 @@ def test_parse_loader():
 
     # Errors
     assert errors == parsed.errors
+
+
+@patch("bdantic.models.QueryResult.parse")
+def test_parse_query(p):
+    m = Mock()
+    parse_query(m)
+    p.assert_called_once_with(m)
+
+
+@patch("bdantic.models.RealAccount.parse")
+def test_parse_realize(p):
+    m = Mock()
+    parse_realize(m)
+    p.assert_called_once_with(m)

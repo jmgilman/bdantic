@@ -22,3 +22,4 @@ from .display import (  # noqa: F401
 )
 from .file import BeancountFile, Entries, Options  # noqa: F401
 from .query import QueryResult  # noqa: F401
+from .realize import RealAccount  # noqa: F401
