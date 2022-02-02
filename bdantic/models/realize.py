@@ -4,8 +4,7 @@ from .base import Base
 from .data import Account, Inventory
 from .directives import TxnPosting
 from beancount.core import realization
-from ..parse import export_all, parse_all
-from ..types import ModelDirective
+from ..types import ModelDirective, type_map
 from typing import Dict, List, Literal, Union
 
 
@@ -34,7 +33,10 @@ class RealAccount(Base, smart_union=True):
 
         return RealAccount(
             account=obj.account,
-            txn_postings=parse_all(obj.txn_postings),
+            txn_postings=[
+                type_map[type(d)].parse(d)  # type: ignore
+                for d in obj.txn_postings
+            ],
             balance=Inventory.parse(obj.balance),
             children=children,
         )
@@ -49,7 +51,9 @@ class RealAccount(Base, smart_union=True):
         for k, v in self.children.items():
             ra[k] = v.export()
 
-        ra.txn_postings = export_all(self.txn_postings)  # type: ignore
+        ra.txn_postings = [
+            p.export() for p in self.txn_postings  # type: ignore
+        ]
         ra.balance = self.balance.export()
 
         return ra

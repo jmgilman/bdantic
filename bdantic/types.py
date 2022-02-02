@@ -33,7 +33,6 @@ from .models.directives import (
     TxnPosting,
 )
 from .models.display import CurrencyContext, DisplayContext, Distribution
-from .models.realize import RealAccount
 from decimal import Decimal
 from typing import Dict, List, Type, Union
 
@@ -60,7 +59,6 @@ type_map: Dict[Type[BeancountType], Type[Model]] = {
     data.Posting: Posting,
     data.Price: Price,
     data.Query: Query,
-    realization.RealAccount: RealAccount,
     data.Transaction: Transaction,
     data.TxnPosting: TxnPosting,
 }
@@ -99,7 +97,6 @@ Model = Union[
     DisplayContext,
     Distribution,
     Inventory,
-    RealAccount,
 ]
 
 # A union for all Beancount types which are NamedTuple's

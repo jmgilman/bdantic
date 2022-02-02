@@ -1,12 +1,12 @@
 import random
 
 from beancount.core.amount import Amount
-from beancount.core.data import Posting, Transaction
+from beancount.core.data import Directive, Posting, Transaction
 from dataclasses import dataclass
 from decimal import Decimal
 from hypothesis import strategies as s
 from random_words import RandomWords  # type: ignore
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Type
 
 
 def register() -> None:
@@ -119,6 +119,18 @@ def decimal() -> s.SearchStrategy[Decimal]:
     return s.decimals(
         min_value=1, max_value=100, allow_infinity=False, allow_nan=False
     )
+
+
+def directive(ty: Type[Directive]) -> s.SearchStrategy[Directive]:
+    """Generates the given directive type.
+
+    Args:
+        ty: The type of directive to generate
+
+    Returns:
+        A new instance of the generated directive
+    """
+    return s.builds(ty, meta=meta())
 
 
 def meta() -> s.SearchStrategy[Dict[str, str]]:

@@ -1,5 +1,6 @@
-from beancount.core.data import Directive
+from beancount.core import data, realization
 from bdantic.models.file import Entries, BeancountFile
+from bdantic.models.realize import RealAccount
 from bdantic.types import type_map
 from bdantic.types import BeancountType, Model
 from typing import Any, Dict, List, Sequence
@@ -17,7 +18,7 @@ def export(model: Model) -> BeancountType:
     return model.export()
 
 
-def export_all(models: List[Model]) -> List[BeancountType]:
+def export_all(models: Sequence[Model]) -> List[BeancountType]:
     """Exports a list of Models into a list of their respective BeancountType.
 
     Args:
@@ -56,7 +57,7 @@ def parse_all(
     return [parse(obj) for obj in objs]
 
 
-def parse_entries(entries: List[Directive]) -> Entries:
+def parse_entries(entries: List[data.Directive]) -> Entries:
     """Parses a list of directives into a Directives model.
 
     Args:
@@ -69,7 +70,7 @@ def parse_entries(entries: List[Directive]) -> Entries:
 
 
 def parse_loader(
-    entries: List[Directive], errors: List[Any], options: Dict[str, Any]
+    entries: List[data.Directive], errors: List[Any], options: Dict[str, Any]
 ) -> BeancountFile:
     """Parses the result from calling the beancount loader to a BeancountFile.
 
@@ -82,3 +83,15 @@ def parse_loader(
         A BeancountFile model
     """
     return BeancountFile.parse(entries, errors, options)
+
+
+def parse_realize(real_acct: realization.RealAccount) -> RealAccount:
+    """Parses the response from running realize() on a list of entries.
+
+    Args:
+        real_acct: The realization.RealAccount to parse
+
+    Returns:
+        A RealAccount model
+    """
+    return RealAccount.parse(real_acct)
