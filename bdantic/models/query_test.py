@@ -5,15 +5,14 @@ from beancount.core import amount
 from beancount.query import query
 from copy import copy
 from .data import Amount, Inventory, Position
-from decimal import Decimal
 from hypothesis import given, strategies as s
 from .query import QueryResult
-from testing import common as t
+from testing import common as t, generate as g
 from typing import Any, Dict, List, Tuple, Type
 
 
 def setup_module(_):
-    s.register_type_strategy(Decimal, s.decimals(allow_nan=False))
+    g.register()
 
 
 @s.composite

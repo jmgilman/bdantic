@@ -1,7 +1,13 @@
 import random
 
 from beancount.core.amount import Amount
-from beancount.core.data import Directive, Posting, Transaction
+from beancount.core.data import (
+    Custom,
+    Directive,
+    Posting,
+    Transaction,
+    TxnPosting,
+)
 from dataclasses import dataclass
 from decimal import Decimal
 from hypothesis import strategies as s
@@ -12,7 +18,9 @@ from typing import Dict, List, Optional, Type
 def register() -> None:
     """Registers common type strategies used in tests."""
     s.register_type_strategy(Amount, amount())
+    s.register_type_strategy(Custom, custom())
     s.register_type_strategy(Decimal, decimal())
+    s.register_type_strategy(Transaction, transaction())
 
 
 @dataclass
@@ -110,6 +118,14 @@ def amount(currency="USD") -> s.SearchStrategy[Amount]:
     )
 
 
+def custom():
+    return s.builds(
+        Custom,
+        meta=meta(),
+        values=s.lists(word()),
+    )
+
+
 def decimal() -> s.SearchStrategy[Decimal]:
     """Generates a random decimal value.
 
@@ -142,8 +158,48 @@ def meta() -> s.SearchStrategy[Dict[str, str]]:
     return s.dictionaries(word(), words(), max_size=2)
 
 
+def posting() -> s.SearchStrategy[Posting]:
+    """Generate a Posting.
+
+    Returns:
+        A new search strategy"""
+    return s.builds(Posting, meta=meta())
+
+
 @s.composite
-def transaction(
+def transaction(draw: s.DrawFn) -> Transaction:
+    """Generates a random transaction
+
+    Returns:
+        A new search strategy
+    """
+    ag = AccountGenerator()
+    accts = ag.generate()
+    return draw(transaction_with_accounts(accts=accts))
+
+
+@s.composite
+def transactions(draw: s.DrawFn, min=3, max=5) -> List[Transaction]:
+    """Generates a list of transactions.
+
+    Args:
+        min: The minimum number to generate
+        max: The maximum number to generate
+
+    Returns:
+        A new search strategy
+    """
+    ag = AccountGenerator()
+    accts = ag.generate()
+    return draw(
+        s.lists(
+            transaction_with_accounts(accts=accts), min_size=min, max_size=max
+        )
+    )
+
+
+@s.composite
+def transaction_with_accounts(
     draw: s.DrawFn,
     accts: List[str],
     currency="USD",
@@ -217,20 +273,13 @@ def transaction(
     return txn
 
 
-@s.composite
-def transactions(draw: s.DrawFn, min=3, max=5) -> List[Transaction]:
-    """Generates a list of transactions.
-
-    Args:
-        min: The minimum number to generate
-        max: The maximum number to generate
+def txnposting() -> s.SearchStrategy[TxnPosting]:
+    """Generates a TxnPosting.
 
     Returns:
         A new search strategy
     """
-    ag = AccountGenerator()
-    accts = ag.generate()
-    return draw(s.lists(transaction(accts=accts), min_size=min, max_size=max))
+    return s.builds(TxnPosting, txn=transaction(), posting=posting())
 
 
 @s.composite

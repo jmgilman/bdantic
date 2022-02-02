@@ -133,8 +133,6 @@ class Custom(BaseDirective):
         Returns:
             A new instance of this model
         """
-        for v in obj.values:  # Don't allow NaN's
-            assert v == v
         return cls.parse_obj(recursive_parse(obj))
 
     def export(self) -> data.Custom:

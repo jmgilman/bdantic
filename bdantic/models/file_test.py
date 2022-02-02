@@ -1,18 +1,17 @@
 from beancount.core import data
 from .data import Amount, Cost, CostSpec
-from decimal import Decimal
 from .directives import Meta, Posting, Transaction
 from .file import Entries, Options
 from hypothesis import given, strategies as s
-from testing import common as t
+from testing import common as t, generate as g
 from ..types import OptionValues
-from typing import Dict, List, Type
+from typing import Dict, List
 
 r = [Amount, Cost, CostSpec, Meta, Posting, Transaction]
 
 
-def build_with_meta(t: Type):
-    return s.builds(t, meta=s.dictionaries(s.text(), s.text()))
+def setup_module(_):
+    g.register()
 
 
 def reject(obj):
@@ -26,38 +25,20 @@ def reject(obj):
     return True
 
 
-def setup_module(_):
-    s.register_type_strategy(
-        Decimal, s.decimals(allow_nan=False, allow_infinity=False)
-    )
-
-
 @given(
     s.recursive(
-        build_with_meta(data.Balance)
-        | build_with_meta(data.Close)
-        | build_with_meta(data.Commodity)
-        | s.builds(
-            data.Custom,
-            meta=s.dictionaries(s.text(), s.text()),
-            values=s.lists(s.text()),
-        )
-        | build_with_meta(data.Document)
-        | build_with_meta(data.Event)
-        | build_with_meta(data.Note)
-        | build_with_meta(data.Open)
-        | build_with_meta(data.Query)
-        | build_with_meta(data.Pad)
-        | build_with_meta(data.Price)
-        | s.builds(
-            data.Transaction,
-            meta=s.dictionaries(s.text(), s.text()),
-            tags=s.sets(s.text()),
-            links=s.sets(s.text()),
-            postings=s.lists(
-                s.builds(data.Posting, meta=s.dictionaries(s.text(), s.text()))
-            ),
-        ),
+        g.directive(data.Balance)
+        | g.directive(data.Close)
+        | g.directive(data.Commodity)
+        | g.custom()
+        | g.directive(data.Document)
+        | g.directive(data.Event)
+        | g.directive(data.Note)
+        | g.directive(data.Open)
+        | g.directive(data.Query)
+        | g.directive(data.Pad)
+        | g.directive(data.Price)
+        | g.transaction(),
         s.lists,
         max_leaves=5,
     ).filter(reject)

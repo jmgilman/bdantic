@@ -1,9 +1,13 @@
 from beancount.core import display_context, distribution
 from .display import CurrencyContext, DisplayContext, Distribution
 from hypothesis import given, strategies as s
-from testing import common as t
+from testing import common as t, generate as g
 
 r = [distribution.Distribution, Distribution, CurrencyContext]
+
+
+def setup_module(_):
+    g.register()
 
 
 def build_distribution():

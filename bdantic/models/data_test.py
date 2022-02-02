@@ -1,13 +1,12 @@
 from beancount.core import amount, inventory, position
 from .data import Amount, Cost, CostSpec, Inventory, Position
-from decimal import Decimal
 from hypothesis import given, strategies as s
-from testing import common as t
+from testing import common as t, generate as g
 from typing import List
 
 
 def setup_module(_):
-    s.register_type_strategy(Decimal, s.decimals(allow_nan=False))
+    g.register()
 
 
 @given(s.builds(amount.Amount))
