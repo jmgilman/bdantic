@@ -50,6 +50,8 @@ def compare(obj1: Any, obj2: Any, ctx: Ctx) -> None:
         compare_dict(obj1, obj2, ctx)
     elif isinstance(obj1, list) and isinstance(obj2, list):
         compare_list(obj1, obj2, ctx)
+    elif isinstance(obj1, tuple) and isinstance(obj2, tuple):
+        compare_list(obj1, obj2, ctx)
     else:
         assert obj1 == obj2
 

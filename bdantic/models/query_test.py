@@ -6,7 +6,7 @@ from beancount.query import query
 from copy import copy
 from .data import Amount, Inventory, Position
 from hypothesis import given, strategies as s
-from .query import QueryResult
+from .query import _map, QueryResult
 from testing import common as t, generate as g
 from typing import Any, Dict, List, Tuple, Type
 
@@ -78,7 +78,8 @@ def test_queryresult(r: Tuple[List[Tuple[str, Type]], List[Dict[str, Any]]]):
     pr = QueryResult.parse((r[0], rows))
     er = pr.export()
 
-    t.compare_list(er[0], pr.columns, t.Ctx(recurse=[Amount]))
+    columns = [(column.name, _map[column.type]) for column in pr.columns]
+    t.compare_list(er[0], columns, t.Ctx(recurse=[Amount]))
     t.compare_list(
         [r._asdict() for r in er[1]], pr.rows, t.Ctx(recurse=[Amount])
     )
