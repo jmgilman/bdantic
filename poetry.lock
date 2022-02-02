@@ -42,7 +42,7 @@ requests = "*"
 
 [[package]]
 name = "beancount-stubs"
-version = "0.1.2"
+version = "0.1.3"
 description = "Stub files for the beancount package"
 category = "main"
 optional = false
@@ -897,8 +897,8 @@ beancount = [
     {file = "beancount-2.3.4.tar.gz", hash = "sha256:2bf08ce6a95d98000f4d73395985cd1deb81c0d52ed5a76e610bac77d82f86c0"},
 ]
 beancount-stubs = [
-    {file = "beancount-stubs-0.1.2.tar.gz", hash = "sha256:14ccb89637eae0f7b09f215d50d6831d8fdfa50427090add9c3c973b626fe23b"},
-    {file = "beancount_stubs-0.1.2-py3-none-any.whl", hash = "sha256:b4ef32ff2fc6d96a7d19f822be5d7ca3893148a037fbece7e4702a3761316a1a"},
+    {file = "beancount-stubs-0.1.3.tar.gz", hash = "sha256:143f1afef0436fb5fbaef5fc672736d6e601a6487ed757c9072fd5fe805e8374"},
+    {file = "beancount_stubs-0.1.3-py3-none-any.whl", hash = "sha256:59104d354927c6991a64f219a3e8626d9687e240dc701f08297752d7100f865e"},
 ]
 beautifulsoup4 = [
     {file = "beautifulsoup4-4.10.0-py3-none-any.whl", hash = "sha256:9a315ce70049920ea4572a4055bc4bd700c940521d36fc858205ad4fcde149bf"},

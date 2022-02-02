@@ -139,6 +139,22 @@ class Inventory(Base):
         positions = [position.export() for position in self.__root__]
         return inventory.Inventory(positions=positions)
 
+    def __len__(self) -> int:
+        return len(self.__root__)
+
+    def __getitem__(self, i: int) -> Position:
+        return self.__root__[i]
+
+    def __delitem__(self, i: int) -> None:
+        del self.__root__[i]
+
+    def __setitem__(self, i: int, v: Position):
+        self.__root__[i] = v
+
+    def __iter__(self):
+        for v in self.__root__:
+            yield v
+
 
 class Position(Base):
     """A model representing a beancount.core.position.Position."""

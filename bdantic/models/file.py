@@ -70,8 +70,8 @@ class Options(BaseModel, smart_union=True):
         self.__root__[key] = v
 
     def __iter__(self):
-        for v in self.__root__.values():
-            yield v
+        for k in self.__root__.keys():
+            yield k
 
     def items(self):
         return self.__root__.items()
