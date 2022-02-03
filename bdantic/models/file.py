@@ -1,31 +1,15 @@
 from __future__ import annotations
 
-from .base import Base, BaseFiltered
+from .base import Base, BaseDict, BaseList
 from beancount.core import data
 from bdantic.types import ModelDirective, OptionValues, type_map
 from typing import Any, Dict, List, Tuple
 
 
-class Entries(BaseFiltered, smart_union=True):
+class Entries(BaseList, smart_union=True):
     """A model representing a list of entries (directives)."""
 
     __root__: List[ModelDirective]
-
-    def __len__(self) -> int:
-        return len(self.__root__)
-
-    def __getitem__(self, i: int) -> ModelDirective:
-        return self.__root__[i]
-
-    def __delitem__(self, i: int) -> None:
-        del self.__root__[i]
-
-    def __setitem__(self, i: int, v: ModelDirective):
-        self.__root__[i] = v
-
-    def __iter__(self):
-        for v in self.__root__:
-            yield v
 
     @classmethod
     def parse(cls, obj: List[data.Directive]) -> Entries:
@@ -52,35 +36,10 @@ class Entries(BaseFiltered, smart_union=True):
         return dirs
 
 
-class Options(BaseFiltered, smart_union=True):
+class Options(BaseDict, smart_union=True):
     """A model representing a dictionary of options."""
 
     __root__: Dict[str, OptionValues]
-
-    def __len__(self) -> int:
-        return len(self.__root__)
-
-    def __getitem__(self, key: str) -> Any:
-        return self.__root__[key]
-
-    def __delitem__(self, key: str) -> None:
-        del self.__root__[key]
-
-    def __setitem__(self, key: str, v: Any):
-        self.__root__[key] = v
-
-    def __iter__(self):
-        for k in self.__root__.keys():
-            yield k
-
-    def items(self):
-        return self.__root__.items()
-
-    def keys(self):
-        return self.__root__.keys()
-
-    def values(self):
-        return self.__root__.values()
 
     @classmethod
     def parse(cls, obj: Dict[str, Any]) -> Options:

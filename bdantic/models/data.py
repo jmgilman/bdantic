@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import datetime
 
-from .base import Base, BaseFiltered
+from .base import Base, BaseList
 from beancount.core import (
     amount,
     inventory,
@@ -110,7 +110,7 @@ class CostSpec(Base):
         return self._sibling(**recursive_export(self))
 
 
-class Inventory(BaseFiltered):
+class Inventory(BaseList):
     """A model representing a beancount.core.inventory.Inventory."""
 
     __root__: List[Position]
@@ -138,22 +138,6 @@ class Inventory(BaseFiltered):
         """
         positions = [position.export() for position in self.__root__]
         return inventory.Inventory(positions=positions)
-
-    def __len__(self) -> int:
-        return len(self.__root__)
-
-    def __getitem__(self, i: int) -> Position:
-        return self.__root__[i]
-
-    def __delitem__(self, i: int) -> None:
-        del self.__root__[i]
-
-    def __setitem__(self, i: int, v: Position):
-        self.__root__[i] = v
-
-    def __iter__(self):
-        for v in self.__root__:
-            yield v
 
 
 class Position(Base):

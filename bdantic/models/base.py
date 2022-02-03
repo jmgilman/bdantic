@@ -6,7 +6,7 @@ import orjson
 from datetime import date
 from decimal import Decimal
 from pydantic import BaseModel
-from typing import Any, Callable, Optional, Type, TypeVar
+from typing import Any, Callable, Dict, Generic, List, Optional, Type, TypeVar
 
 
 def orjson_dumps(v, *, default):
@@ -109,7 +109,7 @@ class Base(BaseModel):
 
 
 class BaseFiltered(Base):
-    """A base model which can be optionally filtered."""
+    """A base model which can be filtered."""
 
     def filter(self: S, expr: str) -> Optional[S]:
         """Filters this model using the given jmespath expression.
@@ -123,6 +123,59 @@ class BaseFiltered(Base):
             return self.parse_obj(obj)
         else:
             return None
+
+
+class BaseList(BaseFiltered, Generic[S]):
+    """A base model that wraps a list of objects."""
+
+    __root__: List[S]
+
+    def __len__(self) -> int:
+        return len(self.__root__)
+
+    def __getitem__(self, i: int):
+        return self.__root__[i]
+
+    def __delitem__(self, i: int):
+        del self.__root__[i]
+
+    def __setitem__(self, i: int, v: S):
+        self.__root__[i] = v
+
+    def __iter__(self):
+        for v in self.__root__:
+            yield v
+
+
+class BaseDict(Base, Generic[S]):
+    """A base model that wraps a dictionary."""
+
+    __root__: Dict[str, S]
+
+    def __len__(self) -> int:
+        return len(self.__root__)
+
+    def __getitem__(self, key: str):
+        return self.__root__[key]
+
+    def __delitem__(self, key: str):
+        del self.__root__[key]
+
+    def __setitem__(self, key: str, v: Any):
+        self.__root__[key] = v
+
+    def __iter__(self):
+        for k in self.__root__.keys():
+            yield k
+
+    def items(self):
+        return self.__root__.items()
+
+    def keys(self):
+        return self.__root__.keys()
+
+    def values(self):
+        return self.__root__.values()
 
 
 def _map(obj: Any, fn: Callable) -> Any:
