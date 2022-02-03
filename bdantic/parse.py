@@ -1,5 +1,5 @@
 from beancount.core import data, realization
-from bdantic.models.file import Entries, BeancountFile
+from bdantic.models.file import Directives, BeancountFile
 from bdantic.models.query import QueryResult
 from bdantic.models.realize import RealAccount
 from bdantic.types import type_map
@@ -58,7 +58,7 @@ def parse_all(
     return [parse(obj) for obj in objs]
 
 
-def parse_entries(entries: List[data.Directive]) -> Entries:
+def parse_directives(entries: List[data.Directive]) -> Directives:
     """Parses a list of directives into a Directives model.
 
     Args:
@@ -67,7 +67,7 @@ def parse_entries(entries: List[data.Directive]) -> Entries:
     Returns:
         A Directives instance
     """
-    return Entries.parse(entries)
+    return Directives.parse(entries)
 
 
 def parse_loader(

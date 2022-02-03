@@ -6,17 +6,17 @@ from bdantic.types import ModelDirective, OptionValues, type_map
 from typing import Any, Dict, List, Tuple
 
 
-class Entries(BaseList, smart_union=True):
-    """A model representing a list of entries (directives)."""
+class Directives(BaseList, smart_union=True):
+    """A model representing a list of directives."""
 
     __root__: List[ModelDirective]
 
     @classmethod
-    def parse(cls, obj: List[data.Directive]) -> Entries:
-        """Parses a list of beancount entries into this model
+    def parse(cls, obj: List[data.Directive]) -> Directives:
+        """Parses a list of beancount directives into this model
 
         Args:
-            obj: The Beancount entries to parse
+            obj: The Beancount directives to parse
 
         Returns:
             A new instance of this model
@@ -24,13 +24,13 @@ class Entries(BaseList, smart_union=True):
         dirs = []
 
         dirs = [type_map[type(d)].parse(d) for d in obj]  # type: ignore
-        return Entries(__root__=dirs)
+        return Directives(__root__=dirs)
 
     def export(self) -> List[data.Directive]:
-        """Exports this model into a list of beancount entries
+        """Exports this model into a list of beancount directives
 
         Returns:
-            The list of beancount entries
+            The list of beancount directives
         """
         dirs = [d.export() for d in self.__root__]
         return dirs
@@ -79,7 +79,7 @@ class Options(BaseDict, smart_union=True):
 class BeancountFile(Base):
     """A model representing the contents of an entire beancount file."""
 
-    entries: Entries
+    entries: Directives
     options: Options
     errors: List[Any]
 
@@ -99,7 +99,7 @@ class BeancountFile(Base):
             A new instance of this model
         """
         return BeancountFile(
-            entries=Entries.parse(entries),
+            entries=Directives.parse(entries),
             options=Options.parse(options),
             errors=errors,
         )

@@ -1,7 +1,7 @@
 from beancount.core import data
 from .data import Amount, Cost, CostSpec
 from .directives import Meta, Posting, Transaction
-from .file import Entries, Options
+from .file import Directives, Options
 from hypothesis import given, strategies as s
 from testing import common as t, generate as g
 from ..types import OptionValues
@@ -43,11 +43,11 @@ def reject(obj):
         max_leaves=5,
     ).filter(reject)
 )
-def test_entries(e: List[data.Directive]):
-    pe = Entries.parse(e)
+def test_directives(d: List[data.Directive]):
+    pd = Directives.parse(d)
 
-    for i, en in enumerate(pe):
-        t.compare_object(en, e[i], ctx=t.Ctx(recurse=r))
+    for i, en in enumerate(pd):
+        t.compare_object(en, d[i], ctx=t.Ctx(recurse=r))
 
 
 @given(

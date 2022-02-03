@@ -3,7 +3,7 @@ from beancount.core import amount, data
 from bdantic import (
     parse,
     parse_all,
-    parse_entries,
+    parse_directives,
     parse_loader,
     parse_query,
     parse_realize,
@@ -101,7 +101,7 @@ def test_parse_all():
     assert result == expected_models
 
 
-def test_parse_entries():
+def test_parse_directives():
     btypes = []
     expected_models = []
 
@@ -163,10 +163,10 @@ def test_parse_entries():
             currency="USD",
         )
     )
-    expected_entries = models.file.Entries(__root__=expected_models)
+    expected_directives = models.file.Directives(__root__=expected_models)
 
-    result = parse_entries(btypes)
-    assert result == expected_entries
+    result = parse_directives(btypes)
+    assert result == expected_directives
 
 
 def test_parse_loader():
