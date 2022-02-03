@@ -4,7 +4,6 @@ from beancount import loader
 from beancount.core import amount
 from beancount.query import query
 from copy import copy
-from .data import Amount, Inventory, Position
 from hypothesis import given, strategies as s
 from .query import _map, QueryResult
 from testing import common as t, generate as g
@@ -79,15 +78,15 @@ def test_queryresult(r: Tuple[List[Tuple[str, Type]], List[Dict[str, Any]]]):
     er = pr.export()
 
     columns = [(column.name, _map[column.type]) for column in pr.columns]
-    t.compare_list(er[0], columns, t.Ctx(recurse=[Amount]))
+    t.compare_list(er[0], columns, t.Ctx(recurse=g.recurse))
     t.compare_list(
-        [r._asdict() for r in er[1]], pr.rows, t.Ctx(recurse=[Amount])
+        [r._asdict() for r in er[1]], pr.rows, t.Ctx(recurse=g.recurse)
     )
-    t.compare_list(er[0], r[0], t.Ctx(partial=False, recurse=[Amount]))
+    t.compare_list(er[0], r[0], t.Ctx(partial=False, recurse=g.recurse))
     t.compare_list(
         [r._asdict() for r in er[1]],
         [r._asdict() for r in rows],
-        t.Ctx(partial=False, recurse=[Amount]),
+        t.Ctx(partial=False, recurse=g.recurse),
     )
 
 
@@ -102,10 +101,10 @@ def test_query():
     t.compare_list(
         er[0],
         result[0],
-        t.Ctx(partial=False, recurse=[Amount, Inventory, Position]),
+        t.Ctx(partial=False, recurse=g.recurse),
     )
     t.compare_list(
         er[1],
         result[1],
-        t.Ctx(partial=False, recurse=[Amount, Inventory, Position]),
+        t.Ctx(partial=False, recurse=g.recurse),
     )

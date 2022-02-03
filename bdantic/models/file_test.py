@@ -1,13 +1,9 @@
 from beancount.core import data
-from .data import Amount, Cost, CostSpec
-from .directives import Meta, Posting, Transaction
 from .file import Directives, Options
 from hypothesis import given, strategies as s
 from testing import common as t, generate as g
 from ..types import OptionValues
 from typing import Dict, List
-
-r = [Amount, Cost, CostSpec, Meta, Posting, Transaction]
 
 
 def setup_module(_):
@@ -47,7 +43,7 @@ def test_directives(d: List[data.Directive]):
     pd = Directives.parse(d)
 
     for i, en in enumerate(pd):
-        t.compare_object(en, d[i], ctx=t.Ctx(recurse=r))
+        t.compare_object(en, d[i], ctx=t.Ctx(recurse=g.recurse))
 
 
 @given(

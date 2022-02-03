@@ -3,8 +3,6 @@ from .display import CurrencyContext, DisplayContext, Distribution
 from hypothesis import given, strategies as s
 from testing import common as t, generate as g
 
-r = [distribution.Distribution, Distribution, CurrencyContext]
-
 
 def setup_module(_):
     g.register()
@@ -35,8 +33,8 @@ def test_currencycontext(c: CurrencyContext):
     bcc.fractional_dist = bd
 
     pc = CurrencyContext.parse(bcc)
-    t.compare_object(pc, bcc, t.Ctx(recurse=r))
-    t.compare_object(pc.export(), bcc, t.Ctx(partial=False, recurse=r))
+    t.compare_object(pc, bcc, t.Ctx(recurse=g.recurse))
+    t.compare_object(pc.export(), bcc, t.Ctx(partial=False, recurse=g.recurse))
 
 
 @given(
@@ -62,8 +60,10 @@ def test_displaycontext(c: DisplayContext):
     bdc.commas = c.commas
 
     pdc = DisplayContext.parse(bdc)
-    t.compare_object(pdc, bdc, t.Ctx(recurse=r))
-    t.compare_object(pdc.export(), bdc, t.Ctx(partial=False, recurse=r))
+    t.compare_object(pdc, bdc, t.Ctx(recurse=g.recurse))
+    t.compare_object(
+        pdc.export(), bdc, t.Ctx(partial=False, recurse=g.recurse)
+    )
 
 
 @given(build_distribution())
@@ -72,5 +72,5 @@ def test_distribution(d: Distribution):
     bd.hist = d.hist
 
     pd = Distribution.parse(bd)
-    t.compare_object(pd, bd, t.Ctx(recurse=r))
-    t.compare_object(pd.export(), bd, t.Ctx(partial=False, recurse=r))
+    t.compare_object(pd, bd, t.Ctx(recurse=g.recurse))
+    t.compare_object(pd.export(), bd, t.Ctx(partial=False, recurse=g.recurse))

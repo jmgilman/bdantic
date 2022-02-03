@@ -1,5 +1,6 @@
 import random
 
+from beancount.core import distribution
 from beancount.core.amount import Amount
 from beancount.core.data import (
     Custom,
@@ -23,6 +24,10 @@ recurse = [
     models.Close,
     models.Cost,
     models.CostSpec,
+    models.CurrencyContext,
+    models.DisplayContext,
+    distribution.Distribution,
+    models.Distribution,
     Meta,
     models.Open,
     models.Posting,
