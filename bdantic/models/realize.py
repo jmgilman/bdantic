@@ -1,13 +1,33 @@
 from __future__ import annotations
 
-from .base import Base
+from .base import Base, BaseList
 from beancount.core import data, realization
 from .data import Account as AccountName, Inventory
 from datetime import date
-from .directives import Close, Open, TxnPosting
+from .directives import Balance, Close, Document, Note, Open, Pad, TxnPosting
 from pydantic import BaseModel
-from ..types import ModelDirective, type_map
-from typing import cast, Dict, List, Literal, Optional, Union
+from typing import Dict, List, Literal, Optional, Type, Union
+
+ModelTxnPosting = Union[Balance, Close, Document, Note, Open, Pad, TxnPosting]
+BeanTxnPosting = Union[
+    data.Balance,
+    data.Close,
+    data.Document,
+    data.Note,
+    data.Open,
+    data.Pad,
+    data.TxnPosting,
+]
+
+_type_map: Dict[Type[BeanTxnPosting], Type[ModelTxnPosting]] = {
+    data.Balance: Balance,
+    data.Close: Close,
+    data.Document: Document,
+    data.Note: Note,
+    data.Open: Open,
+    data.Pad: Pad,
+    data.TxnPosting: TxnPosting,
+}
 
 
 class Account(BaseModel):
@@ -23,7 +43,7 @@ class Account(BaseModel):
 
     balance: Dict[str, Inventory]
     close: Optional[date]
-    directives: List[Union[ModelDirective, TxnPosting]]
+    directives: TxnPostings
     name: str
     open: date
 
@@ -37,22 +57,15 @@ class Account(BaseModel):
         Returns:
             A new instance of this model
         """
-        open = cast(
-            List[data.Open],
-            list(
-                filter(lambda d: isinstance(d, data.Open), obj.txn_postings),
-            ),
-        )
+        txn_postings = TxnPostings.parse(obj.txn_postings)  # type: ignore
+
+        open = txn_postings.filter("[?ty == 'Open']")
+        assert open is not None
         assert len(open) == 1
 
-        close = cast(
-            List[data.Close],
-            list(
-                filter(lambda d: isinstance(d, data.Close), obj.txn_postings),
-            ),
-        )
-        assert len(close) < 2
+        close = txn_postings.filter("[?ty == 'Close']")
         if close:
+            assert len(close) < 2
             close_date = close[0].date
         else:
             close_date = None
@@ -65,10 +78,7 @@ class Account(BaseModel):
         return Account(
             balance=map,
             close=close_date,
-            directives=[
-                type_map[type(d)].parse(d)  # type: ignore
-                for d in obj.txn_postings
-            ],
+            directives=txn_postings,
             open=open[0].date,
             name=obj.account,
         )
@@ -83,22 +93,13 @@ class Account(BaseModel):
         Returns:
             A new instance of Account
         """
-        open = cast(
-            List[Open],
-            list(
-                filter(lambda d: isinstance(d, Open), ra.txn_postings),
-            ),
-        )
+        open = ra.txn_postings.filter("[?ty == `Open`]")
+        assert open is not None
         assert len(open) == 1
 
-        close = cast(
-            List[Close],
-            list(
-                filter(lambda d: isinstance(d, Close), ra.txn_postings),
-            ),
-        )
-        assert len(close) < 2
+        close = ra.txn_postings.filter("[?ty == `Close`]")
         if close:
+            assert len(close) < 2
             close_date = close[0].date
         else:
             close_date = None
@@ -123,7 +124,7 @@ class RealAccount(Base, smart_union=True):
     balance: Inventory
     children: Dict[str, RealAccount]
     cur_map: Dict[str, Inventory]
-    txn_postings: List[Union[ModelDirective, TxnPosting]]
+    txn_postings: TxnPostings
 
     @classmethod
     def parse(cls, obj: realization.RealAccount) -> RealAccount:
@@ -149,10 +150,7 @@ class RealAccount(Base, smart_union=True):
             balance=Inventory.parse(obj.balance),
             children=children,
             cur_map=map,
-            txn_postings=[
-                type_map[type(d)].parse(d)  # type: ignore
-                for d in obj.txn_postings
-            ],
+            txn_postings=TxnPostings.parse(obj.txn_postings),  # type: ignore
         )
 
     def export(self) -> realization.RealAccount:
@@ -165,9 +163,7 @@ class RealAccount(Base, smart_union=True):
         for k, v in self.children.items():
             ra[k] = v.export()
 
-        ra.txn_postings = [
-            p.export() for p in self.txn_postings  # type: ignore
-        ]
+        ra.txn_postings = self.txn_postings.export()  # type: ignore
         ra.balance = self.balance.export()
 
         return ra
@@ -179,3 +175,27 @@ class RealAccount(Base, smart_union=True):
             A new Account instance
         """
         return Account.from_real(self)
+
+
+class TxnPostings(BaseList):
+    """A model representing the txnpostings found within RealAccount's."""
+
+    __root__: List[ModelTxnPosting]
+
+    @classmethod
+    def parse(
+        cls,
+        obj: List[BeanTxnPosting],
+    ) -> TxnPostings:
+        return TxnPostings(
+            __root__=[_type_map[type(d)].parse(d) for d in obj]  # type: ignore
+        )
+
+    def export(self) -> List[BeanTxnPosting]:
+        return [d.export() for d in self.__root__]
+
+
+# Update forward references
+Account.update_forward_refs()
+RealAccount.update_forward_refs()
+TxnPostings.update_forward_refs()
