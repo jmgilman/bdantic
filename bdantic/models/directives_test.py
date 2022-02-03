@@ -1,4 +1,5 @@
 from beancount.core import data
+from beancount.parser import parser  # type: ignore
 from .directives import (
     Balance,
     Close,
@@ -16,7 +17,7 @@ from .directives import (
     TxnPosting,
 )
 from hypothesis import given, strategies as s
-from testing import common as t, generate as g
+from testing import common as t, generate as g, syntax as sy
 
 
 def setup_module(_):
@@ -25,6 +26,18 @@ def setup_module(_):
 
 def build_meta():
     return s.dictionaries(s.text(), s.text())
+
+
+def test_syntax():
+    def strip(s: str) -> str:
+        return s.strip().replace(" ", "").replace("\n", "")
+
+    for test in sy.tests:
+        d = parser.parse_string(test[0])[0][0]
+        pd = test[1].parse(d)
+        syn = pd.syntax()
+
+        assert strip(test[0]) == strip(syn)
 
 
 @given(g.directive(data.Balance))

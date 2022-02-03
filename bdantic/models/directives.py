@@ -4,6 +4,7 @@ import datetime
 
 from .base import Base
 from beancount.core import data
+from beancount.parser import printer  # type: ignore
 from .data import Account, Amount, Cost, CostSpec, Currency, Flag
 from decimal import Decimal
 from pydantic import BaseModel, Extra, Field
@@ -15,6 +16,9 @@ class BaseDirective(Base):
 
     date: datetime.date
     meta: Optional[Meta]
+
+    def syntax(self) -> str:
+        return printer.format_entry(self.export())
 
 
 class Meta(BaseModel):
