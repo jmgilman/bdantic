@@ -86,9 +86,7 @@ class BeancountFile(Base):
     @classmethod
     def parse(
         cls,
-        entries: List[data.Directive],
-        errors: List[Any],
-        options: Dict[str, Any],
+        obj: Tuple[List[data.Directive], List[Any], Dict[str, Any]],
     ) -> BeancountFile:
         """Parses the results of loading a beancount file into this model.
 
@@ -99,9 +97,9 @@ class BeancountFile(Base):
             A new instance of this model
         """
         return BeancountFile(
-            entries=Directives.parse(entries),
-            options=Options.parse(options),
-            errors=errors,
+            entries=Directives.parse(obj[0]),
+            options=Options.parse(obj[2]),
+            errors=obj[1],
         )
 
     def export(self) -> Tuple[List[data.Directive], List[Any], Dict[str, Any]]:

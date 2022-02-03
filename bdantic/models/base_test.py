@@ -2,7 +2,7 @@ from beancount.core import (
     amount,
     data,
 )
-from bdantic.models import common, data as mdata, directives
+from bdantic.models import base, data as mdata, directives
 from datetime import date
 from decimal import Decimal
 from typing import NamedTuple
@@ -12,7 +12,7 @@ def test_filter_dict():
     d = {"test": "test", 1: 2, type(str): "str"}
     expected = {"test": "test", 1: 2}
 
-    result = common.filter_dict(d)
+    result = base.filter_dict(d)
     assert result == expected
 
 
@@ -20,10 +20,10 @@ def test_is_named_tuple():
     class Test(NamedTuple):
         pass
 
-    assert common.is_named_tuple(Test())
+    assert base.is_named_tuple(Test())
 
     tup = ("test", "tuple")
-    assert not common.is_named_tuple(tup)
+    assert not base.is_named_tuple(tup)
 
 
 def test_recursive_parse():
@@ -76,7 +76,7 @@ def test_recursive_parse():
         ],
     }
 
-    result = common.recursive_parse(txn)
+    result = base.recursive_parse(txn)
     assert result == expected
 
 
@@ -127,5 +127,5 @@ def test_recursive_export():
         ],
     }
 
-    result = common.recursive_export(txn)
+    result = base.recursive_export(txn)
     assert result == expected

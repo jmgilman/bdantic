@@ -6,7 +6,6 @@ from bdantic import (
     parse_directives,
     parse_loader,
     parse_query,
-    parse_realize,
     types,
 )
 from bdantic import models
@@ -196,11 +195,4 @@ def test_parse_loader():
 def test_parse_query(p):
     m = Mock()
     parse_query(m)
-    p.assert_called_once_with(m)
-
-
-@patch("bdantic.models.RealAccount.parse")
-def test_parse_realize(p):
-    m = Mock()
-    parse_realize(m)
     p.assert_called_once_with(m)

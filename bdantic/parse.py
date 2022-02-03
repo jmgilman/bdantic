@@ -1,7 +1,6 @@
-from beancount.core import data, realization
+from beancount.core import data
 from bdantic.models.file import Directives, BeancountFile
 from bdantic.models.query import QueryResult
-from bdantic.models.realize import RealAccount
 from bdantic.types import type_map
 from bdantic.types import BeancountType, Model
 from typing import Any, Dict, List, Sequence, Tuple, Type
@@ -83,7 +82,7 @@ def parse_loader(
     Returns:
         A BeancountFile model
     """
-    return BeancountFile.parse(entries, errors, options)
+    return BeancountFile.parse((entries, errors, options))
 
 
 def parse_query(
@@ -98,15 +97,3 @@ def parse_query(
         A QueryResult model
     """
     return QueryResult.parse(query_result)
-
-
-def parse_realize(real_acct: realization.RealAccount) -> RealAccount:
-    """Parses the response from running realize() on a list of entries.
-
-    Args:
-        real_acct: The realization.RealAccount to parse
-
-    Returns:
-        A RealAccount model
-    """
-    return RealAccount.parse(real_acct)
