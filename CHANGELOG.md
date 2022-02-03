@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `filter` and `select` functions for manipulating models
+- `BaseList` and `BaseDict` for models which wrap lists and dictionaries
+- `TxnPostings` model for holding txn_postings field of a `RealAccount`
+
+### Changed
+
+- `Account` model can now be parsed from a beancount `RealAccount`
+- `Entries` renamed to `Directives`
+- The `parse` and `export` methods were moved to the base class
+- General code cleanup
+
 # [0.1.3] - 2022-02-02
 
 ### Added
