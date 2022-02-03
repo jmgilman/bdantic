@@ -18,6 +18,7 @@ class BaseDirective(Base):
     meta: Optional[Meta]
 
     def syntax(self) -> str:
+        """Converts this directive into it's equivalent beancount syntax."""
         return printer.format_entry(self.export())
 
 
