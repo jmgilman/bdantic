@@ -8,11 +8,28 @@ from beancount.core.data import (
     Transaction,
     TxnPosting,
 )
+from beancount.core.inventory import Inventory
+from beancount.core.position import Position
+from bdantic import models
+from bdantic.models.directives import Meta
 from dataclasses import dataclass
 from decimal import Decimal
 from hypothesis import strategies as s
 from random_words import RandomWords  # type: ignore
 from typing import Dict, List, Optional, Type
+
+recurse = [
+    models.Amount,
+    models.Close,
+    models.Cost,
+    models.CostSpec,
+    Meta,
+    models.Open,
+    models.Posting,
+    models.Position,
+    models.Transaction,
+    models.TxnPosting,
+]
 
 
 def register() -> None:
@@ -88,11 +105,17 @@ class AccountGenerator:
 
     def _rand_leave(self) -> int:
         """Generates a random number of leaves to generate."""
-        return random.randrange(self.min_leaves, self.max_leaves)
+        if self.min_leaves == self.max_leaves:
+            return self.min_leaves
+        else:
+            return random.randrange(self.min_leaves, self.max_leaves)
 
     def _rand_node(self) -> int:
         """Generates a random number of nodes to generate."""
-        return random.randrange(self.min_nodes, self.max_nodes)
+        if self.min_nodes == self.max_nodes:
+            return self.min_nodes
+        else:
+            return random.randrange(self.min_nodes, self.max_nodes)
 
     def _rand_words(self) -> List[str]:
         """Generates a random number of words as configured by the class."""
@@ -100,6 +123,17 @@ class AccountGenerator:
             w.capitalize()
             for w in self.rw.random_words(count=self._rand_node())
         ]
+
+
+@s.composite
+def account(_) -> str:
+    ag = AccountGenerator()
+    ag.min_nodes = 1
+    ag.max_nodes = 1
+    ag.min_leaves = 3
+    ag.max_leaves = 3
+
+    return ag.generate()[0]
 
 
 def amount(currency="USD") -> s.SearchStrategy[Amount]:
@@ -134,7 +168,7 @@ def decimal() -> s.SearchStrategy[Decimal]:
     """
     return s.decimals(
         min_value=1, max_value=100, allow_infinity=False, allow_nan=False
-    )
+    ).filter(lambda d: d is not None)
 
 
 def directive(ty: Type[Directive]) -> s.SearchStrategy[Directive]:
@@ -147,6 +181,12 @@ def directive(ty: Type[Directive]) -> s.SearchStrategy[Directive]:
         A new instance of the generated directive
     """
     return s.builds(ty, meta=meta())
+
+
+@s.composite
+def inventory(draw: s.DrawFn) -> Inventory:
+    positions = draw(s.lists(s.builds(Position), max_size=3))
+    return Inventory(positions)
 
 
 def meta() -> s.SearchStrategy[Dict[str, str]]:

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from .base import Base
-from beancount.core import realization
+from beancount.core import data, realization
 from .data import Account as AccountName, Inventory
 from datetime import date
 from .directives import Close, Open, TxnPosting
@@ -17,15 +17,61 @@ class Account(BaseModel):
         balance: A mapping of currencies to inventories
         close: The (optional) date the account was closed
         directives: All directives associated with this account
-        open: The date the account was opened
         name: The account name
+        open: The date the account was opened
     """
 
     balance: Dict[str, Inventory]
     close: Optional[date]
     directives: List[Union[ModelDirective, TxnPosting]]
-    open: date
     name: str
+    open: date
+
+    @staticmethod
+    def parse(obj: realization.RealAccount) -> Account:
+        """Parses a beancount RealAccount into this model
+
+        Args:
+            obj: The Beancount RealAccount
+
+        Returns:
+            A new instance of this model
+        """
+        open = cast(
+            List[data.Open],
+            list(
+                filter(lambda d: isinstance(d, data.Open), obj.txn_postings),
+            ),
+        )
+        assert len(open) == 1
+
+        close = cast(
+            List[data.Close],
+            list(
+                filter(lambda d: isinstance(d, data.Close), obj.txn_postings),
+            ),
+        )
+        assert len(close) < 2
+        if close:
+            close_date = close[0].date
+        else:
+            close_date = None
+
+        split = obj.balance.split()
+        map = {}
+        for k, v in split.items():
+            map[k] = Inventory.parse(v)
+
+        return Account(
+            balance=map,
+            close=close_date,
+            directives=[
+                type_map[type(d)].parse(d)  # type: ignore
+                for d in obj.txn_postings
+            ],
+            open=open[0].date,
+            name=obj.account,
+        )
 
     @staticmethod
     def from_real(ra: RealAccount) -> Account:
@@ -64,6 +110,9 @@ class Account(BaseModel):
             open=open[0].date,
             name=ra.account,
         )
+
+    def export(self):
+        raise NotImplementedError
 
 
 class RealAccount(Base, smart_union=True):

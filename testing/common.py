@@ -44,6 +44,11 @@ def compare(obj1: Any, obj2: Any, ctx: Ctx) -> None:
     Raises:
         AssertionError when an equality check fails
     """
+    if hasattr(obj1, "__root__"):
+        obj1 = obj1.__root__
+    elif hasattr(obj2, "__root__"):
+        obj2 = obj2.__root__
+
     if ctx.is_recurse(obj1, obj2):
         compare_object(obj1, obj2, ctx)
     elif isinstance(obj1, dict) and isinstance(obj2, dict):
