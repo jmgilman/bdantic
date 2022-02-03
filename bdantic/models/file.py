@@ -1,12 +1,12 @@
 from __future__ import annotations
 
+from .base import Base, BaseFiltered
 from beancount.core import data
-from pydantic import BaseModel
 from bdantic.types import ModelDirective, OptionValues, type_map
 from typing import Any, Dict, List, Tuple
 
 
-class Entries(BaseModel, smart_union=True):
+class Entries(BaseFiltered, smart_union=True):
     """A model representing a list of entries (directives)."""
 
     __root__: List[ModelDirective]
@@ -52,7 +52,7 @@ class Entries(BaseModel, smart_union=True):
         return dirs
 
 
-class Options(BaseModel, smart_union=True):
+class Options(BaseFiltered, smart_union=True):
     """A model representing a dictionary of options."""
 
     __root__: Dict[str, OptionValues]
@@ -117,7 +117,7 @@ class Options(BaseModel, smart_union=True):
         return d
 
 
-class BeancountFile(BaseModel):
+class BeancountFile(Base):
     """A model representing the contents of an entire beancount file."""
 
     entries: Entries
