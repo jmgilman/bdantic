@@ -1,0 +1,2520 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-7.3.0">
+    
+    
+      
+        <title>directives - bdantic</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.8b42a75e.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.3f5d1f46.min.css">
+        
+      
+    
+    
+    
+      
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>:root{--md-text-font-family:"Roboto";--md-code-font-family:"Roboto Mono"}</style>
+      
+    
+    
+    
+      <link rel="stylesheet" href="../../../assets/_mkdocstrings.css">
+    
+    
+      
+
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+  
+    
+    <script>function __prefix(e){return new URL("../../..",location).pathname+"."+e}function __get(e,t=localStorage){return JSON.parse(t.getItem(__prefix(e)))}</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#directives" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="bdantic" class="md-header__button md-logo" aria-label="bdantic" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            bdantic
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              directives
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="bdantic" class="md-nav__button md-logo" aria-label="bdantic" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    bdantic
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../parsing/" class="md-nav__link">
+        Parsing
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../exporting/" class="md-nav__link">
+        Exporting
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../rendering/" class="md-nav__link">
+        Rendering
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../filtering/" class="md-nav__link">
+        Filtering
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6" type="checkbox" id="__nav_6" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6">
+          API
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="API" data-md-level="1">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          API
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_6_1" type="checkbox" id="__nav_6_1" checked>
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6_1">
+          models
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="models" data-md-level="2">
+        <label class="md-nav__title" for="__nav_6_1">
+          <span class="md-nav__icon md-icon"></span>
+          models
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../base/" class="md-nav__link">
+        base
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../data/" class="md-nav__link">
+        data
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          directives
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        directives
+      </a>
+      
+        
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#bdantic.models.directives" class="md-nav__link">
+    bdantic.models.directives
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bdantic.models.directives.Balance" class="md-nav__link">
+    Balance
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bdantic.models.directives.BaseDirective" class="md-nav__link">
+    BaseDirective
+  </a>
+  
+    <nav class="md-nav" aria-label="BaseDirective">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#bdantic.models.directives.BaseDirective.syntax" class="md-nav__link">
+    syntax()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bdantic.models.directives.Close" class="md-nav__link">
+    Close
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bdantic.models.directives.Commodity" class="md-nav__link">
+    Commodity
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bdantic.models.directives.Custom" class="md-nav__link">
+    Custom
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bdantic.models.directives.Document" class="md-nav__link">
+    Document
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bdantic.models.directives.Event" class="md-nav__link">
+    Event
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bdantic.models.directives.Meta" class="md-nav__link">
+    Meta
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bdantic.models.directives.Note" class="md-nav__link">
+    Note
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bdantic.models.directives.Open" class="md-nav__link">
+    Open
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bdantic.models.directives.Pad" class="md-nav__link">
+    Pad
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bdantic.models.directives.Posting" class="md-nav__link">
+    Posting
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bdantic.models.directives.Price" class="md-nav__link">
+    Price
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bdantic.models.directives.Query" class="md-nav__link">
+    Query
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bdantic.models.directives.Transaction" class="md-nav__link">
+    Transaction
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bdantic.models.directives.TxnPosting" class="md-nav__link">
+    TxnPosting
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../display/" class="md-nav__link">
+        display
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../file/" class="md-nav__link">
+        file
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../query/" class="md-nav__link">
+        query
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../realize/" class="md-nav__link">
+        realize
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../parse/" class="md-nav__link">
+        parse
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#bdantic.models.directives" class="md-nav__link">
+    bdantic.models.directives
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bdantic.models.directives.Balance" class="md-nav__link">
+    Balance
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bdantic.models.directives.BaseDirective" class="md-nav__link">
+    BaseDirective
+  </a>
+  
+    <nav class="md-nav" aria-label="BaseDirective">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#bdantic.models.directives.BaseDirective.syntax" class="md-nav__link">
+    syntax()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bdantic.models.directives.Close" class="md-nav__link">
+    Close
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bdantic.models.directives.Commodity" class="md-nav__link">
+    Commodity
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bdantic.models.directives.Custom" class="md-nav__link">
+    Custom
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bdantic.models.directives.Document" class="md-nav__link">
+    Document
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bdantic.models.directives.Event" class="md-nav__link">
+    Event
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bdantic.models.directives.Meta" class="md-nav__link">
+    Meta
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bdantic.models.directives.Note" class="md-nav__link">
+    Note
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bdantic.models.directives.Open" class="md-nav__link">
+    Open
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bdantic.models.directives.Pad" class="md-nav__link">
+    Pad
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bdantic.models.directives.Posting" class="md-nav__link">
+    Posting
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bdantic.models.directives.Price" class="md-nav__link">
+    Price
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bdantic.models.directives.Query" class="md-nav__link">
+    Query
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bdantic.models.directives.Transaction" class="md-nav__link">
+    Transaction
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bdantic.models.directives.TxnPosting" class="md-nav__link">
+    TxnPosting
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content" data-md-component="content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                
+                <h1 id="directives">Directives</h1>
+
+
+  <div class="doc doc-object doc-module">
+
+<a id="bdantic.models.directives"></a>
+    <div class="doc doc-contents first">
+
+      <p>Provides models for all beancount directives.</p>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+  <div class="doc doc-object doc-class">
+
+
+
+<h2 id="bdantic.models.directives.Balance" class="doc doc-heading">
+        <code>
+Balance            (<a title="bdantic.models.directives.BaseDirective" href="#bdantic.models.directives.BaseDirective">BaseDirective</a>)
+        </code>
+
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-pydantic-model"><code>pydantic-model</code></small>
+  </span>
+
+</h2>
+
+    <div class="doc doc-contents ">
+
+      <p>A model representing a <code>beancount.core.data.Balance</code>.</p>
+
+<p><strong>Attributes:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>ty</code></td>
+        <td><code>Literal[&#39;Balance&#39;]</code></td>
+        <td><p>A string literal identifying this model.</p></td>
+      </tr>
+      <tr>
+        <td><code>account</code></td>
+        <td><code>str</code></td>
+        <td><p>The account whose balance to check at the given date.</p></td>
+      </tr>
+      <tr>
+        <td><code>amount</code></td>
+        <td><code>Amount</code></td>
+        <td><p>The number of expected units for the account at the given date.</p></td>
+      </tr>
+      <tr>
+        <td><code>diff_amount</code></td>
+        <td><code>Optional[bdantic.models.data.Amount]</code></td>
+        <td><p>The difference between the expected and actual amounts.</p></td>
+      </tr>
+      <tr>
+        <td><code>tolerance</code></td>
+        <td><code>Optional[decimal.Decimal]</code></td>
+        <td><p>The amount of tolerance to use in the verification.</p></td>
+      </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>bdantic/models/directives.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Balance</span><span class="p">(</span><span class="n">BaseDirective</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A model representing a `beancount.core.data.Balance`.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        ty: A string literal identifying this model.</span>
+<span class="sd">        account: The account whose balance to check at the given date.</span>
+<span class="sd">        amount: The number of expected units for the account at the given date.</span>
+<span class="sd">        diff_amount: The difference between the expected and actual amounts.</span>
+<span class="sd">        tolerance: The amount of tolerance to use in the verification.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_sibling</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">Balance</span>
+
+    <span class="n">ty</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;Balance&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Balance&quot;</span>
+    <span class="n">account</span><span class="p">:</span> <span class="n">Account</span>
+    <span class="n">amount</span><span class="p">:</span> <span class="n">Amount</span>
+    <span class="n">tolerance</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Decimal</span><span class="p">]</span>
+    <span class="n">diff_amount</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Amount</span><span class="p">]</span>
+</code></pre></div>
+        </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-class">
+
+
+
+<h2 id="bdantic.models.directives.BaseDirective" class="doc doc-heading">
+        <code>
+BaseDirective            (<a title="bdantic.models.base.Base" href="../base/#bdantic.models.base.Base">Base</a>)
+        </code>
+
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-pydantic-model"><code>pydantic-model</code></small>
+  </span>
+
+</h2>
+
+    <div class="doc doc-contents ">
+
+      <p>A base class containing common fields for a Beancount directive.</p>
+<p>All directives in beancount share two common fields: a date they were
+recorded and optional metadata attached to them. This class provides fields
+for both of these attributes which directive models inherit from.</p>
+<p>Additionally, all directives can be represented as raw beancount syntax and
+this class provides a method for converting a directive model into its
+equivalent beancount syntax.</p>
+
+<p><strong>Attributes:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>ty</code></td>
+        <td></td>
+        <td><p>A string literal identifying this model.</p></td>
+      </tr>
+      <tr>
+        <td><code>date</code></td>
+        <td><code>date</code></td>
+        <td><p>The date for this directive.</p></td>
+      </tr>
+      <tr>
+        <td><code>meta</code></td>
+        <td><code>Optional[bdantic.models.directives.Meta]</code></td>
+        <td><p>An optional dictionary of metadata attached to the directive.</p></td>
+      </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>bdantic/models/directives.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">BaseDirective</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A base class containing common fields for a Beancount directive.</span>
+
+<span class="sd">    All directives in beancount share two common fields: a date they were</span>
+<span class="sd">    recorded and optional metadata attached to them. This class provides fields</span>
+<span class="sd">    for both of these attributes which directive models inherit from.</span>
+
+<span class="sd">    Additionally, all directives can be represented as raw beancount syntax and</span>
+<span class="sd">    this class provides a method for converting a directive model into its</span>
+<span class="sd">    equivalent beancount syntax.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        ty: A string literal identifying this model.</span>
+<span class="sd">        date: The date for this directive.</span>
+<span class="sd">        meta: An optional dictionary of metadata attached to the directive.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">date</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span>
+    <span class="n">meta</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Meta</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">syntax</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;Converts this directive into it&#39;s equivalent beancount syntax.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">printer</span><span class="o">.</span><span class="n">format_entry</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">export</span><span class="p">())</span>
+</code></pre></div>
+        </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 id="bdantic.models.directives.BaseDirective.syntax" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">syntax</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></code>
+
+
+</h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Converts this directive into it's equivalent beancount syntax.</p>
+
+        <details class="quote">
+          <summary>Source code in <code>bdantic/models/directives.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span> <span class="nf">syntax</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Converts this directive into it&#39;s equivalent beancount syntax.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">printer</span><span class="o">.</span><span class="n">format_entry</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">export</span><span class="p">())</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-class">
+
+
+
+<h2 id="bdantic.models.directives.Close" class="doc doc-heading">
+        <code>
+Close            (<a title="bdantic.models.directives.BaseDirective" href="#bdantic.models.directives.BaseDirective">BaseDirective</a>)
+        </code>
+
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-pydantic-model"><code>pydantic-model</code></small>
+  </span>
+
+</h2>
+
+    <div class="doc doc-contents ">
+
+      <p>A model representing a <code>beancount.core.data.Close</code>.</p>
+
+<p><strong>Attributes:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>ty</code></td>
+        <td><code>Literal[&#39;Close&#39;]</code></td>
+        <td><p>A string literal identifying this model.</p></td>
+      </tr>
+      <tr>
+        <td><code>account</code></td>
+        <td><code>str</code></td>
+        <td><p>The name of the account being closed.</p></td>
+      </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>bdantic/models/directives.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Close</span><span class="p">(</span><span class="n">BaseDirective</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A model representing a `beancount.core.data.Close`.</span>
+<span class="sd">    Attributes:</span>
+<span class="sd">        ty: A string literal identifying this model.</span>
+<span class="sd">        account: The name of the account being closed.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_sibling</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">Close</span>
+
+    <span class="n">ty</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;Close&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Close&quot;</span>
+    <span class="n">account</span><span class="p">:</span> <span class="n">Account</span>
+</code></pre></div>
+        </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-class">
+
+
+
+<h2 id="bdantic.models.directives.Commodity" class="doc doc-heading">
+        <code>
+Commodity            (<a title="bdantic.models.directives.BaseDirective" href="#bdantic.models.directives.BaseDirective">BaseDirective</a>)
+        </code>
+
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-pydantic-model"><code>pydantic-model</code></small>
+  </span>
+
+</h2>
+
+    <div class="doc doc-contents ">
+
+      <p>A model representing a <code>beancount.core.data.Commodity</code>.</p>
+
+<p><strong>Attributes:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>ty</code></td>
+        <td><code>Literal[&#39;Commodity&#39;]</code></td>
+        <td><p>A string literal identifying this model.</p></td>
+      </tr>
+      <tr>
+        <td><code>currency</code></td>
+        <td><code>str</code></td>
+        <td><p>The commodity under consideration.</p></td>
+      </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>bdantic/models/directives.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Commodity</span><span class="p">(</span><span class="n">BaseDirective</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A model representing a `beancount.core.data.Commodity`.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        ty: A string literal identifying this model.</span>
+<span class="sd">        currency: The commodity under consideration.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_sibling</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">Commodity</span>
+
+    <span class="n">ty</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;Commodity&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Commodity&quot;</span>
+    <span class="n">currency</span><span class="p">:</span> <span class="nb">str</span>
+</code></pre></div>
+        </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-class">
+
+
+
+<h2 id="bdantic.models.directives.Custom" class="doc doc-heading">
+        <code>
+Custom            (<a title="bdantic.models.directives.BaseDirective" href="#bdantic.models.directives.BaseDirective">BaseDirective</a>)
+        </code>
+
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-pydantic-model"><code>pydantic-model</code></small>
+  </span>
+
+</h2>
+
+    <div class="doc doc-contents ">
+
+      <p>A model representing a <code>beancount.core.data.Custom</code>.</p>
+
+<p><strong>Attributes:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>ty</code></td>
+        <td><code>Literal[&#39;Custom&#39;]</code></td>
+        <td><p>A string literal identifying this model.</p></td>
+      </tr>
+      <tr>
+        <td><code>type</code></td>
+        <td><code>str</code></td>
+        <td><p>The type of this custom directive.</p></td>
+      </tr>
+      <tr>
+        <td><code>values</code></td>
+        <td><code>List[Any]</code></td>
+        <td><p>A list of values of simple types supported by the grammar.</p></td>
+      </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>bdantic/models/directives.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Custom</span><span class="p">(</span><span class="n">BaseDirective</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A model representing a `beancount.core.data.Custom`.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        ty: A string literal identifying this model.</span>
+<span class="sd">        type: The type of this custom directive.</span>
+<span class="sd">        values: A list of values of simple types supported by the grammar.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_sibling</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">Custom</span>
+
+    <span class="n">ty</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;Custom&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Custom&quot;</span>
+    <span class="nb">type</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">values</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]</span>
+</code></pre></div>
+        </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-class">
+
+
+
+<h2 id="bdantic.models.directives.Document" class="doc doc-heading">
+        <code>
+Document            (<a title="bdantic.models.directives.BaseDirective" href="#bdantic.models.directives.BaseDirective">BaseDirective</a>)
+        </code>
+
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-pydantic-model"><code>pydantic-model</code></small>
+  </span>
+
+</h2>
+
+    <div class="doc doc-contents ">
+
+      <p>A model representing a <code>beancount.core.data.Document</code>.</p>
+
+<p><strong>Attributes:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>ty</code></td>
+        <td><code>Literal[&#39;Document&#39;]</code></td>
+        <td><p>A string literal identifying this model.</p></td>
+      </tr>
+      <tr>
+        <td><code>account</code></td>
+        <td><code>str</code></td>
+        <td><p>The account the document is associated with.</p></td>
+      </tr>
+      <tr>
+        <td><code>filename</code></td>
+        <td><code>str</code></td>
+        <td><p>The absolute filename of the document.</p></td>
+      </tr>
+      <tr>
+        <td><code>tags</code></td>
+        <td><code>Optional[Set]</code></td>
+        <td><p>A set of tag strings.</p></td>
+      </tr>
+      <tr>
+        <td><code>links</code></td>
+        <td><code>Optional[Set]</code></td>
+        <td><p>A set of link strings.</p></td>
+      </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>bdantic/models/directives.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Document</span><span class="p">(</span><span class="n">BaseDirective</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A model representing a `beancount.core.data.Document`.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        ty: A string literal identifying this model.</span>
+<span class="sd">        account: The account the document is associated with.</span>
+<span class="sd">        filename: The absolute filename of the document.</span>
+<span class="sd">        tags: A set of tag strings.</span>
+<span class="sd">        links: A set of link strings.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_sibling</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">Document</span>
+
+    <span class="n">ty</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;Document&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Document&quot;</span>
+    <span class="n">account</span><span class="p">:</span> <span class="n">Account</span>
+    <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">tags</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Set</span><span class="p">]</span>
+    <span class="n">links</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Set</span><span class="p">]</span>
+</code></pre></div>
+        </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-class">
+
+
+
+<h2 id="bdantic.models.directives.Event" class="doc doc-heading">
+        <code>
+Event            (<a title="bdantic.models.directives.BaseDirective" href="#bdantic.models.directives.BaseDirective">BaseDirective</a>)
+        </code>
+
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-pydantic-model"><code>pydantic-model</code></small>
+  </span>
+
+</h2>
+
+    <div class="doc doc-contents ">
+
+      <p>A model representing a <code>beancount.core.data.Event</code>.</p>
+
+<p><strong>Attributes:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>ty</code></td>
+        <td><code>Literal[&#39;Event&#39;]</code></td>
+        <td><p>A string literal identifying this model.</p></td>
+      </tr>
+      <tr>
+        <td><code>type</code></td>
+        <td><code>str</code></td>
+        <td><p>A unique string identifying this event.</p></td>
+      </tr>
+      <tr>
+        <td><code>description</code></td>
+        <td><code>str</code></td>
+        <td><p>The value of the above type at the given date.</p></td>
+      </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>bdantic/models/directives.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Event</span><span class="p">(</span><span class="n">BaseDirective</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A model representing a `beancount.core.data.Event`.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        ty: A string literal identifying this model.</span>
+<span class="sd">        type: A unique string identifying this event.</span>
+<span class="sd">        description: The value of the above type at the given date.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_sibling</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">Event</span>
+
+    <span class="n">ty</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;Event&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Event&quot;</span>
+    <span class="nb">type</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span>
+</code></pre></div>
+        </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-class">
+
+
+
+<h2 id="bdantic.models.directives.Meta" class="doc doc-heading">
+        <code>
+Meta            (<span title="pydantic.main.BaseModel">BaseModel</span>)
+        </code>
+
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-pydantic-model"><code>pydantic-model</code></small>
+  </span>
+
+</h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Represents the metadata attached to a directive.</p>
+<p>Most directives share common metadata fields, namely the filename and line
+number in which they occur. This model provides access to those common
+fields but is also configured to accept any other variable number of fields
+that may be attached to a directive.</p>
+
+<p><strong>Attributes:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>filename</code></td>
+        <td><code>Optional[str]</code></td>
+        <td><p>The name of the file the direcive is located in</p></td>
+      </tr>
+      <tr>
+        <td><code>lineno</code></td>
+        <td><code>Optional[int]</code></td>
+        <td><p>The line number the directive is located on</p></td>
+      </tr>
+      <tr>
+        <td><code>tolerances</code></td>
+        <td><code>Optional[Dict[str, decimal.Decimal]]</code></td>
+        <td><p>A lookup dictionary for fetching currency tolerances.</p></td>
+      </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>bdantic/models/directives.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Meta</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Represents the metadata attached to a directive.</span>
+
+<span class="sd">    Most directives share common metadata fields, namely the filename and line</span>
+<span class="sd">    number in which they occur. This model provides access to those common</span>
+<span class="sd">    fields but is also configured to accept any other variable number of fields</span>
+<span class="sd">    that may be attached to a directive.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        filename: The name of the file the direcive is located in</span>
+<span class="sd">        lineno: The line number the directive is located on</span>
+<span class="sd">        tolerances: A lookup dictionary for fetching currency tolerances.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">filename</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">lineno</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span>
+    <span class="n">tolerances</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Decimal</span><span class="p">]]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">alias</span><span class="o">=</span><span class="s2">&quot;__tolerances__&quot;</span><span class="p">)</span>
+
+    <span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>
+        <span class="n">extra</span> <span class="o">=</span> <span class="n">Extra</span><span class="o">.</span><span class="n">allow</span>
+</code></pre></div>
+        </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-class">
+
+
+
+<h2 id="bdantic.models.directives.Note" class="doc doc-heading">
+        <code>
+Note            (<a title="bdantic.models.directives.BaseDirective" href="#bdantic.models.directives.BaseDirective">BaseDirective</a>)
+        </code>
+
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-pydantic-model"><code>pydantic-model</code></small>
+  </span>
+
+</h2>
+
+    <div class="doc doc-contents ">
+
+      <p>A model representing a <code>beancount.core.data.Note</code>.</p>
+
+<p><strong>Attributes:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>ty</code></td>
+        <td><code>Literal[&#39;Note&#39;]</code></td>
+        <td><p>A string literal identifying this model.</p></td>
+      </tr>
+      <tr>
+        <td><code>account</code></td>
+        <td><code>str</code></td>
+        <td><p>The account this note is attached to.</p></td>
+      </tr>
+      <tr>
+        <td><code>comment</code></td>
+        <td><code>str</code></td>
+        <td><p>The string contents of the note.</p></td>
+      </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>bdantic/models/directives.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Note</span><span class="p">(</span><span class="n">BaseDirective</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A model representing a `beancount.core.data.Note`.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        ty: A string literal identifying this model.</span>
+<span class="sd">        account: The account this note is attached to.</span>
+<span class="sd">        comment: The string contents of the note.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_sibling</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">Note</span>
+
+    <span class="n">ty</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;Note&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Note&quot;</span>
+    <span class="n">account</span><span class="p">:</span> <span class="n">Account</span>
+    <span class="n">comment</span><span class="p">:</span> <span class="nb">str</span>
+</code></pre></div>
+        </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-class">
+
+
+
+<h2 id="bdantic.models.directives.Open" class="doc doc-heading">
+        <code>
+Open            (<a title="bdantic.models.directives.BaseDirective" href="#bdantic.models.directives.BaseDirective">BaseDirective</a>)
+        </code>
+
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-pydantic-model"><code>pydantic-model</code></small>
+  </span>
+
+</h2>
+
+    <div class="doc doc-contents ">
+
+      <p>A model representing a <code>beancount.core.data.Open</code>.</p>
+
+<p><strong>Attributes:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>ty</code></td>
+        <td><code>Literal[&#39;Open&#39;]</code></td>
+        <td><p>A string literal identifying this model.</p></td>
+      </tr>
+      <tr>
+        <td><code>account</code></td>
+        <td><code>str</code></td>
+        <td><p>The name of the account being opened.</p></td>
+      </tr>
+      <tr>
+        <td><code>currencies</code></td>
+        <td><code>Optional[List[str]]</code></td>
+        <td><p>Currencies that are allowed in this account.</p></td>
+      </tr>
+      <tr>
+        <td><code>booking</code></td>
+        <td><code>Optional[beancount.core.data.Booking]</code></td>
+        <td><p>Booking method used to disambiguate postings to this account.</p></td>
+      </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>bdantic/models/directives.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Open</span><span class="p">(</span><span class="n">BaseDirective</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A model representing a `beancount.core.data.Open`.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        ty: A string literal identifying this model.</span>
+<span class="sd">        account: The name of the account being opened.</span>
+<span class="sd">        currencies: Currencies that are allowed in this account.</span>
+<span class="sd">        booking: Booking method used to disambiguate postings to this account.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_sibling</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">Open</span>
+
+    <span class="n">ty</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;Open&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Open&quot;</span>
+    <span class="n">account</span><span class="p">:</span> <span class="n">Account</span>
+    <span class="n">currencies</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Currency</span><span class="p">]]</span>
+    <span class="n">booking</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">data</span><span class="o">.</span><span class="n">Booking</span><span class="p">]</span>
+</code></pre></div>
+        </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-class">
+
+
+
+<h2 id="bdantic.models.directives.Pad" class="doc doc-heading">
+        <code>
+Pad            (<a title="bdantic.models.directives.BaseDirective" href="#bdantic.models.directives.BaseDirective">BaseDirective</a>)
+        </code>
+
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-pydantic-model"><code>pydantic-model</code></small>
+  </span>
+
+</h2>
+
+    <div class="doc doc-contents ">
+
+      <p>A model representing a <code>beancount.core.data.Pad</code>.</p>
+
+<p><strong>Attributes:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>ty</code></td>
+        <td><code>Literal[&#39;Pad&#39;]</code></td>
+        <td><p>A string literal identifying this model.</p></td>
+      </tr>
+      <tr>
+        <td><code>account</code></td>
+        <td><code>str</code></td>
+        <td><p>The name of the account which needs to be filled.</p></td>
+      </tr>
+      <tr>
+        <td><code>source_account</code></td>
+        <td><code>str</code></td>
+        <td><p>The name of the account used for debiting.</p></td>
+      </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>bdantic/models/directives.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Pad</span><span class="p">(</span><span class="n">BaseDirective</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A model representing a `beancount.core.data.Pad`.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        ty: A string literal identifying this model.</span>
+<span class="sd">        account: The name of the account which needs to be filled.</span>
+<span class="sd">        source_account: The name of the account used for debiting.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_sibling</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">Pad</span>
+
+    <span class="n">ty</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;Pad&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Pad&quot;</span>
+    <span class="n">account</span><span class="p">:</span> <span class="n">Account</span>
+    <span class="n">source_account</span><span class="p">:</span> <span class="n">Account</span>
+</code></pre></div>
+        </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-class">
+
+
+
+<h2 id="bdantic.models.directives.Posting" class="doc doc-heading">
+        <code>
+Posting            (<a title="bdantic.models.base.Base" href="../base/#bdantic.models.base.Base">Base</a>)
+        </code>
+
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-pydantic-model"><code>pydantic-model</code></small>
+  </span>
+
+</h2>
+
+    <div class="doc doc-contents ">
+
+      <p>A model representing a <code>beancount.core.data.Posting</code>.</p>
+
+<p><strong>Attributes:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>ty</code></td>
+        <td><code>Literal[&#39;Posting&#39;]</code></td>
+        <td><p>A string literal identifying this model.</p></td>
+      </tr>
+      <tr>
+        <td><code>account</code></td>
+        <td><code>str</code></td>
+        <td><p>The account that is modified by this posting.</p></td>
+      </tr>
+      <tr>
+        <td><code>units</code></td>
+        <td><code>Optional[bdantic.models.data.Amount]</code></td>
+        <td><p>The units of the position.</p></td>
+      </tr>
+      <tr>
+        <td><code>cost</code></td>
+        <td><code>Union[bdantic.models.data.Cost, bdantic.models.data.CostSpec]</code></td>
+        <td><p>The cost of the position.</p></td>
+      </tr>
+      <tr>
+        <td><code>price</code></td>
+        <td><code>Optional[bdantic.models.data.Amount]</code></td>
+        <td><p>The optional price at which the position took place.</p></td>
+      </tr>
+      <tr>
+        <td><code>flag</code></td>
+        <td><code>Optional[str]</code></td>
+        <td><p>An optional flag to associate with the posting.</p></td>
+      </tr>
+      <tr>
+        <td><code>meta</code></td>
+        <td><code>Optional[Dict[str, Any]]</code></td>
+        <td><p>Optional metadata attached to the posting.</p></td>
+      </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>bdantic/models/directives.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Posting</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A model representing a `beancount.core.data.Posting`.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        ty: A string literal identifying this model.</span>
+<span class="sd">        account: The account that is modified by this posting.</span>
+<span class="sd">        units: The units of the position.</span>
+<span class="sd">        cost: The cost of the position.</span>
+<span class="sd">        price: The optional price at which the position took place.</span>
+<span class="sd">        flag: An optional flag to associate with the posting.</span>
+<span class="sd">        meta: Optional metadata attached to the posting.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_sibling</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">Posting</span>
+
+    <span class="n">ty</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;Posting&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Posting&quot;</span>
+    <span class="n">account</span><span class="p">:</span> <span class="n">Account</span>
+    <span class="n">units</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Amount</span><span class="p">]</span>
+    <span class="n">cost</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Cost</span><span class="p">,</span> <span class="n">CostSpec</span><span class="p">]]</span>
+    <span class="n">price</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Amount</span><span class="p">]</span>
+    <span class="n">flag</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">meta</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span>
+</code></pre></div>
+        </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-class">
+
+
+
+<h2 id="bdantic.models.directives.Price" class="doc doc-heading">
+        <code>
+Price            (<a title="bdantic.models.directives.BaseDirective" href="#bdantic.models.directives.BaseDirective">BaseDirective</a>)
+        </code>
+
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-pydantic-model"><code>pydantic-model</code></small>
+  </span>
+
+</h2>
+
+    <div class="doc doc-contents ">
+
+      <p>A model representing a <code>beancount.core.data.Price</code>.</p>
+
+<p><strong>Attributes:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>ty</code></td>
+        <td><code>Literal[&#39;Price&#39;]</code></td>
+        <td><p>A string literal identifying this model.</p></td>
+      </tr>
+      <tr>
+        <td><code>currency</code></td>
+        <td><code>str</code></td>
+        <td><p>The currency that is being priced.</p></td>
+      </tr>
+      <tr>
+        <td><code>amount</code></td>
+        <td><code>Amount</code></td>
+        <td><p>The value of the currency.</p></td>
+      </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>bdantic/models/directives.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Price</span><span class="p">(</span><span class="n">BaseDirective</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A model representing a `beancount.core.data.Price`.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        ty: A string literal identifying this model.</span>
+<span class="sd">        currency: The currency that is being priced.</span>
+<span class="sd">        amount: The value of the currency.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_sibling</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">Price</span>
+
+    <span class="n">ty</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;Price&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Price&quot;</span>
+    <span class="n">currency</span><span class="p">:</span> <span class="n">Currency</span>
+    <span class="n">amount</span><span class="p">:</span> <span class="n">Amount</span>
+</code></pre></div>
+        </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-class">
+
+
+
+<h2 id="bdantic.models.directives.Query" class="doc doc-heading">
+        <code>
+Query            (<a title="bdantic.models.directives.BaseDirective" href="#bdantic.models.directives.BaseDirective">BaseDirective</a>)
+        </code>
+
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-pydantic-model"><code>pydantic-model</code></small>
+  </span>
+
+</h2>
+
+    <div class="doc doc-contents ">
+
+      <p>A model representing a <code>beancount.core.data.Query</code>.</p>
+
+<p><strong>Attributes:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>ty</code></td>
+        <td><code>Literal[&#39;Query&#39;]</code></td>
+        <td><p>A string literal identifying this model.</p></td>
+      </tr>
+      <tr>
+        <td><code>name</code></td>
+        <td><code>str</code></td>
+        <td><p>The unique identifier for the query.</p></td>
+      </tr>
+      <tr>
+        <td><code>query_string</code></td>
+        <td><code>str</code></td>
+        <td><p>The SQL query string to run or be made available.</p></td>
+      </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>bdantic/models/directives.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Query</span><span class="p">(</span><span class="n">BaseDirective</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A model representing a `beancount.core.data.Query`.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        ty: A string literal identifying this model.</span>
+<span class="sd">        name: The unique identifier for the query.</span>
+<span class="sd">        query_string: The SQL query string to run or be made available.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_sibling</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">Query</span>
+
+    <span class="n">ty</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;Query&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Query&quot;</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">query_string</span><span class="p">:</span> <span class="nb">str</span>
+</code></pre></div>
+        </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-class">
+
+
+
+<h2 id="bdantic.models.directives.Transaction" class="doc doc-heading">
+        <code>
+Transaction            (<a title="bdantic.models.directives.BaseDirective" href="#bdantic.models.directives.BaseDirective">BaseDirective</a>)
+        </code>
+
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-pydantic-model"><code>pydantic-model</code></small>
+  </span>
+
+</h2>
+
+    <div class="doc doc-contents ">
+
+      <p>A model representing a <code>beancount.core.data.Transaction</code>.</p>
+
+<p><strong>Attributes:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>ty</code></td>
+        <td><code>Literal[&#39;Transaction&#39;]</code></td>
+        <td><p>A string literal identifying this model.</p></td>
+      </tr>
+      <tr>
+        <td><code>flag</code></td>
+        <td><code>str</code></td>
+        <td><p>A flag denoting the state of the transaction.</p></td>
+      </tr>
+      <tr>
+        <td><code>payee</code></td>
+        <td><code>Optional[str]</code></td>
+        <td><p>The payee of the transaction.</p></td>
+      </tr>
+      <tr>
+        <td><code>narration</code></td>
+        <td><code>str</code></td>
+        <td><p>A description of the transaction.</p></td>
+      </tr>
+      <tr>
+        <td><code>tags</code></td>
+        <td><code>Optional[Set[str]]</code></td>
+        <td><p>A set of tag strings.</p></td>
+      </tr>
+      <tr>
+        <td><code>links</code></td>
+        <td><code>Optional[Set[str]]</code></td>
+        <td><p>A set of link strings.</p></td>
+      </tr>
+      <tr>
+        <td><code>postings</code></td>
+        <td><code>List[bdantic.models.directives.Posting]</code></td>
+        <td><p>A list of postings attached to this transaction.</p></td>
+      </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>bdantic/models/directives.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Transaction</span><span class="p">(</span><span class="n">BaseDirective</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A model representing a `beancount.core.data.Transaction`.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        ty: A string literal identifying this model.</span>
+<span class="sd">        flag: A flag denoting the state of the transaction.</span>
+<span class="sd">        payee: The payee of the transaction.</span>
+<span class="sd">        narration: A description of the transaction.</span>
+<span class="sd">        tags: A set of tag strings.</span>
+<span class="sd">        links: A set of link strings.</span>
+<span class="sd">        postings: A list of postings attached to this transaction.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_sibling</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">Transaction</span>
+
+    <span class="n">ty</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;Transaction&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Transaction&quot;</span>
+    <span class="n">flag</span><span class="p">:</span> <span class="n">Flag</span>
+    <span class="n">payee</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">narration</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">tags</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span>
+    <span class="n">links</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span>
+    <span class="n">postings</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Posting</span><span class="p">]</span>
+</code></pre></div>
+        </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-class">
+
+
+
+<h2 id="bdantic.models.directives.TxnPosting" class="doc doc-heading">
+        <code>
+TxnPosting            (<a title="bdantic.models.base.Base" href="../base/#bdantic.models.base.Base">Base</a>)
+        </code>
+
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-pydantic-model"><code>pydantic-model</code></small>
+  </span>
+
+</h2>
+
+    <div class="doc doc-contents ">
+
+      <p>A model representing a <code>beancount.core.data.TxnPosting</code>.</p>
+
+<p><strong>Attributes:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>ty</code></td>
+        <td><code>Literal[&#39;TxnPosting&#39;]</code></td>
+        <td><p>A string literal identifying this model.</p></td>
+      </tr>
+      <tr>
+        <td><code>txn</code></td>
+        <td><code>Transaction</code></td>
+        <td><p>The parent transaction instance.</p></td>
+      </tr>
+      <tr>
+        <td><code>posting</code></td>
+        <td><code>Posting</code></td>
+        <td><p>The posting instance.</p></td>
+      </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>bdantic/models/directives.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">TxnPosting</span><span class="p">(</span><span class="n">Base</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A model representing a `beancount.core.data.TxnPosting`.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        ty: A string literal identifying this model.</span>
+<span class="sd">        txn: The parent transaction instance.</span>
+<span class="sd">        posting: The posting instance.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_sibling</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">TxnPosting</span>
+
+    <span class="n">ty</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;TxnPosting&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;TxnPosting&quot;</span>
+    <span class="n">txn</span><span class="p">:</span> <span class="n">Transaction</span>
+    <span class="n">posting</span><span class="p">:</span> <span class="n">Posting</span>
+</code></pre></div>
+        </details>
+
+
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+  </div>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+        
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <nav class="md-footer__inner md-grid" aria-label="Footer">
+      
+        
+        <a href="../data/" class="md-footer__link md-footer__link--prev" aria-label="Previous: data" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              data
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../display/" class="md-footer__link md-footer__link--next" aria-label="Next: display" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              display
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        
+          Made with
+          <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+            Material for MkDocs
+          </a>
+        
+        
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    <script id="__config" type="application/json">{"base": "../../..", "features": [], "translations": {"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing", "select.version.title": "Select version"}, "search": "../../../assets/javascripts/workers/search.f8263e09.min.js", "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.4fc53ad4.min.js"></script>
+      
+    
+  </body>
+</html>
