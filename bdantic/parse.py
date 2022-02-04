@@ -1,3 +1,11 @@
+"""Provides functions for parsing and exporting beancont types/models.
+
+These functions are stricly helper functions in that parsing/exporting can be
+done directly by importing the appropriate model and accessing its parse/export
+method. However, most of these functions take any supported type/model as an
+input which results in less imports in your code.
+"""
+
 from beancount.core import data
 from bdantic.models.file import Directives, BeancountFile
 from bdantic.models.query import QueryResult

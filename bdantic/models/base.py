@@ -1,3 +1,16 @@
+"""Provides the base models from which every other model inherits from.
+
+Most models share common behavior, namely the ability to parse and export.
+Models which are based from a beancount type which is a NamedTuple all share
+the same parse/export code inherited from the [Base][bdantic.models.base.Base]
+class. Models which need specialized code for parsing/exporting will override
+these methods appropriately.
+
+Additionally, models which wrap lists or dictionaries have a dedicated base
+class for allowing filtering and providing the expected pythonic methods to
+make them behave as lists/dictionaries.
+"""
+
 from __future__ import annotations
 
 import jmespath  # type: ignore
@@ -203,7 +216,7 @@ def filter_dict(meta: Dict[Any, Any]) -> Dict:
     """Recursively filters a dictionary to remove non-JSON serializable keys.
 
     Args:
-        d: The dictionary to filter
+        meta: The dictionary to filter
 
     Returns:
         The filtered dictionary

@@ -1,3 +1,5 @@
+"""Provides models for representing the results of running a query."""
+
 from __future__ import annotations
 
 from .base import Base
@@ -24,12 +26,30 @@ _map: Dict[str, Type] = {
 
 
 class QueryColumn(BaseModel):
+    """A model representing a single column from a query response.
+
+    Attributes:
+        name: The name of the column.
+        type: The type of the column.
+    """
+
     name: str
     type: str
 
 
 class QueryResult(Base):
-    """A model representing the result from a beancount query."""
+    """A model representing the result from a beancount query.
+
+    The constructor of this model accepts the value returned from executing a
+    beancount query using the `beancount.query.query.run_query` function. The
+    result is a tuple of columns and rows which this model represents in the
+    `columns` and `rows` fields accordingly. Like all models, any data types
+    which can be parsed from the result into models are automatically parsed.
+
+    Attributes:
+        columns: The columns denoting the name and types of the resulting data.
+        rows: The data rows returned from the query.
+    """
 
     ty: Literal["QueryResult"] = "QueryResult"
     columns: List[QueryColumn]

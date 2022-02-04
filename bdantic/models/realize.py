@@ -1,3 +1,5 @@
+"""Provides models for representing the results of running a realization."""
+
 from __future__ import annotations
 
 from .base import Base, BaseList
@@ -33,12 +35,17 @@ _type_map: Dict[Type[BeanTxnPosting], Type[ModelTxnPosting]] = {
 class Account(BaseModel):
     """A simplified view of an entire beancount account.
 
+    The primary differenece between this and a `RealAccount` is that it strips
+    out all children and provides some other useful data points like when the
+    account was opened or closed. Removing the children greatly reduces the
+    size of this model, especially when being rendered in something like JSON.
+
     Attributes:
-        balance: A mapping of currencies to inventories
-        close: The (optional) date the account was closed
-        directives: All directives associated with this account
-        name: The account name
-        open: The date the account was opened
+        balance: A mapping of currencies to inventories.
+        close: The (optional) date the account was closed.
+        directives: All directives associated with this account.
+        name: The account name.
+        open: The date the account was opened.
     """
 
     balance: Dict[str, Inventory]
@@ -85,7 +92,8 @@ class Account(BaseModel):
 
     @staticmethod
     def from_real(ra: RealAccount) -> Account:
-        """Creates a new instance of Account using details from a RealAccount.
+        """Creates a new instance of `Account` using details from a
+        [RealAccount][bdantic.models.realize.RealAccount].
 
         Args:
             ra: The RealAccount to use
@@ -117,7 +125,21 @@ class Account(BaseModel):
 
 
 class RealAccount(Base, smart_union=True):
-    """A model representing a beancount.core.realize.RealAccount."""
+    """A model representing a `beancount.core.realize.RealAccount`.
+
+    A `RealAccount` is represented as a dictionary in beancount which contains
+    additional attributes for describing details about the account. This model
+    matches those details, however, the dictinary representation of a
+    `RealAccount` is moved to the dedicated `children` field.
+
+    Attributes:
+        ty: A string literal identifying this model.
+        account: The account name.
+        balance: The balance of the account
+        children: All children that belong to this account.
+        cur_map: A map of currencies to their respective balances.
+        txn_postings: A list of directives in which this account appears.
+    """
 
     ty: Literal["RealAccount"] = "RealAccount"
     account: AccountName

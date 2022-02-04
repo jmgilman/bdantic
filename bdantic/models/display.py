@@ -1,3 +1,5 @@
+"""Provides models for constructing a DisplayContext."""
+
 from __future__ import annotations
 
 import collections
@@ -8,7 +10,16 @@ from typing import Literal
 
 
 class CurrencyContext(Base):
-    """A model representing a core.display_context._CurrencyContext."""
+    """A model representing a `beancount.core.display_context._CurrencyContext`.
+
+    Attributes:
+        ty: A string literal identifying this model.
+        has_sign: True if at least one of the numbers has a negative or
+            explicit positive sign.
+        integer_max: The maximum number of digits for the integer part.
+        fractional_dist: A frequency distribution of fractionals seen in the
+            input file.
+    """
 
     _sibling = display_context._CurrencyContext
     ty: Literal["CurrencyContext"] = "CurrencyContext"
@@ -47,7 +58,13 @@ class CurrencyContext(Base):
 
 
 class DisplayContext(Base):
-    """A model representing a core.display_context.DisplayContext."""
+    """A model representing a `beancount.core.display_context.DisplayContext`.
+
+    Attributes:
+        ty: A string literal identifying this model.
+        ccontexts: A dict of currency string to CurrencyContext instances.
+        commas: True if we should render commas.
+    """
 
     _sibling = display_context.DisplayContext
     ty: Literal["DisplayContext"] = "DisplayContext"
@@ -87,7 +104,12 @@ class DisplayContext(Base):
 
 
 class Distribution(Base):
-    """A model representing a beancount.core.distribution.Distribution."""
+    """A model representing a `beancount.core.distribution.Distribution`.
+
+    Attributes:
+        ty: A string literal identifying this model.
+        hist: A histogram of integer values.
+    """
 
     _sibling = distribution.Distribution
     ty: Literal["Distribution"] = "Distribution"

@@ -1,3 +1,5 @@
+"""Provides the types used throughout the package."""
+
 from __future__ import annotations
 
 from beancount.core import (
@@ -150,4 +152,5 @@ OptionValues = Union[
     None,
 ]
 
+# Valid types of values found in metadata.
 MetaValues = Union[bool, int, Decimal, str, Dict[str, Decimal]]

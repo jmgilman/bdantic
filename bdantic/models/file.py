@@ -1,3 +1,5 @@
+"""Provides models for representing the contents of a parsed beancount file."""
+
 from __future__ import annotations
 
 from .base import Base, BaseDict, BaseList
@@ -7,7 +9,12 @@ from typing import Any, Dict, List, Tuple
 
 
 class Directives(BaseList, smart_union=True):
-    """A model representing a list of directives."""
+    """A model representing a list of directives.
+
+    This models wraps the entries response often returned when loading the
+    content of a beancount file. It holds a list of various valid directive
+    models.
+    """
 
     __root__: List[ModelDirective]
 
@@ -37,7 +44,12 @@ class Directives(BaseList, smart_union=True):
 
 
 class Options(BaseDict, smart_union=True):
-    """A model representing a dictionary of options."""
+    """A model representing a dictionary of options.
+
+    This model wraps the options often returned when loading the content of a
+    beancount file. Options which contain raw beancount types are automatically
+    parsed into their respective model.
+    """
 
     __root__: Dict[str, OptionValues]
 
@@ -77,7 +89,17 @@ class Options(BaseDict, smart_union=True):
 
 
 class BeancountFile(Base):
-    """A model representing the contents of an entire beancount file."""
+    """A model representing the contents of an entire beancount file.
+
+    This model provides an interface for accessing the result returned when
+    loading the contents of a beancount file. It's constructor can be fed the
+    (entries, errors, options) tuple often returned from loader functions.
+
+    Attributes:
+        entries: The directives parsed from the beancount file.
+        options: The options parsed from the beancount file.
+        errors: Any errors generated during parsing.
+    """
 
     entries: Directives
     options: Options

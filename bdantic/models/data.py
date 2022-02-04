@@ -1,3 +1,5 @@
+"""Provides models for the core beancount data types."""
+
 from __future__ import annotations
 
 import datetime
@@ -17,7 +19,13 @@ Flag = str
 
 
 class Amount(Base):
-    """A model representing a beancount.core.amount.Amount."""
+    """A model representing a `beancount.core.amount.Amount`.
+
+    Attributes:
+        ty: A string literal identifying this model.
+        number: The value of the amount.
+        currency: The amount currency.
+    """
 
     _sibling = amount.Amount
 
@@ -27,7 +35,15 @@ class Amount(Base):
 
 
 class Cost(Base):
-    """A model representing a beancount.core.position.Cost."""
+    """A model representing a `beancount.core.position.Cost`.
+
+    Attributes:
+        ty: A string literal identifying this model.
+        number: The per-unit cost.
+        currency: The cost currency.
+        date: A date that the lot was created at.
+        label: An optional label for the lot.
+    """
 
     _sibling = position.Cost
 
@@ -39,7 +55,18 @@ class Cost(Base):
 
 
 class CostSpec(Base):
-    """A model representing a beancount.core.position.CostSpec."""
+    """A model representing a `beancount.core.position.CostSpec`.
+
+    Attributes:
+        ty: A string literal identifying this model.
+        number_per: The cost/price per unit.
+        number_total: The total cost/price, or None if unspecified.
+        currency: The commodity of the amount.
+        date: A date for the lot.
+        label: An optional label for the lot.
+        merge: True if this specification calls for averaging the units of this
+            lot's currency, or False if unspecified.
+    """
 
     _sibling = position.CostSpec
 
@@ -53,7 +80,12 @@ class CostSpec(Base):
 
 
 class Inventory(BaseList):
-    """A model representing a beancount.core.inventory.Inventory."""
+    """A model representing a `beancount.core.inventory.Inventory`.
+
+    A beancount inventory mimics a dictionary, but ultimately the data
+    underlying it is a list of Positions. This model represents this fact by
+    wrapping a list of [Position][bdantic.models.data.Position] models. It
+    inherits basic list functionality and can be indexed/iterated over."""
 
     __root__: List[Position]
 
@@ -70,7 +102,13 @@ class Inventory(BaseList):
 
 
 class Position(Base):
-    """A model representing a beancount.core.position.Position."""
+    """A model representing a `beancount.core.position.Position`.
+
+    Attributes:
+        ty: A string literal identifying this model.
+        units: The number of units and its currency.
+        cost: A Cost that represents the lot.
+    """
 
     _sibling = position.Position
 
