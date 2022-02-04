@@ -11,6 +11,8 @@
 
 > A package for extending [beancount][1] with [pydantic][2]
 
+See the [docs](https://jmgilman.github.io/bdantic/) for more details.
+
 ## Installation
 
 ```shell
