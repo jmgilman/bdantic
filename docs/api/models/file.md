@@ -1,0 +1,3 @@
+# File
+
+::: bdantic.models.file

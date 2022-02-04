@@ -1,0 +1,26 @@
+site_name: bdantic
+nav:
+  - Home: index.md
+  - Parsing: parsing.md
+  - Exporting: exporting.md
+  - Rendering: rendering.md
+  - Filtering: filtering.md
+  - API:
+      - models:
+          - base: api/models/base.md
+          - data: api/models/data.md
+          - directives: api/models/directives.md
+          - display: api/models/display.md
+          - file: api/models/file.md
+          - query: api/models/query.md
+          - realize: api/models/realize.md
+      - parse: api/parse.md
+theme: material
+plugins:
+  - search
+  - mkdocstrings
+markdown_extensions:
+  - pymdownx.highlight
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences

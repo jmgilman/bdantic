@@ -1,0 +1,3 @@
+# Base
+
+::: bdantic.models.base

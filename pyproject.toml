@@ -25,6 +25,8 @@ mypy = "^0.931"
 twine = "^3.7.1"
 hypothesis = "^6.36.1"
 RandomWords = "^0.3.0"
+mkdocstrings = "^0.17.0"
+mkdocs = "^1.2.3"
 
 [tool.black]
 line-length = 79
