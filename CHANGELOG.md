@@ -7,11 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+# [0.2.0] - 2022-02-04
+
 ### Added
 
 - `filter` and `select` functions for manipulating models
 - `BaseList` and `BaseDict` for models which wrap lists and dictionaries
 - `TxnPostings` model for holding txn_postings field of a `RealAccount`
+- Documentation using mkdocs
 
 ### Changed
 
@@ -19,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Entries` renamed to `Directives`
 - The `parse` and `export` methods were moved to the base class
 - General code cleanup
+- Improved most docstrings
 
 # [0.1.3] - 2022-02-02
 
@@ -58,7 +62,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[unreleased]: https://github.com/jmgilman/bdantic/compare/v0.1.3...HEAD
+[unreleased]: https://github.com/jmgilman/bdantic/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/jmgilman/bdantics/releases/tag/v0.2.0
 [0.1.3]: https://github.com/jmgilman/bdantics/releases/tag/v0.1.3
 [0.1.2]: https://github.com/jmgilman/bdantics/releases/tag/v0.1.2
 [0.1.1]: https://github.com/jmgilman/bdantics/releases/tag/v0.1.1
