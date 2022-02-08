@@ -179,8 +179,17 @@ class BaseDirective(Base):
     this class provides a method for converting a directive model into its
     equivalent beancount syntax.
 
+    Note: The ID of a given directive is only as unique as the contents it was
+    created from. In other words, when passing arbitrary beancount types to a
+    directive's parse() method, it's possible to generate duplicate ID's.
+    However, if the types being passed are directly from the beancount loader,
+    the metadata associated with each directive will guarantee that the ID is
+    unique. This is because every directive has an associated filename and line
+    number which cannot be duplicated across directives. In short: don't rely
+    on ID's being unique unless you're parsing from a beancount ledger.
+
     Attributes:
-        ty: A string literal identifying this model.
+        id: A unique ID for this directive.
         date: The date for this directive.
         meta: An optional dictionary of metadata attached to the directive.
     """
