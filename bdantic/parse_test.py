@@ -15,6 +15,12 @@ from testing import common as t
 from unittest.mock import patch, Mock
 
 
+def hash(obj) -> str:
+    robj = models.base.recursive_parse(obj)
+    del robj["id"]
+    return t.hash(robj)
+
+
 def test_parse():
     txn = data.Transaction(
         meta={
@@ -40,6 +46,7 @@ def test_parse():
     )
 
     expected = models.directives.Transaction(
+        id=hash(txn),
         meta=models.directives.Meta(filename="test.beancount", lineno=123),
         date=date.today(),
         flag="*",
@@ -87,6 +94,7 @@ def test_parse_all():
     )
     expected_models.append(
         models.directives.Balance(
+            id=hash(btypes[1]),
             meta=models.directives.Meta(filename="test.beancount", lineno=123),
             date=date.today(),
             account="Test",
@@ -140,6 +148,7 @@ def test_parse_directives():
 
     expected_models.append(
         models.directives.Balance(
+            id=hash(btypes[0]),
             meta=models.directives.Meta(filename="test.beancount", lineno=123),
             date=date.today(),
             account="Test",
@@ -150,6 +159,7 @@ def test_parse_directives():
     )
     expected_models.append(
         models.directives.Close(
+            id=hash(btypes[1]),
             meta=models.directives.Meta(filename="test.beancount", lineno=123),
             date=date.today(),
             account="Test",
@@ -157,6 +167,7 @@ def test_parse_directives():
     )
     expected_models.append(
         models.directives.Commodity(
+            id=hash(btypes[2]),
             meta=models.directives.Meta(filename="test.beancount", lineno=123),
             date=date.today(),
             currency="USD",

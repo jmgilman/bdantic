@@ -1,3 +1,6 @@
+import hashlib
+import pickle
+
 from pydantic import BaseModel
 from typing import Any, List, Type
 
@@ -134,3 +137,15 @@ def compare_object(obj1: Any, obj2: Any, ctx: Ctx) -> None:
         val2 = getattr(obj2, attr)
 
         compare(val1, val2, ctx)
+
+
+def hash(obj) -> str:
+    """Hashes the given object.
+
+    Args:
+        obj: The object to hash.
+
+    Returns:
+        An MD5 hash of the object.
+    """
+    return hashlib.md5(pickle.dumps(obj)).hexdigest()

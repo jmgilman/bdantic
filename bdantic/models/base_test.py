@@ -6,6 +6,7 @@ from bdantic.models import base, data as mdata, directives
 from datetime import date
 from decimal import Decimal
 from typing import NamedTuple
+from testing import common as t
 
 
 def test_filter_dict():
@@ -75,6 +76,7 @@ def test_recursive_parse():
             }
         ],
     }
+    expected["id"] = t.hash(expected)
 
     result = base.recursive_parse(txn)
     assert result == expected
@@ -82,6 +84,7 @@ def test_recursive_parse():
 
 def test_recursive_export():
     txn = directives.Transaction(
+        id="",
         meta={
             "filename": "test.beancount",
             "lineno": 123,
@@ -127,5 +130,5 @@ def test_recursive_export():
         ],
     }
 
-    result = base.recursive_export(txn)
+    result = base.recursive_export(txn, base._IGNORE_FIELDS)
     assert result == expected

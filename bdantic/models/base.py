@@ -14,22 +14,40 @@ make them behave as lists/dictionaries.
 from __future__ import annotations
 
 import datetime
+import hashlib
 import jmespath  # type: ignore
 import orjson
+import pickle
 
+from beancount.core import data
 from beancount.parser import printer  # type: ignore
 from datetime import date
 from decimal import Decimal
 from pydantic import BaseModel, Field, Extra
 from typing import Any, Callable, Dict, Generic, List, Optional, Type, TypeVar
 
+S = TypeVar("S", bound="Base")
+T = TypeVar("T")
+
+_IGNORE_FIELDS = ["id", "ty"]
+_DIRECTIVES = [
+    data.Balance,
+    data.Close,
+    data.Commodity,
+    data.Custom,
+    data.Document,
+    data.Event,
+    data.Note,
+    data.Open,
+    data.Pad,
+    data.Price,
+    data.Query,
+    data.Transaction,
+]
+
 
 def orjson_dumps(v, *, default):
     return orjson.dumps(v, default=default).decode()
-
-
-S = TypeVar("S", bound="Base")
-T = TypeVar("T")
 
 
 class Base(BaseModel, Generic[T]):
@@ -78,7 +96,13 @@ class Base(BaseModel, Generic[T]):
         Returns:
             A new instance of this model
         """
-        return cls.parse_obj(recursive_parse(obj))
+        parsed = recursive_parse(obj)
+
+        # Add unique ID to directives to enable lookups
+        # if issubclass(cls, BaseDirective):
+        #     parsed["id"] = hashlib.md5(pickle.dumps(parsed)).hexdigest()
+
+        return cls.parse_obj(parsed)
 
     def export(self: S) -> T:
         """Exports this model into it's associated beancount type
@@ -86,7 +110,7 @@ class Base(BaseModel, Generic[T]):
         Returns:
             A new instance of the beancount type
         """
-        return self._sibling(**recursive_export(self))
+        return self._sibling(**recursive_export(self, _IGNORE_FIELDS))
 
     def select(
         self, expr: str, model: Type[BaseModel] = None
@@ -161,6 +185,7 @@ class BaseDirective(Base):
         meta: An optional dictionary of metadata attached to the directive.
     """
 
+    id: str
     date: datetime.date
     meta: Optional[Meta]
 
@@ -334,21 +359,24 @@ def recursive_parse(b: Any) -> Dict[str, Any]:
         else:
             result[key] = value
 
+    if type(b) in _DIRECTIVES:
+        result["id"] = _hash(result)
     return result
 
 
-def recursive_export(b: Any) -> Dict[str, Any]:
+def recursive_export(b: Any, skip_fields: List[str] = []) -> Dict[str, Any]:
     """Recursively exports a ModelTuple into a nested dictionary
 
     Args:
         b: The ModelTuple to recursively export
+        skip_fields: A list of fields to skip when exporting
 
     Returns:
         A nested dictionary with all exported Beancount types
     """
     result: Dict[str, Any] = {}
     for key, value in b.__dict__.items():
-        if key == "ty":
+        if key in skip_fields:
             continue
         elif key == "meta":
             if not isinstance(value, dict) and value:
@@ -359,11 +387,14 @@ def recursive_export(b: Any) -> Dict[str, Any]:
                 result[key] = value
             continue
         if isinstance(value, Base):
-            result[key] = value._sibling(**recursive_export(value))
+            result[key] = value._sibling(
+                **recursive_export(value, skip_fields)
+            )
         elif isinstance(value, list) and value:
             if isinstance(value[0], Base):
                 result[key] = [
-                    c._sibling(**recursive_export(c)) for c in value
+                    c._sibling(**recursive_export(c, skip_fields))
+                    for c in value
                 ]
             else:
                 result[key] = value
@@ -371,6 +402,21 @@ def recursive_export(b: Any) -> Dict[str, Any]:
             result[key] = value
 
     return result
+
+
+def _hash(obj: Any) -> str:
+    """Hashes the given object.
+
+    Hashing is accomplished by pickling the object and then taking the MD5 hash
+    of the result.
+
+    Args:
+        obj: The object to hash.
+
+    Returns:
+        An MD5 hex digest.
+    """
+    return hashlib.md5(pickle.dumps(obj)).hexdigest()
 
 
 def _map(obj: Any, fn: Callable) -> Any:
