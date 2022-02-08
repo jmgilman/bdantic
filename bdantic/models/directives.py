@@ -2,62 +2,11 @@
 
 from __future__ import annotations
 
-import datetime
-
-from .base import Base
+from .base import Base, BaseDirective, Meta  # noqa: F401
 from beancount.core import data
-from beancount.parser import printer  # type: ignore
 from .data import Account, Amount, Cost, CostSpec, Currency, Flag
 from decimal import Decimal
-from pydantic import BaseModel, Extra, Field
 from typing import Any, Dict, List, Literal, Optional, Set, Union
-
-
-class BaseDirective(Base):
-    """A base class containing common fields for a Beancount directive.
-
-    All directives in beancount share two common fields: a date they were
-    recorded and optional metadata attached to them. This class provides fields
-    for both of these attributes which directive models inherit from.
-
-    Additionally, all directives can be represented as raw beancount syntax and
-    this class provides a method for converting a directive model into its
-    equivalent beancount syntax.
-
-    Attributes:
-        ty: A string literal identifying this model.
-        date: The date for this directive.
-        meta: An optional dictionary of metadata attached to the directive.
-    """
-
-    date: datetime.date
-    meta: Optional[Meta]
-
-    def syntax(self) -> str:
-        """Converts this directive into it's equivalent beancount syntax."""
-        return printer.format_entry(self.export())
-
-
-class Meta(BaseModel):
-    """Represents the metadata attached to a directive.
-
-    Most directives share common metadata fields, namely the filename and line
-    number in which they occur. This model provides access to those common
-    fields but is also configured to accept any other variable number of fields
-    that may be attached to a directive.
-
-    Attributes:
-        filename: The name of the file the direcive is located in
-        lineno: The line number the directive is located on
-        tolerances: A lookup dictionary for fetching currency tolerances.
-    """
-
-    filename: Optional[str]
-    lineno: Optional[int]
-    tolerances: Optional[Dict[str, Decimal]] = Field(alias="__tolerances__")
-
-    class Config:
-        extra = Extra.allow
 
 
 class Balance(BaseDirective):
