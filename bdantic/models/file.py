@@ -42,6 +42,42 @@ class Directives(BaseList, smart_union=True):
         dirs = [d.export() for d in self.__root__]
         return dirs
 
+    def get(self, id: str) -> ModelDirective:
+        """Returns the directive with the given ID.
+
+        Args:
+            id: The directive ID.
+
+        Raises:
+            IDNotFoundError: If the given ID was not found.
+
+        Returns:
+            The directive.
+        """
+        id_map = {d.id: d for d in self}
+        if id not in id_map:
+            raise IDNotFoundError(f"Failed to find directive with ID: {id}")
+
+        return id_map[id]
+
+    def get_all(self, ids: List[str]) -> List[ModelDirective]:
+        """Returns a list of directives matching the given ID's.
+
+        Args:
+            ids: A list of ID's to get.
+
+        Raises:
+            IDNotFoundError: If any of the given ID's were not found.
+
+        Returns:
+            A list of the directives.
+        """
+        result = []
+        for id in ids:
+            result.append(self.get(id))
+
+        return result
+
 
 class Options(BaseDict, smart_union=True):
     """A model representing a dictionary of options.
@@ -131,3 +167,9 @@ class BeancountFile(Base):
             The entries, errors, and options from the original loader
         """
         return (self.entries.export(), self.errors, self.options.export())
+
+
+class IDNotFoundError(Exception):
+    """Thrown when a `Directives` instance doesn't contain the given id."""
+
+    pass
