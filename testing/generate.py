@@ -176,7 +176,7 @@ def decimal() -> s.SearchStrategy[Decimal]:
     ).filter(lambda d: d is not None)
 
 
-def directive(ty: Type[Directive]) -> s.SearchStrategy[Directive]:
+def directive(ty: Type[Directive], **kwargs) -> s.SearchStrategy[Directive]:
     """Generates the given directive type.
 
     Args:
@@ -185,7 +185,7 @@ def directive(ty: Type[Directive]) -> s.SearchStrategy[Directive]:
     Returns:
         A new instance of the generated directive
     """
-    return s.builds(ty, meta=meta())
+    return s.builds(ty, meta=meta(), **kwargs)
 
 
 @s.composite
