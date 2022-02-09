@@ -2,6 +2,9 @@
 
 from __future__ import annotations
 
+import lzma
+import pickle
+
 from .base import Base, BaseDict, BaseList
 from beancount.core import data, realization
 from bdantic import models
@@ -185,6 +188,7 @@ class BeancountFile(Base):
         entries: The directives parsed from the beancount file.
         options: The options parsed from the beancount file.
         errors: Any errors generated during parsing.
+        accounts: A dictionary of account names to `Account` instances
     """
 
     entries: Directives
@@ -223,6 +227,18 @@ class BeancountFile(Base):
             accounts=accounts,
         )
 
+    @staticmethod
+    def decompress(data: bytes) -> BeancountFile:
+        """Decompresses the given data into a `BeancountFile` instance.
+
+        Args:
+            data: The bytes from an LZMA compressed pickled `BeancountFile`.
+
+        Returns:
+            The decompressed, unpickled `BeancountFile` instance.
+        """
+        return pickle.loads(lzma.decompress(data))
+
     def export(self) -> Tuple[List[data.Directive], List[Any], Dict[str, Any]]:
         """Exports this model into it's original counterpart
 
@@ -230,6 +246,14 @@ class BeancountFile(Base):
             The entries, errors, and options from the original loader
         """
         return (self.entries.export(), self.errors, self.options.export())
+
+    def compress(self) -> bytes:
+        """Compresses this instance into a byte stream.
+
+        Returns:
+            An LZMA compressed pickle instance of this instance.
+        """
+        return lzma.compress(pickle.dumps(self))
 
 
 class IDNotFoundError(Exception):
