@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `id` field to all directive types to uniquely identify them
+- `by_id` and `by_ids` methods to `Directives` for fetching directives by ID
+- `by_account` method to `Directives` for fetching directives by account name
+- `by_type` method to `Directives` and `TxnPostings` for fetching entries by
+   type
+- `accounts` field to `BeancountFile` for holding all `Account` instances parsed
+   from the file
+- `compress` and `decompress` methods to `BeancountFile` for compressing and
+  decompressing a whole `BeancountFile` instance.
+
+### Changed
+
+- `Account` no longer holds copies of the directives associated with the account
+
 # [0.2.0] - 2022-02-04
 
 ### Added
