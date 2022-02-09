@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.1] - 2022-02-08
+
 ### Added
 
 - `id` field to all directive types to uniquely identify them
@@ -23,7 +25,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `Account` no longer holds copies of the directives associated with the account
 
-# [0.2.0] - 2022-02-04
+### Fixed
+
+- Added missing imports from `models/__init__.py`
+
+## [0.2.0] - 2022-02-04
 
 ### Added
 
@@ -40,7 +46,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - General code cleanup
 - Improved most docstrings
 
-# [0.1.3] - 2022-02-02
+## [0.1.3] - 2022-02-02
 
 ### Added
 
@@ -62,7 +68,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added export for `parse_realize`
 - Bumped `beancount-stubs` to v0.1.3
 
-# [0.1.1] - 2022-02-01
+## [0.1.1] - 2022-02-01
 
 ### Added
 
@@ -78,7 +84,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[unreleased]: https://github.com/jmgilman/bdantic/compare/v0.2.0...HEAD
+[unreleased]: https://github.com/jmgilman/bdantic/compare/v0.2.1...HEAD
+[0.2.1]: https://github.com/jmgilman/bdantics/releases/tag/v0.2.1
 [0.2.0]: https://github.com/jmgilman/bdantics/releases/tag/v0.2.0
 [0.1.3]: https://github.com/jmgilman/bdantics/releases/tag/v0.1.3
 [0.1.2]: https://github.com/jmgilman/bdantics/releases/tag/v0.1.2
