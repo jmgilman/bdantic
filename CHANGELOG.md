@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.2] - 2022-02-09
+
+### Added
+
+- `query` and `realize` methods for querying and realize a `BeancountFile`
+
 ## [0.2.1] - 2022-02-08
 
 ### Added
@@ -84,7 +90,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[unreleased]: https://github.com/jmgilman/bdantic/compare/v0.2.1...HEAD
+[unreleased]: https://github.com/jmgilman/bdantic/compare/v0.2.2...HEAD
+[0.2.1]: https://github.com/jmgilman/bdantics/releases/tag/v0.2.2
 [0.2.1]: https://github.com/jmgilman/bdantics/releases/tag/v0.2.1
 [0.2.0]: https://github.com/jmgilman/bdantics/releases/tag/v0.2.0
 [0.1.3]: https://github.com/jmgilman/bdantics/releases/tag/v0.1.3
