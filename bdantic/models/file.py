@@ -7,9 +7,11 @@ import pickle
 
 from .base import Base, BaseDict, BaseList
 from beancount.core import data, realization
+from beancount.query import query
 from bdantic import models
 from bdantic.types import ModelDirective, OptionValues, type_map
-from .realize import Account
+from .query import QueryResult
+from .realize import Account, RealAccount
 from typing import Any, Dict, List, Tuple, Type, TypeVar
 
 T = TypeVar("T", bound="ModelDirective")
@@ -254,6 +256,30 @@ class BeancountFile(Base):
             An LZMA compressed pickle instance of this instance.
         """
         return lzma.compress(pickle.dumps(self))
+
+    def query(self, query_str: str) -> QueryResult:
+        """Executes the given BQL query against the entries in this file.
+
+        Args:
+            query_str: The BQL query to execute.
+
+        Returns:
+            A `QueryResult` containing the results of the query.
+        """
+        result = query.run_query(
+            self.entries.export(), self.options.export(), query_str
+        )
+
+        return QueryResult.parse(result)
+
+    def realize(self) -> RealAccount:
+        """Realizes the entries in this file.
+
+        Returns:
+            The root `RealAccount` from the realization.
+        """
+        root = realization.realize(self.entries.export())
+        return RealAccount.parse(root)
 
 
 class IDNotFoundError(Exception):

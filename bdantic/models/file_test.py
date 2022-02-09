@@ -7,6 +7,7 @@ from hypothesis import given, strategies as s
 from testing import common as t, generate as g
 from ..types import OptionValues
 from typing import Dict, List
+from unittest import mock
 
 
 def setup_module(_):
@@ -138,3 +139,31 @@ def test_options(o: Dict[str, OptionValues]):
 def test_file_compress(txn, opts):
     bf = BeancountFile.parse(([txn], [], opts))
     assert bf.decompress(bf.compress()) == bf
+
+
+@mock.patch("bdantic.models.query.QueryResult.parse")
+@mock.patch("beancount.query.query.run_query")
+def test_file_query(query, response):
+    bf = BeancountFile(entries=[], options={}, errors=[], accounts=[])
+    query.return_value = "query"
+    response.return_value = "response"
+    result = bf.query("test")
+
+    query.assert_called_once_with([], {}, "test")
+    response.assert_called_once_with("query")
+
+    assert result == "response"
+
+
+@mock.patch("bdantic.models.realize.RealAccount.parse")
+@mock.patch("beancount.core.realization.realize")
+def test_file_realize(realize, acct):
+    bf = BeancountFile(entries=[], options={}, errors=[], accounts=[])
+    realize.return_value = "realize"
+    acct.return_value = "response"
+    result = bf.realize()
+
+    realize.assert_called_once_with([])
+    acct.assert_called_once_with("realize")
+
+    assert result == "response"
