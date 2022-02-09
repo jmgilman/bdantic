@@ -8,7 +8,9 @@ from .data import Account as AccountName, Inventory
 from datetime import date
 from .directives import Balance, Close, Document, Note, Open, Pad, TxnPosting
 from pydantic import BaseModel
-from typing import Dict, List, Literal, Optional, Type, Union
+from typing import Dict, List, Literal, Optional, Type, TypeVar, Union
+
+T = TypeVar("T", bound="ModelTxnPosting")
 
 ModelTxnPosting = Union[Balance, Close, Document, Note, Open, Pad, TxnPosting]
 BeanTxnPosting = Union[
@@ -36,21 +38,20 @@ class Account(BaseModel):
     """A simplified view of an entire beancount account.
 
     The primary differenece between this and a `RealAccount` is that it strips
-    out all children and provides some other useful data points like when the
-    account was opened or closed. Removing the children greatly reduces the
-    size of this model, especially when being rendered in something like JSON.
+    out all children and directives associated with the account. Additionally,
+    it added some useful data about an account like open/close date. The
+    removal of the children and directives greatly reduces the size of this
+    object, especially when serialized.
 
     Attributes:
         balance: A mapping of currencies to inventories.
         close: The (optional) date the account was closed.
-        directives: All directives associated with this account.
         name: The account name.
         open: The date the account was opened.
     """
 
     balance: Dict[str, Inventory]
     close: Optional[date]
-    directives: TxnPostings
     name: str
     open: date
 
@@ -64,18 +65,13 @@ class Account(BaseModel):
         Returns:
             A new instance of this model
         """
-        txn_postings = TxnPostings.parse(obj.txn_postings)  # type: ignore
-
-        open = txn_postings.filter("[?ty == 'Open']")
-        assert open is not None
-        assert len(open) == 1
-
-        close = txn_postings.filter("[?ty == 'Close']")
-        if close:
-            assert len(close) < 2
-            close_date = close[0].date
-        else:
-            close_date = None
+        open_date = None
+        close_date = None
+        for dir in obj.txn_postings:
+            if isinstance(dir, data.Open):
+                open_date = dir.date
+            elif isinstance(dir, data.Close):
+                close_date = dir.date
 
         split = obj.balance.split()
         map = {}
@@ -85,8 +81,7 @@ class Account(BaseModel):
         return Account(
             balance=map,
             close=close_date,
-            directives=txn_postings,
-            open=open[0].date,
+            open=open_date,
             name=obj.account,
         )
 
@@ -101,11 +96,11 @@ class Account(BaseModel):
         Returns:
             A new instance of Account
         """
-        open = ra.txn_postings.filter("[?ty == `Open`]")
+        open = ra.txn_postings.by_type(Open)
         assert open is not None
         assert len(open) == 1
 
-        close = ra.txn_postings.filter("[?ty == `Close`]")
+        close = ra.txn_postings.by_type(Close)
         if close:
             assert len(close) < 2
             close_date = close[0].date
@@ -115,7 +110,6 @@ class Account(BaseModel):
         return Account(
             balance=ra.cur_map,
             close=close_date,
-            directives=ra.txn_postings,
             open=open[0].date,
             name=ra.account,
         )
@@ -190,13 +184,13 @@ class RealAccount(Base, smart_union=True):
 
         return ra
 
-    def to_account(self) -> Account:
-        """Converts this RealAccount into an Account instance.
+    # def to_account(self) -> Account:
+    #     """Converts this RealAccount into an Account instance.
 
-        Returns:
-            A new Account instance
-        """
-        return Account.from_real(self)
+    #     Returns:
+    #         A new Account instance
+    #     """
+    #     return Account.from_real(self)
 
 
 class TxnPostings(BaseList):
@@ -215,6 +209,17 @@ class TxnPostings(BaseList):
 
     def export(self) -> List[BeanTxnPosting]:
         return [d.export() for d in self.__root__]
+
+    def by_type(self, ty: Type[T]) -> TxnPostings:
+        """Returns a new instance of `TxnPostings` filtered by the given type.
+
+        Args:
+            ty: The type to filter by.
+
+        Returns:
+            A new instance of `TxnPostings` with the filtered results.
+        """
+        return TxnPostings(__root__=super()._by_type(ty))
 
 
 # Update forward references

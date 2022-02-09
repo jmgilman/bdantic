@@ -3,9 +3,13 @@
 from __future__ import annotations
 
 from .base import Base, BaseDict, BaseList
-from beancount.core import data
+from beancount.core import data, realization
+from bdantic import models
 from bdantic.types import ModelDirective, OptionValues, type_map
-from typing import Any, Dict, List, Tuple
+from .realize import Account
+from typing import Any, Dict, List, Tuple, Type, TypeVar
+
+T = TypeVar("T", bound="ModelDirective")
 
 
 class Directives(BaseList, smart_union=True):
@@ -42,7 +46,42 @@ class Directives(BaseList, smart_union=True):
         dirs = [d.export() for d in self.__root__]
         return dirs
 
-    def get(self, id: str) -> ModelDirective:
+    def by_account(self, account: str) -> Directives:
+        """Returns a new instance of `Directives` filtered by the given account.
+
+        Args:
+            account: The account to filter by.
+
+        Returns:
+            A new instance of `Directives` with the filtered results.
+        """
+        result: List[ModelDirective] = []
+        simple = (
+            models.Open,
+            models.Close,
+            models.Balance,
+            models.Note,
+            models.Document,
+        )
+        for dir in self:
+            if isinstance(dir, models.Transaction):
+                if account in [p.account for p in dir.postings]:
+                    result.append(dir)
+            elif isinstance(dir, simple):
+                if dir.account == account:
+                    result.append(dir)
+            elif isinstance(dir, models.Pad):
+                if dir.account == account or dir.source_account == account:
+                    result.append(dir)
+            elif isinstance(dir, models.Custom):
+                for v in dir.values:
+                    if isinstance(v, str):
+                        if v == account:
+                            result.append(dir)
+
+        return Directives(__root__=result)
+
+    def by_id(self, id: str) -> ModelDirective:
         """Returns the directive with the given ID.
 
         Args:
@@ -60,7 +99,7 @@ class Directives(BaseList, smart_union=True):
 
         return id_map[id]
 
-    def get_all(self, ids: List[str]) -> List[ModelDirective]:
+    def by_ids(self, ids: List[str]) -> List[ModelDirective]:
         """Returns a list of directives matching the given ID's.
 
         Args:
@@ -74,9 +113,20 @@ class Directives(BaseList, smart_union=True):
         """
         result = []
         for id in ids:
-            result.append(self.get(id))
+            result.append(self.by_id(id))
 
         return result
+
+    def by_type(self, ty: Type[T]) -> Directives:
+        """Returns a new instance of `Directives` filtered by the given type.
+
+        Args:
+            ty: The type to filter by.
+
+        Returns:
+            A new instance of `Directives` with the filtered results.
+        """
+        return Directives(__root__=super()._by_type(ty))
 
 
 class Options(BaseDict, smart_union=True):
@@ -140,6 +190,7 @@ class BeancountFile(Base):
     entries: Directives
     options: Options
     errors: List[Any]
+    accounts: Dict[str, Account]
 
     @classmethod
     def parse(
@@ -154,10 +205,22 @@ class BeancountFile(Base):
         Returns:
             A new instance of this model
         """
+        entries = Directives.parse(obj[0])
+        errors = obj[1]
+        options = Options.parse(obj[2])
+
+        real = realization.realize(obj[0])
+        names = [o.account for o in entries.by_type(models.Open)]
+
+        accounts = {}
+        for name in names:
+            accounts[name] = Account.parse(realization.get(real, name))
+
         return BeancountFile(
-            entries=Directives.parse(obj[0]),
-            options=Options.parse(obj[2]),
-            errors=obj[1],
+            entries=entries,
+            options=options,
+            errors=errors,
+            accounts=accounts,
         )
 
     def export(self) -> Tuple[List[data.Directive], List[Any], Dict[str, Any]]:

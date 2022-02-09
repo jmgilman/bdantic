@@ -47,7 +47,9 @@ _DIRECTIVES = [
 
 
 def orjson_dumps(v, *, default):
-    return orjson.dumps(v, default=default).decode()
+    return orjson.dumps(
+        v, default=default, option=orjson.OPT_NON_STR_KEYS
+    ).decode()
 
 
 class Base(BaseModel, Generic[T]):
@@ -224,6 +226,14 @@ class BaseList(BaseFiltered, Generic[S]):
     """A base model that wraps a list of objects."""
 
     __root__: List[S]
+
+    def _by_type(self, ty: Type[T]) -> List[T]:
+        result = []
+        for model in self:
+            if isinstance(model, ty):
+                result.append(model)
+
+        return result
 
     def __len__(self) -> int:
         return len(self.__root__)

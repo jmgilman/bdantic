@@ -26,7 +26,6 @@ def test_account(txns, acct, inv, open):
     for k, v in ra.balance.split().items():
         balance[k] = v.get_positions()
     t.compare_dict(a.balance, balance, t.Ctx(recurse=g.recurse))
-    t.compare_list(a.directives, ra.txn_postings, t.Ctx(recurse=g.recurse))
     assert a.close is None
     assert a.name == ra.account
     assert a.open == open.date
