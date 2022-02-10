@@ -184,13 +184,32 @@ class RealAccount(Base, smart_union=True):
 
         return ra
 
-    # def to_account(self) -> Account:
-    #     """Converts this RealAccount into an Account instance.
+    def get(self, account_name: str) -> Optional[RealAccount]:
+        """Fetches a nested child account from this `RealAccount` instance.
 
-    #     Returns:
-    #         A new Account instance
-    #     """
-    #     return Account.from_real(self)
+        Args:
+            account_name: The account to fetch.
+
+        Returns:
+            The `RealAccount` instance if the account exists, otherwise None.
+        """
+        account = self
+
+        try:
+            for key in account_name.split(":"):
+                account = account.children[key]
+        except KeyError:
+            return None
+
+        return account
+
+    def to_account(self) -> Account:
+        """Converts this RealAccount into an Account instance.
+
+        Returns:
+            A new Account instance
+        """
+        return Account.from_real(self)
 
 
 class TxnPostings(BaseList):
