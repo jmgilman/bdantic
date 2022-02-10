@@ -17,6 +17,7 @@ import datetime
 import hashlib
 import jmespath  # type: ignore
 import orjson
+import os
 
 from beancount.core import data, number
 from beancount.parser import printer  # type: ignore
@@ -114,7 +115,11 @@ class Base(BaseModel, Generic[T]):
         try:
             parsed["id"] = hashlib.md5(
                 "".join(
-                    [parsed["meta"]["filename"], str(parsed["meta"]["lineno"])]
+                    [
+                        os.path.basename(parsed["meta"]["filename"]),
+                        str(parsed["meta"]["lineno"]),
+                        str(parsed["date"]),
+                    ]
                 ).encode()
             ).hexdigest()
         except (KeyError, TypeError):
