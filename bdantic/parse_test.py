@@ -15,18 +15,9 @@ from testing import common as t
 from unittest.mock import patch, Mock
 
 
-def hash(obj) -> str:
-    robj = models.base.recursive_parse(obj)
-    del robj["id"]
-    return t.hash(robj)
-
-
 def test_parse():
     txn = data.Transaction(
-        meta={
-            "filename": "test.beancount",
-            "lineno": 123,
-        },
+        meta=None,
         date=date.today(),
         flag="*",
         payee="test",
@@ -46,8 +37,6 @@ def test_parse():
     )
 
     expected = models.directives.Transaction(
-        id=hash(txn),
-        meta=models.directives.Meta(filename="test.beancount", lineno=123),
         date=date.today(),
         flag="*",
         payee="test",
@@ -77,10 +66,7 @@ def test_parse_all():
     btypes.append(amount.Amount(number=Decimal(1.50), currency="USD"))
     btypes.append(
         data.Balance(
-            meta={
-                "filename": "test.beancount",
-                "lineno": 123,
-            },
+            meta=None,
             date=date.today(),
             account="Test",
             amount=amount.Amount(number=Decimal(1.50), currency="USD"),
@@ -94,8 +80,7 @@ def test_parse_all():
     )
     expected_models.append(
         models.directives.Balance(
-            id=hash(btypes[1]),
-            meta=models.directives.Meta(filename="test.beancount", lineno=123),
+            meta=None,
             date=date.today(),
             account="Test",
             amount=models.data.Amount(number=Decimal(1.50), currency="USD"),
@@ -114,10 +99,7 @@ def test_parse_directives():
 
     btypes.append(
         data.Balance(
-            meta={
-                "filename": "test.beancount",
-                "lineno": 123,
-            },
+            meta=None,
             date=date.today(),
             account="Test",
             amount=amount.Amount(number=Decimal(1.50), currency="USD"),
@@ -126,21 +108,17 @@ def test_parse_directives():
         )
     )
     btypes.append(
-        data.Close(
-            meta={
-                "filename": "test.beancount",
-                "lineno": 123,
-            },
+        data.Open(
+            meta=None,
             date=date.today(),
             account="Test",
+            currencies=["USD"],
+            booking=None,
         )
     )
     btypes.append(
         data.Commodity(
-            meta={
-                "filename": "test.beancount",
-                "lineno": 123,
-            },
+            meta=None,
             date=date.today(),
             currency="USD",
         )
@@ -148,8 +126,6 @@ def test_parse_directives():
 
     expected_models.append(
         models.directives.Balance(
-            id=hash(btypes[0]),
-            meta=models.directives.Meta(filename="test.beancount", lineno=123),
             date=date.today(),
             account="Test",
             amount=models.data.Amount(number=Decimal(1.50), currency="USD"),
@@ -158,17 +134,14 @@ def test_parse_directives():
         )
     )
     expected_models.append(
-        models.directives.Close(
-            id=hash(btypes[1]),
-            meta=models.directives.Meta(filename="test.beancount", lineno=123),
+        models.directives.Open(
             date=date.today(),
             account="Test",
+            currencies=["USD"],
         )
     )
     expected_models.append(
         models.directives.Commodity(
-            id=hash(btypes[2]),
-            meta=models.directives.Meta(filename="test.beancount", lineno=123),
             date=date.today(),
             currency="USD",
         )
@@ -200,6 +173,10 @@ def test_parse_loader():
 
     # Errors
     assert errors == parsed.errors
+
+    # Verify ID's are unique
+    ids = [e.id for e in parsed.entries]
+    assert len(ids) == len(set(ids))
 
 
 @patch("bdantic.models.QueryResult.parse")

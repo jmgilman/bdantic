@@ -5,26 +5,6 @@ from beancount.core import (
 from bdantic.models import base, data as mdata, directives
 from datetime import date
 from decimal import Decimal
-from typing import NamedTuple
-from testing import common as t
-
-
-def test_filter_dict():
-    d = {"test": "test", 1: 2, type(str): "str"}
-    expected = {"test": "test", 1: 2}
-
-    result = base.filter_dict(d)
-    assert result == expected
-
-
-def test_is_named_tuple():
-    class Test(NamedTuple):
-        pass
-
-    assert base.is_named_tuple(Test())
-
-    tup = ("test", "tuple")
-    assert not base.is_named_tuple(tup)
 
 
 def test_recursive_parse():
@@ -76,7 +56,6 @@ def test_recursive_parse():
             }
         ],
     }
-    expected["id"] = t.hash(expected)
 
     result = base.recursive_parse(txn)
     assert result == expected

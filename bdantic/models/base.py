@@ -17,9 +17,8 @@ import datetime
 import hashlib
 import jmespath  # type: ignore
 import orjson
-import pickle
 
-from beancount.core import data
+from beancount.core import data, number
 from beancount.parser import printer  # type: ignore
 from datetime import date
 from decimal import Decimal
@@ -100,9 +99,26 @@ class Base(BaseModel, Generic[T]):
         """
         parsed = recursive_parse(obj)
 
-        # Add unique ID to directives to enable lookups
-        # if issubclass(cls, BaseDirective):
-        #     parsed["id"] = hashlib.md5(pickle.dumps(parsed)).hexdigest()
+        # It's possible for tolerances to have a number.MISSING key which will
+        # fail validation
+        try:
+            parsed["meta"]["__tolerances__"] = {
+                k: v
+                for k, v in parsed["meta"]["__tolerances__"].items()
+                if k is not number.MISSING
+            }
+        except (KeyError, TypeError):
+            pass
+
+        # Generate a unique ID for directives parsed from a file
+        try:
+            parsed["id"] = hashlib.md5(
+                "".join(
+                    [parsed["meta"]["filename"], str(parsed["meta"]["lineno"])]
+                ).encode()
+            ).hexdigest()
+        except (KeyError, TypeError):
+            pass
 
         return cls.parse_obj(parsed)
 
@@ -181,24 +197,22 @@ class BaseDirective(Base):
     this class provides a method for converting a directive model into its
     equivalent beancount syntax.
 
-    Note: The ID of a given directive is only as unique as the contents it was
-    created from. In other words, when passing arbitrary beancount types to a
-    directive's parse() method, it's possible to generate duplicate ID's.
-    However, if the types being passed are directly from the beancount loader,
-    the metadata associated with each directive will guarantee that the ID is
-    unique. This is because every directive has an associated filename and line
-    number which cannot be duplicated across directives. In short: don't rely
-    on ID's being unique unless you're parsing from a beancount ledger.
+    Note: The ID of a directive will only be generated in the case where the
+    directive contains the `filename` and `lineno` metadata fields. Per the
+    beancount documentation, these fields are guaranteed to be present if the
+    directive is coming from a parsed beancount ledger file. If a directive is
+    dynamically created at runtime without these metadata fields the resulting
+    model will not have an ID (it will be None).
 
     Attributes:
-        id: A unique ID for this directive.
+        id: An optional unique ID for this directive.
         date: The date for this directive.
         meta: An optional dictionary of metadata attached to the directive.
     """
 
-    id: str
+    id: Optional[str] = None
     date: datetime.date
-    meta: Optional[Meta]
+    meta: Optional[Meta] = None
 
     def syntax(self) -> str:
         """Converts this directive into it's equivalent beancount syntax."""
@@ -305,52 +319,6 @@ class Meta(BaseModel):
         extra = Extra.allow
 
 
-def filter_dict(meta: Dict[Any, Any]) -> Dict:
-    """Recursively filters a dictionary to remove non-JSON serializable keys.
-
-    Args:
-        meta: The dictionary to filter
-
-    Returns:
-        The filtered dictionary
-    """
-    new_meta: Dict = {}
-    for key, value in meta.items():
-        if type(key) not in [str, int, float, bool, None]:
-            continue
-        if isinstance(value, dict):
-            new_meta[key] = filter_dict(value)
-        elif isinstance(value, list):
-            new_meta[key] = [
-                filter_dict(v) for v in value if isinstance(v, dict)
-            ]
-        else:
-            new_meta[key] = value
-
-    return new_meta
-
-
-def is_named_tuple(obj: Any) -> bool:
-    """Attempts to determine if an object is a NamedTuple.
-
-    The method is not fullproof and attempts to determine if the given object
-    is a tuple which happens to have _asdict() and _fields() methods. It's
-    possible to generate false positives but no such case exists within the
-    beancount package.
-
-    Args:
-        obj: The object to check against
-
-    Returns:
-        True if the object is a NamedTuple, False otherwise
-    """
-    return (
-        isinstance(obj, tuple)
-        and hasattr(obj, "_asdict")
-        and hasattr(obj, "_fields")
-    )
-
-
 def recursive_parse(b: Any) -> Dict[str, Any]:
     """Recursively parses a BeancountType into a nested dictionary of models.
 
@@ -366,20 +334,16 @@ def recursive_parse(b: Any) -> Dict[str, Any]:
     """
     result: Dict[str, Any] = {}
     for key, value in b._asdict().items():
-        if is_named_tuple(value):
+        if hasattr(value, "_asdict"):
             result[key] = recursive_parse(value)
         elif isinstance(value, list) and value:
-            if is_named_tuple(value[0]):
+            if hasattr(value[0], "_asdict"):
                 result[key] = [recursive_parse(c) for c in value]
             else:
                 result[key] = value
-        elif isinstance(value, dict):
-            result[key] = filter_dict(value)
         else:
             result[key] = value
 
-    if type(b) in _DIRECTIVES:
-        result["id"] = _hash(result)
     return result
 
 
@@ -421,21 +385,6 @@ def recursive_export(b: Any, skip_fields: List[str] = []) -> Dict[str, Any]:
             result[key] = value
 
     return result
-
-
-def _hash(obj: Any) -> str:
-    """Hashes the given object.
-
-    Hashing is accomplished by pickling the object and then taking the MD5 hash
-    of the result.
-
-    Args:
-        obj: The object to hash.
-
-    Returns:
-        An MD5 hex digest.
-    """
-    return hashlib.md5(pickle.dumps(obj)).hexdigest()
 
 
 def _map(obj: Any, fn: Callable) -> Any:

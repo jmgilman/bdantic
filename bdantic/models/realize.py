@@ -51,7 +51,7 @@ class Account(BaseModel):
     """
 
     balance: Dict[str, Inventory]
-    close: Optional[date]
+    close: Optional[date] = None
     name: str
     open: date
 

@@ -30,8 +30,8 @@ class Amount(Base):
     _sibling = amount.Amount
 
     ty: Literal["Amount"] = "Amount"
-    number: Optional[Decimal]
-    currency: Optional[Currency]
+    number: Optional[Decimal] = None
+    currency: Optional[Currency] = None
 
 
 class Cost(Base):
@@ -51,7 +51,7 @@ class Cost(Base):
     number: Decimal
     currency: Currency
     date: datetime.date
-    label: Optional[str]
+    label: Optional[str] = None
 
 
 class CostSpec(Base):
@@ -71,12 +71,12 @@ class CostSpec(Base):
     _sibling = position.CostSpec
 
     ty: Literal["CostSpec"] = "CostSpec"
-    number_per: Optional[Decimal]
-    number_total: Optional[Decimal]
-    currency: Optional[Currency]
-    date: Optional[datetime.date]
-    label: Optional[str]
-    merge: Optional[bool]
+    number_per: Optional[Decimal] = None
+    number_total: Optional[Decimal] = None
+    currency: Optional[Currency] = None
+    date: Optional[datetime.date] = None
+    label: Optional[str] = None
+    merge: Optional[bool] = None
 
 
 class Inventory(BaseList):
@@ -114,7 +114,7 @@ class Position(Base):
 
     ty: Literal["Position"] = "Position"
     units: Amount
-    cost: Optional[Cost]
+    cost: Optional[Cost] = None
 
 
 # Update forward references

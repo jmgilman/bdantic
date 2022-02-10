@@ -17,7 +17,7 @@ from dataclasses import dataclass
 from decimal import Decimal
 from hypothesis import strategies as s
 from random_words import RandomWords  # type: ignore
-from typing import Dict, List, Optional, Type
+from typing import Any, Dict, List, Optional, Type
 
 recurse = [
     models.Amount,
@@ -194,13 +194,18 @@ def inventory(draw: s.DrawFn) -> Inventory:
     return Inventory(positions)
 
 
-def meta() -> s.SearchStrategy[Dict[str, str]]:
+@s.composite
+def meta(draw: s.DrawFn) -> Dict[str, Any]:
     """Generates metadata for directives.
 
     Returns:
         A new search strategy
     """
-    return s.dictionaries(word(), words(), max_size=2)
+    file_parts = draw(s.lists(word(), min_size=5, max_size=5))
+    filename = "/".join(file_parts) + ".beancount"
+    lineno = random.randrange(1, 100000)
+
+    return {"filename": filename, "lineno": lineno}
 
 
 def posting() -> s.SearchStrategy[Posting]:

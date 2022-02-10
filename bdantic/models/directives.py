@@ -25,8 +25,8 @@ class Balance(BaseDirective):
     ty: Literal["Balance"] = "Balance"
     account: Account
     amount: Amount
-    tolerance: Optional[Decimal]
-    diff_amount: Optional[Amount]
+    tolerance: Optional[Decimal] = None
+    diff_amount: Optional[Amount] = None
 
 
 class Close(BaseDirective):
@@ -88,8 +88,8 @@ class Document(BaseDirective):
     ty: Literal["Document"] = "Document"
     account: Account
     filename: str
-    tags: Optional[Set]
-    links: Optional[Set]
+    tags: Optional[Set] = None
+    links: Optional[Set] = None
 
 
 class Event(BaseDirective):
@@ -138,8 +138,8 @@ class Open(BaseDirective):
 
     ty: Literal["Open"] = "Open"
     account: Account
-    currencies: Optional[List[Currency]]
-    booking: Optional[data.Booking]
+    currencies: Optional[List[Currency]] = None
+    booking: Optional[data.Booking] = None
 
 
 class Pad(BaseDirective):
@@ -175,11 +175,11 @@ class Posting(Base):
 
     ty: Literal["Posting"] = "Posting"
     account: Account
-    units: Optional[Amount]
-    cost: Optional[Union[Cost, CostSpec]]
-    price: Optional[Amount]
-    flag: Optional[str]
-    meta: Optional[Dict[str, Any]]
+    units: Optional[Amount] = None
+    cost: Optional[Union[Cost, CostSpec]] = None
+    price: Optional[Amount] = None
+    flag: Optional[str] = None
+    meta: Optional[Dict[str, Any]] = None
 
 
 class Price(BaseDirective):
@@ -231,10 +231,10 @@ class Transaction(BaseDirective):
 
     ty: Literal["Transaction"] = "Transaction"
     flag: Flag
-    payee: Optional[str]
+    payee: Optional[str] = None
     narration: str
-    tags: Optional[Set[str]]
-    links: Optional[Set[str]]
+    tags: Optional[Set[str]] = None
+    links: Optional[Set[str]] = None
     postings: List[Posting]
 
 
