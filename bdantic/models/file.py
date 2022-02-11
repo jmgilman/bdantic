@@ -1,18 +1,20 @@
 """Provides models for representing the contents of a parsed beancount file."""
 
 from __future__ import annotations
+from decimal import Decimal
 
 import lzma
 import pickle
 
-from .base import Base, BaseDict, BaseList
+from .base import Base, BaseList
 from beancount.core import data, realization
 from beancount.query import query
 from bdantic import models
-from bdantic.types import ModelDirective, OptionValues, type_map
+from bdantic.types import ModelDirective, type_map
+from pydantic import Extra
 from .query import QueryResult
 from .realize import Account, RealAccount
-from typing import Any, Dict, List, Tuple, Type, TypeVar
+from typing import Any, Dict, List, Optional, Set, Tuple, Type, TypeVar
 
 T = TypeVar("T", bound="ModelDirective")
 
@@ -134,15 +136,52 @@ class Directives(BaseList, smart_union=True):
         return Directives(__root__=super()._by_type(ty))
 
 
-class Options(BaseDict, smart_union=True):
-    """A model representing a dictionary of options.
+class Options(Base):
+    """A model representing ledger options.
 
-    This model wraps the options often returned when loading the content of a
-    beancount file. Options which contain raw beancount types are automatically
-    parsed into their respective model.
+    This model wraps the options contained within a ledger. Options which
+    contain raw beancount types are automatically parsed into their respective
+    model.
+
+    See the docs for more details about each field:
+    https://beancount.github.io/docs/beancount_options_reference.html
     """
 
-    __root__: Dict[str, OptionValues]
+    account_current_conversions: Optional[str] = None
+    account_current_earnings: Optional[str] = None
+    account_previous_balances: Optional[str] = None
+    account_previous_conversions: Optional[str] = None
+    account_previous_earnings: Optional[str] = None
+    account_rounding: Optional[str] = None
+    allow_deprecated_none_for_tags_and_links: Optional[bool] = None
+    allow_pipe_separator: Optional[bool] = None
+    booking_method: Optional[data.Booking] = None
+    commodities: Optional[Set[str]] = None
+    conversion_currency: Optional[str] = None
+    dcontext: Optional[models.DisplayContext] = None
+    documents: Optional[List[str]] = None
+    experiment_explicit_tolerances: Optional[bool] = None
+    infer_tolerance_from_cost: Optional[bool] = None
+    inferred_tolerance_default: Optional[Dict[str, Decimal]]
+    inferred_tolerance_multiplier: Optional[Decimal] = None
+    input_hash: Optional[str] = None
+    insert_pythonpath: Optional[bool] = None
+    long_string_maxlines: Optional[int] = None
+    name_assets: Optional[str] = None
+    name_equity: Optional[str] = None
+    name_expenses: Optional[str] = None
+    name_income: Optional[str] = None
+    name_liabilities: Optional[str] = None
+    operating_currency: Optional[List[str]] = None
+    plugin: Optional[List[str]] = None
+    plugin_processing_mode: Optional[str] = None
+    render_commas: Optional[bool] = None
+    tolerance: Optional[Decimal] = None
+    title: Optional[str] = None
+    use_legacy_fixed_tolerances: Optional[bool] = None
+
+    class Config:
+        extra = Extra.allow
 
     @classmethod
     def parse(cls, obj: Dict[str, Any]) -> Options:
@@ -161,7 +200,7 @@ class Options(BaseDict, smart_union=True):
             else:
                 d[key] = value
 
-        return Options(__root__=d)
+        return Options(**d)
 
     def export(self) -> Dict[str, Any]:
         """Exports this model into a dictionary of beancount options
@@ -170,7 +209,7 @@ class Options(BaseDict, smart_union=True):
             The dictionary of beancount options
         """
         d = {}
-        for key, value in self.__root__.items():
+        for key, value in self.__dict__.items():
             if type(value) in type_map.values():
                 d[key] = value.export()  # type: ignore
             else:

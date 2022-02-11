@@ -154,7 +154,11 @@ def test_parse_directives():
 
 def test_parse_loader():
     entries, errors, options = loader.load_file("testing/static.beancount")
+    # import pprint
+
+    # pprint.pprint(options)
     parsed = parse_loader(entries, errors, options)
+    # print(parsed.options.export())
 
     def compare(object1, object2):
         for expected, result in zip(object1, object2):
@@ -168,8 +172,13 @@ def test_parse_loader():
     compare(entries, parsed.entries.export())
 
     # Options
-    compare(options.values(), parsed.options.export().values())
-    assert options.keys() == parsed.options.export().keys()
+    expected = options
+    del expected["dcontext"]
+
+    result = parsed.options.export()
+    del result["dcontext"]
+
+    t.compare_dict(expected, result, t.Ctx())
 
     # Errors
     assert errors == parsed.errors

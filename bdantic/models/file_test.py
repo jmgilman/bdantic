@@ -117,7 +117,7 @@ def test_directives_by_type(op, bal, txn):
 )
 def test_options(o: Dict[str, OptionValues]):
     po = Options.parse(o)
-    t.compare_dict(o, po.__root__, t.Ctx())
+    t.compare_dict(o, po.__dict__, t.Ctx())
 
 
 @given(
@@ -149,7 +149,7 @@ def test_file_query(query, response):
     response.return_value = "response"
     result = bf.query("test")
 
-    query.assert_called_once_with([], {}, "test")
+    query.assert_called_once_with([], bf.options, "test")
     response.assert_called_once_with("query")
 
     assert result == "response"
