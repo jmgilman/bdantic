@@ -7,6 +7,7 @@ import lzma
 import pickle
 
 from .base import Base, BaseList
+from beancount import loader
 from beancount.core import data, realization
 from beancount.query import query
 from bdantic import models
@@ -161,6 +162,8 @@ class Options(Base):
     dcontext: Optional[models.DisplayContext] = None
     documents: Optional[List[str]] = None
     experiment_explicit_tolerances: Optional[bool] = None
+    filename: Optional[str] = None
+    include: Optional[List[str]] = None
     infer_tolerance_from_cost: Optional[bool] = None
     inferred_tolerance_default: Optional[Dict[str, Decimal]]
     inferred_tolerance_multiplier: Optional[Decimal] = None
@@ -295,6 +298,30 @@ class BeancountFile(Base):
             An LZMA compressed pickle instance of this instance.
         """
         return lzma.compress(pickle.dumps(self))
+
+    def hash(self) -> str:
+        """Generates a unique hash for this `BeancountFile`.
+
+        This method uses existing logic provided by the beancount package to
+        calculate a hash which should be unique to the current state of the
+        ledger. Specifically, it can be used to ensure that the underlying
+        files used in parsing have not changed. If this instance was created
+        dynamically without being fed data from the loader it will fail.
+
+        Raises:
+            FileNotFoundError: If no source files were found
+
+        Returns:
+            An MD5 hash.
+        """
+        if self.options.include:
+            return loader.compute_input_hash(self.options.include)
+        elif self.options.filename:
+            return loader.compute_input_hash([self.options.filename])
+        else:
+            raise FileNotFoundError(
+                "No source files associated with this instance"
+            )
 
     def query(self, query_str: str) -> QueryResult:
         """Executes the given BQL query against the entries in this file.

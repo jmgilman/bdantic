@@ -141,6 +141,24 @@ def test_file_compress(txn, opts):
     assert bf.decompress(bf.compress()) == bf
 
 
+@mock.patch("beancount.loader.compute_input_hash")
+def test_file_hash(loader):
+    opts = Options(filename="test.beancount")
+    dirs = Directives(__root__=[])
+    bf = BeancountFile(entries=dirs, options=opts, errors=[], accounts={})
+    loader.return_value = "hash"
+
+    result = bf.hash()
+    loader.assert_called_with(["test.beancount"])
+    assert result == "hash"
+
+    opts = Options(include=["test.beancount", "test1.beancount"])
+    bf = BeancountFile(entries=dirs, options=opts, errors=[], accounts={})
+
+    bf.hash()
+    loader.assert_called_with(["test.beancount", "test1.beancount"])
+
+
 @mock.patch("bdantic.models.query.QueryResult.parse")
 @mock.patch("beancount.query.query.run_query")
 def test_file_query(query, response):

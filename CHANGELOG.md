@@ -7,7 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.2.5] - 2022-02-09
+## [0.2.6] - 2022-02-10
+
+### Added
+
+- `include` and `filename` fields to `Options`
+- `hash` method to `BeancountFile` for computing a unique hash
+
+## [0.2.5] - 2022-02-10
 
 ### Changed
 
@@ -115,7 +122,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release
 
-[unreleased]: https://github.com/jmgilman/bdantic/compare/v0.2.5...HEAD
+[unreleased]: https://github.com/jmgilman/bdantic/compare/v0.2.6...HEAD
+[0.2.6]: https://github.com/jmgilman/bdantics/releases/tag/v0.2.6
 [0.2.5]: https://github.com/jmgilman/bdantics/releases/tag/v0.2.5
 [0.2.4]: https://github.com/jmgilman/bdantics/releases/tag/v0.2.4
 [0.2.3]: https://github.com/jmgilman/bdantics/releases/tag/v0.2.3
