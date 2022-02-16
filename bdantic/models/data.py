@@ -3,15 +3,12 @@
 from __future__ import annotations
 
 import datetime
-
-from .base import Base, BaseList
-from beancount.core import (
-    amount,
-    inventory,
-    position,
-)
 from decimal import Decimal
 from typing import List, Literal, Optional
+
+from beancount.core import amount, inventory, position
+
+from .base import Base, BaseList
 
 Account = str
 Currency = str

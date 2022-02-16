@@ -1,9 +1,11 @@
+from typing import List
+
 import beancount_hypothesis as h
 from beancount.core import amount, inventory, position
-from bdantic.models import data
-from hypothesis import given
-from typing import List
 from conftest import Ctx
+from hypothesis import given
+
+from bdantic.models import data
 
 
 @given(h.amount())

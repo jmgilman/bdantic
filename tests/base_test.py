@@ -1,10 +1,11 @@
-from beancount.core import (
-    amount,
-    data,
-)
-from bdantic.models import base, data as mdata, directives
 from datetime import date
 from decimal import Decimal
+
+from beancount.core import amount, data
+
+from bdantic.models import base
+from bdantic.models import data as mdata
+from bdantic.models import directives
 
 
 def test_recursive_parse():

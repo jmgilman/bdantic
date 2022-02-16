@@ -15,16 +15,16 @@ from __future__ import annotations
 
 import datetime
 import hashlib
-import jmespath  # type: ignore
-import orjson
 import os
-
-from beancount.core import data, number
-from beancount.parser import printer  # type: ignore
 from datetime import date
 from decimal import Decimal
-from pydantic import BaseModel, Field, Extra
 from typing import Any, Callable, Dict, Generic, List, Optional, Type, TypeVar
+
+import jmespath  # type: ignore
+import orjson
+from beancount.core import data, number
+from beancount.parser import printer  # type: ignore
+from pydantic import BaseModel, Extra, Field
 
 S = TypeVar("S", bound="Base")
 T = TypeVar("T")

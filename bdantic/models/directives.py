@@ -2,11 +2,13 @@
 
 from __future__ import annotations
 
-from .base import Base, BaseDirective, Meta  # noqa: F401
-from beancount.core import data
-from .data import Account, Amount, Cost, CostSpec, Currency, Flag
 from decimal import Decimal
 from typing import Any, Dict, List, Literal, Optional, Set, Union
+
+from beancount.core import data
+
+from .base import Base, BaseDirective, Meta  # noqa: F401
+from .data import Account, Amount, Cost, CostSpec, Currency, Flag
 
 
 class Balance(BaseDirective):

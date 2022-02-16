@@ -1,12 +1,15 @@
 import string
+from copy import copy
+from typing import Any, Dict, List, Tuple, Type
+
 import beancount_hypothesis as h
 from beancount.core import amount, data
 from beancount.query import query as bquery
-from copy import copy
-from hypothesis import given, strategies as s
-from bdantic.models import query
-from typing import Any, Dict, List, Tuple, Type
 from conftest import Ctx
+from hypothesis import given
+from hypothesis import strategies as s
+
+from bdantic.models import query
 
 
 @s.composite

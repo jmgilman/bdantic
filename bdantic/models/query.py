@@ -2,14 +2,16 @@
 
 from __future__ import annotations
 
-from .base import Base
-from beancount.core import amount, inventory, position
 import collections
 from datetime import date
 from decimal import Decimal
-from pydantic import BaseModel
-from ..types import type_map
 from typing import Any, Dict, List, Literal, Tuple, Type
+
+from beancount.core import amount, inventory, position
+from pydantic import BaseModel
+
+from ..types import type_map
+from .base import Base
 
 QueryRow = Dict[str, Any]
 

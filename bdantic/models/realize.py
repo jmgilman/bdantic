@@ -2,13 +2,16 @@
 
 from __future__ import annotations
 
-from .base import Base, BaseList
-from beancount.core import data, realization
-from .data import Account as AccountName, Inventory
 from datetime import date
-from .directives import Balance, Close, Document, Note, Open, Pad, TxnPosting
-from pydantic import BaseModel
 from typing import Dict, List, Literal, Optional, Type, TypeVar, Union
+
+from beancount.core import data, realization
+from pydantic import BaseModel
+
+from .base import Base, BaseList
+from .data import Account as AccountName
+from .data import Inventory
+from .directives import Balance, Close, Document, Note, Open, Pad, TxnPosting
 
 T = TypeVar("T", bound="ModelTxnPosting")
 

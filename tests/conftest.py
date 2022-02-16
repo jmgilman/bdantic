@@ -1,18 +1,19 @@
-import hashlib
-import pickle
-import pytest
 import datetime
-import random
+import hashlib
 import io
 import os
-from beancount.scripts import example  # type: ignore
+import pickle
+import random
+from typing import Any, List, Type
 
-from beancount.core import data, distribution
+import pytest
 from beancount import loader
+from beancount.core import data, distribution
+from beancount.scripts import example  # type: ignore
+from pydantic import BaseModel
+
 from bdantic import models, types
 from bdantic.models import base
-from pydantic import BaseModel
-from typing import Any, List, Type
 
 
 class Ctx(BaseModel):

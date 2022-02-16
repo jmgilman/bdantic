@@ -6,12 +6,13 @@ method. However, most of these functions take any supported type/model as an
 input which results in less imports in your code.
 """
 
-from beancount.core import data
-from bdantic.models.file import Directives, BeancountFile
-from bdantic.models.query import QueryResult
-from bdantic.types import type_map
-from bdantic.types import BeancountType, Model
 from typing import Any, Dict, List, Sequence, Tuple, Type
+
+from beancount.core import data
+
+from bdantic.models.file import BeancountFile, Directives
+from bdantic.models.query import QueryResult
+from bdantic.types import BeancountType, Model, type_map
 
 
 def export(model: Model) -> BeancountType:

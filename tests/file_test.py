@@ -1,13 +1,16 @@
-import pytest
-import beancount_hypothesis as h
-from beancount_hypothesis.directive import query
-from beancount.core import data
-from bdantic import types
-from bdantic.models import directives, file
-from hypothesis import given, strategies as s
 from typing import Dict, List
 from unittest import mock
+
+import beancount_hypothesis as h
+import pytest
+from beancount.core import data
+from beancount_hypothesis.directive import query
 from conftest import Ctx
+from hypothesis import given
+from hypothesis import strategies as s
+
+from bdantic import types
+from bdantic.models import directives, file
 
 
 def reject(obj):

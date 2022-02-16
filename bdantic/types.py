@@ -2,6 +2,9 @@
 
 from __future__ import annotations
 
+from decimal import Decimal
+from typing import Dict, List, Type, Union
+
 from beancount.core import (
     amount,
     data,
@@ -11,13 +14,8 @@ from beancount.core import (
     position,
     realization,
 )
-from .models.data import (
-    Amount,
-    Cost,
-    CostSpec,
-    Inventory,
-    Position,
-)
+
+from .models.data import Amount, Cost, CostSpec, Inventory, Position
 from .models.directives import (
     Balance,
     Close,
@@ -36,9 +34,6 @@ from .models.directives import (
 )
 from .models.display import CurrencyContext, DisplayContext, Distribution
 from .models.realize import RealAccount
-from decimal import Decimal
-from typing import Dict, List, Type, Union
-
 
 # A dictionary mapping Beancount types to their respective models
 type_map: Dict[Type[BeancountType], Type[Model]] = {

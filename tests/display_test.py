@@ -1,7 +1,9 @@
 from beancount.core import display_context, distribution
-from bdantic.models import display
-from hypothesis import given, strategies as s
 from conftest import Ctx
+from hypothesis import given
+from hypothesis import strategies as s
+
+from bdantic.models import display
 
 
 def build_distribution():

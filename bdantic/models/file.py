@@ -1,21 +1,23 @@
 """Provides models for representing the contents of a parsed beancount file."""
 
 from __future__ import annotations
-from decimal import Decimal
 
 import lzma
 import pickle
+from decimal import Decimal
+from typing import Any, Dict, List, Optional, Set, Tuple, Type, TypeVar
 
-from .base import Base, BaseList
 from beancount import loader
 from beancount.core import data, realization
 from beancount.query import query
+from pydantic import Extra
+
 from bdantic import models
 from bdantic.types import ModelDirective, type_map
-from pydantic import Extra
+
+from .base import Base, BaseList
 from .query import QueryResult
 from .realize import Account, RealAccount
-from typing import Any, Dict, List, Optional, Set, Tuple, Type, TypeVar
 
 T = TypeVar("T", bound="ModelDirective")
 

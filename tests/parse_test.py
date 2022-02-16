@@ -1,5 +1,13 @@
+from datetime import date
+from decimal import Decimal
+from typing import Any
+from unittest.mock import Mock, patch
+
 from beancount.core import amount, data
+from conftest import Ctx
+
 from bdantic import (
+    models,
     parse,
     parse_all,
     parse_directives,
@@ -7,12 +15,6 @@ from bdantic import (
     parse_query,
     types,
 )
-from bdantic import models
-from datetime import date
-from decimal import Decimal
-from unittest.mock import patch, Mock
-from conftest import Ctx
-from typing import Any
 
 
 def test_parse():

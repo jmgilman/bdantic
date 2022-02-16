@@ -1,10 +1,12 @@
-from beancount.core import data
 from typing import Any
+
 import beancount_hypothesis as h
-from beancount.core import realization
-from hypothesis import given, strategies as s
-from bdantic.models import realize
+from beancount.core import data, realization
 from conftest import Ctx
+from hypothesis import given
+from hypothesis import strategies as s
+
+from bdantic.models import realize
 
 
 @given(

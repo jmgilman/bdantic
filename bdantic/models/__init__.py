@@ -1,4 +1,4 @@
-from .base import Base, BaseDirective, BaseDict, BaseList  # noqa: F401
+from .base import Base, BaseDict, BaseDirective, BaseList  # noqa: F401
 from .data import Amount, Cost, CostSpec, Inventory, Position  # noqa: F401
 from .directives import (  # noqa: F401
     Balance,

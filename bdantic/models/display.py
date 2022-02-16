@@ -3,10 +3,11 @@
 from __future__ import annotations
 
 import collections
+from typing import Literal
+
+from beancount.core import display_context, distribution
 
 from .base import Base
-from beancount.core import distribution, display_context
-from typing import Literal
 
 
 class CurrencyContext(Base):

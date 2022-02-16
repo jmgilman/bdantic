@@ -1,10 +1,11 @@
 import beancount_hypothesis as h
-from beancount_hypothesis.directive import query
 from beancount.core import data
 from beancount.parser import parser  # type: ignore
-from bdantic.models import directives
-from hypothesis import given
+from beancount_hypothesis.directive import query
 from conftest import Ctx
+from hypothesis import given
+
+from bdantic.models import directives
 
 
 def test_syntax(syntax):
