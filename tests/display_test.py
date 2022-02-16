@@ -1,29 +1,25 @@
 from beancount.core import display_context, distribution
-from .display import CurrencyContext, DisplayContext, Distribution
+from bdantic.models import display
 from hypothesis import given, strategies as s
-from testing import common as t, generate as g
-
-
-def setup_module(_):
-    g.register()
+from conftest import Ctx
 
 
 def build_distribution():
     return s.builds(
-        Distribution,
+        display.Distribution,
         hist=s.dictionaries(s.integers(), s.integers()),
     )
 
 
 def build_currencycontext():
     return s.builds(
-        CurrencyContext,
+        display.CurrencyContext,
         fractional_dist=build_distribution(),
     )
 
 
 @given(build_currencycontext())
-def test_currencycontext(c: CurrencyContext):
+def test_currencycontext(ctx: Ctx, c: display.CurrencyContext):
     bd = distribution.Distribution()
     bd.hist = c.fractional_dist.hist
 
@@ -32,18 +28,18 @@ def test_currencycontext(c: CurrencyContext):
     bcc.integer_max = c.integer_max
     bcc.fractional_dist = bd
 
-    pc = CurrencyContext.parse(bcc)
-    t.compare_object(pc, bcc, t.Ctx(recurse=g.recurse))
-    t.compare_object(pc.export(), bcc, t.Ctx(partial=False, recurse=g.recurse))
+    pc = display.CurrencyContext.parse(bcc)
+    ctx.compare_object(pc, bcc)
+    ctx.compare_object(pc.export(), bcc, False)
 
 
 @given(
     s.builds(
-        DisplayContext,
+        display.DisplayContext,
         ccontexts=s.dictionaries(s.text(), build_currencycontext()),
     )
 )
-def test_displaycontext(c: DisplayContext):
+def test_displaycontext(ctx: Ctx, c: display.DisplayContext):
     ccs = {}
     for key, cc in c.ccontexts.items():
         bd = distribution.Distribution()
@@ -59,18 +55,16 @@ def test_displaycontext(c: DisplayContext):
     bdc.ccontexts = ccs
     bdc.commas = c.commas
 
-    pdc = DisplayContext.parse(bdc)
-    t.compare_object(pdc, bdc, t.Ctx(recurse=g.recurse))
-    t.compare_object(
-        pdc.export(), bdc, t.Ctx(partial=False, recurse=g.recurse)
-    )
+    pdc = display.DisplayContext.parse(bdc)
+    ctx.compare_object(pdc, bdc)
+    ctx.compare_object(pdc.export(), bdc, False)
 
 
 @given(build_distribution())
-def test_distribution(d: Distribution):
+def test_distribution(ctx: Ctx, d: display.Distribution):
     bd = distribution.Distribution()
     bd.hist = d.hist
 
-    pd = Distribution.parse(bd)
-    t.compare_object(pd, bd, t.Ctx(recurse=g.recurse))
-    t.compare_object(pd.export(), bd, t.Ctx(partial=False, recurse=g.recurse))
+    pd = display.Distribution.parse(bd)
+    ctx.compare_object(pd, bd)
+    ctx.compare_object(pd.export(), bd, False)

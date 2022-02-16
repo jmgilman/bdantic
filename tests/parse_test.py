@@ -1,4 +1,3 @@
-from beancount import loader
 from beancount.core import amount, data
 from bdantic import (
     parse,
@@ -11,8 +10,9 @@ from bdantic import (
 from bdantic import models
 from datetime import date
 from decimal import Decimal
-from testing import common as t
 from unittest.mock import patch, Mock
+from conftest import Ctx
+from typing import Any
 
 
 def test_parse():
@@ -152,8 +152,10 @@ def test_parse_directives():
     assert result == expected_directives
 
 
-def test_parse_loader():
-    entries, errors, options = loader.load_file("testing/static.beancount")
+def test_parse_loader(
+    ctx: Ctx, beanfile: tuple[list[data.Directive], list, dict[str, Any]]
+):
+    entries, errors, options = beanfile
     # import pprint
 
     # pprint.pprint(options)
@@ -163,7 +165,7 @@ def test_parse_loader():
     def compare(object1, object2):
         for expected, result in zip(object1, object2):
             if type(expected) in types.type_map.keys():
-                t.compare_object(expected, result, t.Ctx())
+                ctx.compare_object(expected, result)
             else:
                 if expected and result:
                     assert expected == result
@@ -178,7 +180,7 @@ def test_parse_loader():
     result = parsed.options.export()
     del result["dcontext"]
 
-    t.compare_dict(expected, result, t.Ctx())
+    ctx.compare_dict(expected, result)
 
     # Errors
     assert errors == parsed.errors

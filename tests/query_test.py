@@ -1,17 +1,12 @@
 import string
-
-from beancount import loader
-from beancount.core import amount
-from beancount.query import query
+import beancount_hypothesis as h
+from beancount.core import amount, data
+from beancount.query import query as bquery
 from copy import copy
 from hypothesis import given, strategies as s
-from .query import _map, QueryResult
-from testing import common as t, generate as g
+from bdantic.models import query
 from typing import Any, Dict, List, Tuple, Type
-
-
-def setup_module(_):
-    g.register()
+from conftest import Ctx
 
 
 @s.composite
@@ -37,7 +32,7 @@ def query_response(draw):
                         s.text(alphabet=string.ascii_letters, min_size=1),
                         s.integers(),
                         s.decimals(allow_infinity=False, allow_nan=False),
-                        s.builds(amount.Amount),
+                        h.amount(),
                     ]
                 ),
                 min_size=5,
@@ -59,7 +54,9 @@ def query_response(draw):
 
 
 @given(query_response())
-def test_queryresult(r: Tuple[List[Tuple[str, Type]], List[Dict[str, Any]]]):
+def test_queryresult(
+    ctx: Ctx, r: Tuple[List[Tuple[str, Type]], List[Dict[str, Any]]]
+):
     class FakeTuple:
         d: Dict[str, Any]
 
@@ -74,37 +71,37 @@ def test_queryresult(r: Tuple[List[Tuple[str, Type]], List[Dict[str, Any]]]):
         ft = FakeTuple(row)
         rows.append(ft)
 
-    pr = QueryResult.parse((r[0], rows))
+    pr = query.QueryResult.parse((r[0], rows))
     er = pr.export()
 
-    columns = [(column.name, _map[column.type]) for column in pr.columns]
-    t.compare_list(er[0], columns, t.Ctx(recurse=g.recurse))
-    t.compare_list(
-        [r._asdict() for r in er[1]], pr.rows, t.Ctx(recurse=g.recurse)
-    )
-    t.compare_list(er[0], r[0], t.Ctx(partial=False, recurse=g.recurse))
-    t.compare_list(
+    columns = [(column.name, query._map[column.type]) for column in pr.columns]
+    ctx.compare_list(er[0], columns)
+    ctx.compare_list([r._asdict() for r in er[1]], pr.rows)
+    ctx.compare_list(er[0], r[0], False)
+    ctx.compare_list(
         [r._asdict() for r in er[1]],
         [r._asdict() for r in rows],
-        t.Ctx(partial=False, recurse=g.recurse),
+        False,
     )
 
 
-def test_query():
-    entries, errors, options = loader.load_file("testing/static.beancount")
-    result = query.run_query(
+def test_query(
+    ctx: Ctx, beanfile: tuple[list[data.Directive], list, dict[str, Any]]
+):
+    entries, _, options = beanfile
+    result = bquery.run_query(
         entries, options, "SELECT date, narration, account, position"
     )
-    pr = QueryResult.parse(result)
+    pr = query.QueryResult.parse(result)
     er = pr.export()
 
-    t.compare_list(
+    ctx.compare_list(
         er[0],
         result[0],
-        t.Ctx(partial=False, recurse=g.recurse),
+        False,
     )
-    t.compare_list(
+    ctx.compare_list(
         er[1],
         result[1],
-        t.Ctx(partial=False, recurse=g.recurse),
+        False,
     )
