@@ -1,23 +1,19 @@
 on:
   push:
     paths-ignore:
-      - '.github/**'
       - '.vscode/**'
-      - '**.toml'
       - '**.md'
   pull_request:
     paths-ignore:
-      - '.github/**'
       - '.vscode/**'
-      - '**.toml'
       - '**.md'
   workflow_dispatch:
 
 name: CI
 
 env:
-  POETRY_VERSION: "1.1.5"
-  PYTHON_VERSION: "3.8"
+  POETRY_VERSION: "1.1.12"
+  PYTHON_VERSION: "3.10"
   TWINE_USERNAME: __token__
   TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
 
@@ -50,10 +46,12 @@ jobs:
         uses: abatilo/actions-poetry@v2.0.0
         with:
           poetry-version: ${{ env.POETRY_VERSION }}
-      - name: Install dependencies
+      - name: Install dependenciesm
         run: poetry install
       - name: Run black
         run: poetry run black --diff --check $(git ls-files '*.py')
+      - name: Run isort
+        run: poetry run isort --settings-path pyproject.toml --check-only .
   type:
     name: Validate type checking
     runs-on: ubuntu-latest
@@ -84,8 +82,8 @@ jobs:
           poetry-version: ${{ env.POETRY_VERSION }}
       - name: Install dependencies
         run: poetry install
-      - name: Run pytest
-        run: poetry run pytest
+      - name: Run tox
+        run: poetry run tox
   push:
     name: Push to PyPi
     runs-on: ubuntu-latest
