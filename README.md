@@ -155,17 +155,13 @@ print(txn.syntax())
 ## Testing
 
 ```shell
-pytest .
+tox
 ```
 
 Most tests make heavy use of [hypothesis][3] for generating test data to be
 used in the tests. Hypothesis automatically keeps a cache to speed up subsequent
-testing, however, the first time you run `pytest` you may experience longer than
+testing, however, the first time you run `tox` you may experience longer than
 normal run times.
-
-Additionally, many tests pull from the `static.beancount` file found in the
-testing folder. This was generated using the `bean-example` CLI tool and is used
-to verify models with a realistic ledger.
 
 ## Contributing
 

@@ -31,6 +31,9 @@ mkdocs = "^1.2.3"
 pytest-helpers-namespace = "^2021.12.29"
 beancount-hypothesis = "^0.1.1"
 isort = "^5.10.1"
+tox = "^3.24.5"
+tox-poetry = "^0.4.1"
+coverage = "^6.3.1"
 
 [tool.black]
 line-length = 79
