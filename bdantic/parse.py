@@ -95,7 +95,7 @@ def parse_loader(
 
 
 def parse_query(
-    query_result: Tuple[List[Tuple[str, Type]], List[Any]]
+    query_result: Tuple[List[Tuple[str, Type]], List[Any]],
 ) -> QueryResult:
     """Parses the response from running query.run_query() on a list of entries.
 

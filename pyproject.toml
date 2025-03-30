@@ -18,9 +18,9 @@ orjson = "^3.6.6"
 jmespath = "^0.10.0"
 RandomWords = "^0.3.0"
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
 pytest = "^6.2.5"
-black = "^21.12b0"
+black = "^25.1.0"
 flake8 = "^4.0.1"
 mypy = "^0.931"
 twine = "^3.7.1"

@@ -12,7 +12,7 @@ on:
 name: CI
 
 env:
-  POETRY_VERSION: "1.1.12"
+  POETRY_VERSION: "2.1.2"
   PYTHON_VERSION: "3.10"
   TWINE_USERNAME: __token__
   TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
